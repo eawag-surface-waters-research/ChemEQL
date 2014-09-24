@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class ProceedCancelDialog extends JDialog
 {
-	protected Main main;
+	protected ChemEqlGuiController main;
 
 	// Constructor for creating bean
 	public ProceedCancelDialog()
@@ -13,11 +13,11 @@ public class ProceedCancelDialog extends JDialog
 		this(null);
 	}
 
-	protected ProceedCancelDialog(Main main)
+	protected ProceedCancelDialog(ChemEqlGuiController main)
 	{
-		super(main);
+		super();
 		this.main = main;
-		setRootPaneCheckingEnabled(false);	// required for letting the IDE sett a layout 
+		setRootPaneCheckingEnabled(false);	// required for letting the IDE sett a layout
 		initComponents();
 
 		getRootPane().setDefaultButton(proceedButton);
@@ -99,15 +99,15 @@ public class ProceedCancelDialog extends JDialog
 
       pack();
    }//GEN-END:initComponents
-	
+
 	private void proceedButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_proceedButtonActionPerformed
 	{
 		doProceed();
 }//GEN-LAST:event_proceedButtonActionPerformed
-	
+
 	private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cancelButtonActionPerformed
 	{
-		doCancel();		
+		doCancel();
 	}//GEN-LAST:event_cancelButtonActionPerformed
 
    // Variables declaration - do not modify//GEN-BEGIN:variables

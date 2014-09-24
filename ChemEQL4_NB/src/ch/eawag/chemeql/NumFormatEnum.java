@@ -1,14 +1,12 @@
 package ch.eawag.chemeql;
 
-import javax.swing.JToggleButton;
 
-
-class NumFormatEnum extends JToggleButton.ToggleButtonModel
+enum NumFormatEnum
 {
-	static final NumFormatEnum LINEAR = new NumFormatEnum("linear");
-	static final NumFormatEnum LOGARITHMIC = new NumFormatEnum("logarithmic");
+	LINEAR("linear"),
+	LOGARITHMIC("logarithmic");
 
-	private String value;
+	private final String value;
 
 	private NumFormatEnum(String v)
 	{

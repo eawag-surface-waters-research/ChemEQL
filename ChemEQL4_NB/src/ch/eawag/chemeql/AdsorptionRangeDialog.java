@@ -7,13 +7,13 @@ import java.awt.event.ComponentEvent;
 class AdsorptionRangeDialog extends ProceedCancelDialog
 {
 	private static AdsorptionRangeDialog INSTANCE;
-	static AdsorptionRangeDialog getInstance(Main parent)
+	static AdsorptionRangeDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new AdsorptionRangeDialog(parent);
 		return INSTANCE;
 	}
-	
+
 	private double currentStart;
 	private double currentEnd;
 	private double currentStep;
@@ -23,8 +23,8 @@ class AdsorptionRangeDialog extends ProceedCancelDialog
 	{
 		initComponents();
 	}
-	
-	private AdsorptionRangeDialog(Main parent)
+
+	private AdsorptionRangeDialog(ChemEqlGuiController parent)
 	{
 		super(parent);
 		initComponents();
@@ -40,7 +40,7 @@ class AdsorptionRangeDialog extends ProceedCancelDialog
 			}
 		});
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -155,7 +155,7 @@ class AdsorptionRangeDialog extends ProceedCancelDialog
 
       pack();
    }//GEN-END:initComponents
-	
+
 	private void checkInputs()
 	{
 		try
@@ -176,13 +176,13 @@ class AdsorptionRangeDialog extends ProceedCancelDialog
 		/*cancel, restore default*/
 		main.adsRange = false;
 		main.outputFormat = OutputFormat.REGULAR;
-		main.graphCmd.setEnabled(false);	
-		main.formatMenu.setEnabled(false);
-		main.pHrangeCmd.setEnabled(true);
-		main.compRangeCmd.setEnabled(true);
+		main.graphMI.setDisable(true);
+		main.formatMenu.setDisable(true);
+		main.pHrangeMI.setDisable(false);
+		main.compRangeMI.setDisable(false);
 		super.doCancel();
 	}
-	
+
 	protected void doProceed()
 	{
 		if (currentStart == 0)
@@ -202,10 +202,10 @@ class AdsorptionRangeDialog extends ProceedCancelDialog
 
 			main.adsRange = true;
 			main.outputFormat = OutputFormat.INTERVAL;
-			main.graphCmd.setEnabled(true);	
-			main.formatMenu.setEnabled(true);	/*activate formats*/
-			main.pHrangeCmd.setEnabled(false);
-			main.compRangeCmd.setEnabled(false);
+			main.graphMI.setDisable(false);
+			main.formatMenu.setDisable(false);	/*activate formats*/
+			main.pHrangeMI.setDisable(true);
+			main.compRangeMI.setDisable(true);
 			super.doProceed();
 		}
 	}

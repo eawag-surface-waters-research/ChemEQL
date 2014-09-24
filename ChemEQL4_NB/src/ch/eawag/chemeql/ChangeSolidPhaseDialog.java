@@ -8,7 +8,7 @@ import javax.swing.*;
 class ChangeSolidPhaseDialog extends ProceedCancelDialog
 {
 	private static ChangeSolidPhaseDialog INSTANCE;
-	static ChangeSolidPhaseDialog getInstance(Main parent)
+	static ChangeSolidPhaseDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new ChangeSolidPhaseDialog(parent);
@@ -17,7 +17,7 @@ class ChangeSolidPhaseDialog extends ProceedCancelDialog
 
 	private double currentLogInput;
 
-	private ChangeSolidPhaseDialog(Main parent)
+	private ChangeSolidPhaseDialog(ChemEqlGuiController parent)
 	{
 		super(parent);
 		initComponents();
@@ -30,7 +30,7 @@ class ChangeSolidPhaseDialog extends ProceedCancelDialog
 			public void componentShown(ComponentEvent arg0)
 			{
 				if (main.spLibrary == null) // falls Library noch nicht offen
-					main.spLibrary = Library.readBinLibrary(main,false);
+					main.spLibrary = Library.readBinLibrary(false);
 				if (main.spLibrary == null) return;	// Error while reading library: Exit!
 
 				proceedButton.setEnabled(false);

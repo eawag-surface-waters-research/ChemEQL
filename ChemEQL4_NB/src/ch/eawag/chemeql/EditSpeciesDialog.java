@@ -10,13 +10,13 @@ import javax.swing.event.ListSelectionEvent;
 class EditSpeciesDialog extends ProceedCancelDialog
 {
 	private static EditSpeciesDialog INSTANCE;
-	static EditSpeciesDialog getInstance(Main parent)
+	static EditSpeciesDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new EditSpeciesDialog(parent);
 		return INSTANCE;
 	}
-	
+
 	private Library library;
 
 	// Constructor for creating a bean
@@ -25,7 +25,7 @@ class EditSpeciesDialog extends ProceedCancelDialog
 		initComponents();
 	}
 
-	private EditSpeciesDialog(Main parent)
+	private EditSpeciesDialog(ChemEqlGuiController parent)
 	{
 		super(parent);
 		getRootPane().setDefaultButton(null);
@@ -150,7 +150,7 @@ class EditSpeciesDialog extends ProceedCancelDialog
 			logKTF.setText("");
 			litTF.setText("");
 		}
-		
+
 		resetButton.setEnabled(false);
 		acceptButton.setEnabled(false);
 		deleteButton.setEnabled(specSelected);
@@ -339,7 +339,7 @@ class EditSpeciesDialog extends ProceedCancelDialog
 
       pack();
    }//GEN-END:initComponents
-	
+
 	private void didEdit()
 	{
 		resetButton.setEnabled(true);
@@ -352,7 +352,7 @@ class EditSpeciesDialog extends ProceedCancelDialog
 		{
 			if (JOptionPane.showConfirmDialog(this,
 				"Do you really want to dismiss all changes made in this dialog?",
-				Main.AN,JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
+				ChemEql.APP_TITLE,JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
 			{
 				main.reloadLibrary(library);
 				super.doCancel();
@@ -361,7 +361,7 @@ class EditSpeciesDialog extends ProceedCancelDialog
 		else
 			super.doCancel();
 	}
-	
+
 	protected void doProceed()
 	{
 		library.writeBinary();

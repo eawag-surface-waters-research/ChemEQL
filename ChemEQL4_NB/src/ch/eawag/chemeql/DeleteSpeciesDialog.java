@@ -7,14 +7,14 @@ import java.awt.event.ComponentEvent;
 class DeleteSpeciesDialog extends ProceedCancelDialog
 {
 	private static DeleteSpeciesDialog INSTANCE;
-	static DeleteSpeciesDialog getInstance(Main parent)
+	static DeleteSpeciesDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new DeleteSpeciesDialog(parent);
 		return INSTANCE;
 	}
 
-	private DeleteSpeciesDialog(Main parent)
+	private DeleteSpeciesDialog(ChemEqlGuiController parent)
 	{
 		super(parent);
 		initComponents();
@@ -29,7 +29,7 @@ class DeleteSpeciesDialog extends ProceedCancelDialog
 		});
 	}
 
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is

@@ -3,6 +3,7 @@ package ch.eawag.chemeql;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
@@ -22,7 +23,7 @@ public class SplashScreen extends JWindow
 		l.setBorder(BorderFactory.createRaisedBevelBorder());
 		getContentPane().add(l,BorderLayout.CENTER);
 		pack();
-		Dimension ownerSize = owner.getSize();
+		Dimension ownerSize = new Dimension(800, 500); //		Dimension ownerSize = owner.getSize();
 		Dimension labelSize = l.getPreferredSize();
 		setLocation(ownerSize.width/2 - (labelSize.width/2),
 			ownerSize.height/2 - (labelSize.height/2));

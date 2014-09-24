@@ -7,7 +7,7 @@ import java.awt.event.ComponentEvent;
 class PHConstDialog extends ProceedCancelDialog
 {
 	private static PHConstDialog INSTANCE;
-	static PHConstDialog getInstance(Main parent)
+	static PHConstDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new PHConstDialog(parent);
@@ -21,8 +21,8 @@ class PHConstDialog extends ProceedCancelDialog
 	{
 		initComponents();
 	}
-	
-	private PHConstDialog(Main m)
+
+	private PHConstDialog(ChemEqlGuiController m)
 	{
 		super(m);
 		initComponents();
@@ -37,7 +37,7 @@ class PHConstDialog extends ProceedCancelDialog
 			}
 		});
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -67,7 +67,7 @@ class PHConstDialog extends ProceedCancelDialog
 
       pack();
    }//GEN-END:initComponents
-	
+
 	private void pHValueChanged()
 	{
 		try
@@ -82,18 +82,18 @@ class PHConstDialog extends ProceedCancelDialog
 			proceedButton.setEnabled(false);
 		}
 	}
-	
+
 	protected void doCancel()
 	{
 		main.pHrangeStart = MyTools.myLog(main.matrix.getMultiConcForLast()); /*restore old value*/
 		main.pHrangeEnd = main.pHrangeStart;
 		main.pHrangeStep = main.pHrangeStart;
-		main.pHrangeCmd.setEnabled(true);
-		main.formatMenu.setEnabled(true);
-		main.fileInfoWindow.update();
+		main.pHrangeMI.setDisable(false);
+		main.formatMenu.setDisable(false);
+//		main.matrixView.update();
 		super.doCancel();
 	}
-	
+
 	protected void doProceed()
 	{
 		main.pHrangeStart = currentPHInput;
@@ -107,9 +107,9 @@ class PHConstDialog extends ProceedCancelDialog
 		}
 		main.pHfix = true;
 		main.pHrange = true;
-		main.pHrangeCmd.setEnabled(false);
-		main.formatMenu.setEnabled(false);
-		main.fileInfoWindow.update();
+		main.pHrangeMI.setDisable(true);
+		main.formatMenu.setDisable(true);
+//		main.matrixView.update();
 		super.doProceed();
 	}
    // Variables declaration - do not modify//GEN-BEGIN:variables

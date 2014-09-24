@@ -9,7 +9,7 @@ import java.awt.event.ItemListener;
 public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static PxPyDiagramDialog INSTANCE;
-	static PxPyDiagramDialog getInstance(Main parent)
+	static PxPyDiagramDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new PxPyDiagramDialog(parent);
@@ -28,8 +28,8 @@ public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListen
 	{
 		initComponents();
 	}
-	
-	private PxPyDiagramDialog(Main parent)
+
+	private PxPyDiagramDialog(ChemEqlGuiController parent)
 	{
 		super(parent);
 		initComponents();
@@ -56,7 +56,7 @@ public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListen
 			}
 		});
 	}
-		
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -287,12 +287,12 @@ public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListen
 
       pack();
    }//GEN-END:initComponents
-	
+
 	public void itemStateChanged(ItemEvent e)
 	{
 		proceedButton.setEnabled(true);
 	}
-	
+
 	private void checkInputs()
 	{
 		try
@@ -316,11 +316,11 @@ public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListen
 		/*cancel*/
 		main.dopXpYdiagram = false;
 		main.doDrawGraph = false;
-		main.graphCmd.setEnabled(false); 
+		main.graphMI.setDisable(true);
 		main.outputFormat = OutputFormat.REGULAR;
 		super.doCancel();
 	}
-	
+
 	protected void doProceed()
 	{
 		if (currentpXStart >= currentpXEnd || currentpYStart >= currentpYEnd)
@@ -333,9 +333,9 @@ public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListen
 		{
 			main.dopXpYdiagram = true;
 			main.doDrawGraph = true;				/*** GRAPHIC ACTIVE ***/
-			main.graphCmd.setEnabled(false);		/*deactivate graphics*/
+			main.graphMI.setDisable(true);		/*deactivate graphics*/
 			main.outputFormat = OutputFormat.PXPY_DIAGRAM;
-			
+
 			main.matrix.xComp = xCompCB.getSelectedIndex();
 			main.matrix.yComp = yCompCB.getSelectedIndex();
 			main.matrix.mainpXpYcomp = mainpXpYcompCB.getSelectedIndex();

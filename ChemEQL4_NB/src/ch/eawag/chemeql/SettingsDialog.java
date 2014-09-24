@@ -12,8 +12,8 @@ import javax.swing.JComboBox;
 class SettingsDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static SettingsDialog INSTANCE;
-	
-	static SettingsDialog getInstance(Main parent)
+
+	static SettingsDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new SettingsDialog(parent);
@@ -26,7 +26,7 @@ class SettingsDialog extends ProceedCancelDialog implements ItemListener
 		new String []{"0.0","0.00","0.000","0.0000","0.00000"};
 	private static final String[] CONSTANT_FORMATS =
 		new String[]{"0.0","0.00","0.000","0.0000"};
-	
+
 	private int concentrationFormatIndex;
 	DecimalFormat concentrationFormat;
 	DecimalFormat nonExpoConcentrationFormat;
@@ -39,11 +39,11 @@ class SettingsDialog extends ProceedCancelDialog implements ItemListener
 		initComponents();
 	}
 
-	private SettingsDialog(Main main)
+	private SettingsDialog(ChemEqlGuiController main)
 	{
-		super(main);
+		super();
 		initComponents();
-		setLocation(300,250);		
+		setLocation(300,250);
 
 		Preferences pref = Preferences.userRoot();
 		concentrationFormatIndex = pref.getInt("concentrationDigits",2);

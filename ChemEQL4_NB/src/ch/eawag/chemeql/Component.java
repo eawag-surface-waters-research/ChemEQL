@@ -3,49 +3,81 @@ package ch.eawag.chemeql;
 
 class Component extends Object
 {
-	String name;
-	double conc;
-	Mode mode;
+	private String name;
+	private double conc;
+	private Mode mode;
+
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String value)
+	{
+		name = value;
+	}
+
+
+	public double getConc()
+	{
+		return conc;
+	}
+
+	public void setConc(double value)
+	{
+		conc = value;
+	}
+
+	public Mode getMode()
+	{
+		return mode;
+	}
+
+	public void setMode(Mode value)
+	{
+		mode = value;
+	}
 
 	Component()
 	{
 		initialize();
 	}
 
-	Component(String n, double c, Mode m)
+	Component(final String n, final double c, final Mode m)
 	{
 		// assert m == Mode.TOTAL || m == Mode.FREE;
-		name = n;
-		conc = c;
-		mode = m;
+		setName(n);
+		setConc(c);
+		setMode(m);
 	}
 
 	void initialize()
 	{
-		name = null;
-		conc = 0;
-		mode = null;
+		setName(null);
+		setConc(0);
+		setMode(null);
 	}
 
 	void copyFrom (Component other)
 	{
-		name = other.name;
-		conc = other.conc;
-		mode = other.mode;
+		setName(other.getName());
+		setConc(other.getConc());
+		setMode(other.getMode());
 	}
 
 	boolean isModeSolidPhaseOrCheckPrecip()
 	{
-		return mode == Mode.SOLID_PHASE || mode == Mode.CHECKPRECIP;
+		return Mode.SOLID_PHASE == getMode() || Mode.CHECKPRECIP == getMode();
 	}
 
 	boolean isHPlusOrEMinus()
 	{
-		return name.equals("H+") || name.equals("e-");
+		return "H+".equals(getName()) || "e-".equals(getName());
 	}
 
 	public String toString()
 	{
-		return name;
+		return getName();
 	}
 }

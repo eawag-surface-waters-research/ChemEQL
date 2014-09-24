@@ -1785,10 +1785,8 @@
                         var f2 = res.createFileSet();
                         f2.setProject(project);
                         f2.setDir(new java.io.File(pdir));
-                        var i2a = new String(project.getProperty("jfx.deployment.jar"));
                         var i2b = new String(project.getProperty("pp_jar_fs2"));
                         var e2c = new String(project.getProperty("pp_jar_fs1"));
-                        f2.setIncludes(i2a);
                         f2.setIncludes(i2b);
                         f2.setExcludes(e2c);
                         f2.setRequiredFor("startup");
@@ -1804,9 +1802,7 @@
                         var fn = res.createFileSet();
                         fn.setProject(project);
                         fn.setDir(new java.io.File(pdir));
-                        var ia = new String(project.getProperty("jfx.deployment.jar"));
                         var ib = new String(project.getProperty("pp_jar_fs2"));
-                        fn.setIncludes(ia);
                         fn.setIncludes(ib);
                         fn.setRequiredFor("startup");
                         var lazyjars = getLazyJars();
@@ -1894,7 +1890,37 @@
                         profileAttribute.setValue(new String(project.getProperty("javac.profile")));
                         man.addConfiguredAttribute(profileAttribute);
                     }
-                    
+                    var perm_elev = new String(project.getProperty("permissions.elevated"));
+                    var cust_perm = new String(project.getProperty("manifest.custom.permissions"));
+                    var cust_cb = new String(project.getProperty("manifest.custom.codebase"));
+                    var sa1 = new org.apache.tools.ant.taskdefs.Manifest.Attribute();
+                    sa1.setName("Codebase");
+                    if(!defined(cust_cb) || cust_cb == "*") {
+                        sa1.setValue("*");
+                        print("Warning: From JDK7u25 the Codebase manifest attribute should be used to restrict JAR repurposing.");
+                        print("         Please set manifest.custom.codebase property to override the current default non-secure value '*'.");
+                    } else {
+                        sa1.setValue(cust_cb);
+                    }
+                    man.addConfiguredAttribute(sa1);
+                    var sa2 = new org.apache.tools.ant.taskdefs.Manifest.Attribute();
+                    sa2.setName("Permissions");
+                    if(!defined(cust_perm)) {
+                        if(isTrue(perm_elev)) {
+                            sa2.setValue("all-permissions");
+                        } else {
+                            sa2.setValue("sandbox");
+                        }
+                    } else {
+                        if(cust_perm == "all-permissions") {
+                            sa2.setValue("all-permissions");
+                        } else {
+                            sa2.setValue("sandbox");
+                        }
+                    }
+                    man.addConfiguredAttribute(sa2);
+                    // Note: see JavaFX Jira issue #RT-25003 if attribute names are created lowercase in manifest
+
                     jar.perform();
                 ]]>
             </script>
@@ -2122,8 +2148,18 @@
                     var outfile = new String(project.getProperty("application.title"));
                     var includeDT = new String(project.getProperty("javafx.deploy.includeDT"));
                     var offline = new String(project.getProperty("javafx.deploy.allowoffline"));
-                    deploy.setWidth(width);
-                    deploy.setHeight(height);
+                    if (width.indexOf("%") != -1) {
+                        deploy.setEmbeddedWidth(width);
+                        deploy.setWidth(800);
+                    } else {
+                        deploy.setWidth(width);
+                    }
+                    if (height.indexOf("%") != -1) {
+                        deploy.setEmbeddedHeight(height);
+                        deploy.setHeight(600);
+                    } else {
+                        deploy.setHeight(height);
+                    }
                     deploy.setOutdir(outdir);
                     deploy.setEmbedJNLP(isTrue(embedJNLP));
                     deploy.setUpdateMode(updatemode);
@@ -3379,7 +3415,7 @@
         <antcall target="jfx-build-native"/>
     </target>
     <target name="build-native-noscript">
-        <property name="javafx.native.bundling.type" value="${native.bundling.type}"/>
+        <property name="javafx.native.bundling.type" value="${native.bundling.type}"/>        
         <antcall target="jfx-build-native-noscript"/>
     </target>
     
@@ -3496,11 +3532,9 @@
         <echo message="exec-error:${exec-error}" level="verbose"/>
         <echo message="exec-result:${exec-result}" level="verbose"/>
         <condition property="missing.WiX">
-            <not><and>
-                <contains string="${exec-output}" substring="Windows Installer Xml Compiler version"/>
-                <not><contains string="${exec-output}" substring="Windows Installer Xml Compiler version 1"/></not>
-                <not><contains string="${exec-output}" substring="Windows Installer Xml Compiler version 2"/></not>
-            </and></not>
+            <not>
+                <matches string="${exec-output}" pattern="windows\s+installer\s+xml\s+(toolset\s+)?compiler\s+version\s+3.*" casesensitive="false"/>
+            </not>
         </condition>
     </target>
     <target name="-check-dpkg-presence" depends="-check-native-bundling-type" if="need.dpkg.presence">
@@ -3636,6 +3670,29 @@
         </java>
         <antcall target="-remove-temp-run-dir"/>
     </target>
+    <target depends="init,compile,jar,-create-temp-run-dir,-debug-start-debugger" description="Debug JavaFX project standalone." name="jfx-project-debug">
+        <echo message="Executing ${temp.run.jar} using platform ${platform.java}"/>
+        <property name="run.jvmargs" value=""/>
+        <property name="run.jvmargs.ide" value=""/>        
+        <java jar="${temp.run.jar}" dir="${work.dir}" fork="true" jvm="${platform.java}">
+            <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
+            <jvmarg line="${debug-args-line}"/>
+            <jvmarg value="-Xrunjdwp:transport=${debug-transport},address=${jpda.address}"/>
+            <jvmarg value="-Dfile.encoding=${runtime.encoding}"/>
+            <redirector errorencoding="${runtime.encoding}" inputencoding="${runtime.encoding}" outputencoding="${runtime.encoding}"/>
+            <jvmarg line="${run.jvmargs}"/>
+            <jvmarg line="${run.jvmargs.ide}"/>
+            <classpath>
+                <path path="${temp.run.jar}:${javac.classpath}"/>
+            </classpath>
+            <arg line="${application.args}"/>
+            <syspropertyset>
+                <propertyref prefix="run-sys-prop."/>
+                <mapper from="run-sys-prop.*" to="*" type="glob"/>
+            </syspropertyset>
+        </java>
+        <antcall target="-remove-temp-run-dir"/>
+    </target>
 
 
     <!-- Running/Debugging/Profiling Standalone -->
@@ -3643,10 +3700,10 @@
     <target name="jfxsa-run" depends="-mark-project-state-running,-clean-if-config-changed,-check-jfx-runtime,-warn-of-preloader,jfx-project-run"/>
     <target name="jfxsa-run-noscript" depends="-set-fallback-no-javascript, jfxsa-run"/>
 
-    <target name="jfxsa-debug" depends="-mark-project-state-debugging,-clean-if-config-changed,jar,-check-jfx-runtime,-warn-of-preloader,debug"/>
+    <target name="jfxsa-debug" depends="-mark-project-state-debugging,-clean-if-config-changed,jar,-check-jfx-runtime,-warn-of-preloader,jfx-project-debug"/>
     <target name="jfxsa-debug-noscript" depends="-set-fallback-no-javascript, jfxsa-debug"/>
     
-    <target name="jfxsa-profile" depends="-mark-project-state-profiling,-check-jfx-runtime,-warn-of-preloader,profile"/>
+    <target name="jfxsa-profile" depends="-mark-project-state-profiling,-check-jfx-runtime,-warn-of-preloader,jfx-project-profile"/>
     <target name="jfxsa-profile-noscript" depends="-set-fallback-no-javascript, jfxsa-profile"/>
 
     <target name="-check-clean-if-config-changed" depends="-init-project">
@@ -3667,7 +3724,11 @@
         <echo message="Config change detected. Invoking clean." level="verbose"/>
         <antcall target="clean"/>
     </target>
-
+    
+    <target depends="-profile-check-1,-profile-pre72" description="Profile a project in the IDE." if="profiler.configured" name="jfx-project-profile" unless="profiler.info.jvmargs.agent">
+        <startprofiler/>
+        <antcall target="jfxsa-run"/>
+    </target>
 
     <!-- Shared Debugging init -->
 
@@ -3885,7 +3946,9 @@
             description="Start JavaFX execution in browser">
         <echo message="Executing ${temp.run.html} using ${javafx.run.inbrowser}"/>
         <echo message="(${javafx.run.inbrowser.path})"/>
+        <property name="javafx.run.inbrowser.arguments" value=""/>
         <exec executable="${javafx.run.inbrowser.path}">
+            <arg line="${javafx.run.inbrowser.arguments}"/>
             <arg file="${temp.run.html}"/>
         </exec>
         <antcall target="-warn-concurrent-html-runs"/>
@@ -3902,8 +3965,10 @@
     <target name="-debug-jfxbe-debuggee" depends="-init-debug-args">
         <echo message="Executing ${jfx.deployment.html} in debug mode using ${javafx.run.inbrowser}"/>
         <echo message="(${javafx.run.inbrowser.path})"/>
+        <property name="javafx.run.inbrowser.arguments" value=""/>
         <exec executable="${javafx.run.inbrowser.path}">
-            <env key="_JPI_VM_OPTIONS" value="${debug-args-line} -Xrunjdwp:transport=${debug-transport},address=${jpda.address}"/>
+            <arg line="${javafx.run.inbrowser.arguments}"/>
+            <env key="_JPI_VM_OPTIONS" value="-agentlib:jdwp=transport=${debug-transport},address=${jpda.address}"/>
             <arg file="${jfx.deployment.html}"/>
         </exec>
     </target>
@@ -3916,8 +3981,10 @@
             -check-jdk-7u4or5-mac,jar,-check-selected-browser-path,-set-html-file,-check-jfx-runtime,-warn-insufficient-signing">
         <echo message="Executing ${jfx.deployment.html} in profile mode using ${javafx.run.inbrowser}"/>
         <echo message="(${javafx.run.inbrowser.path})"/>
-        <property name="run.jvmargs.ide" value=""/>        
+        <property name="run.jvmargs.ide" value=""/>
+        <property name="javafx.run.inbrowser.arguments" value=""/>
         <exec executable="${javafx.run.inbrowser.path}">
+            <arg line="${javafx.run.inbrowser.arguments}"/>
             <env key="_JPI_VM_OPTIONS" value="${run.jvmargs.ide}"/>
             <arg file="${jfx.deployment.html}"/>
         </exec>

@@ -9,7 +9,7 @@ import java.awt.event.ItemListener;
 class IterationParametersDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static IterationParametersDialog INSTANCE;
-	static IterationParametersDialog getInstance(Main parent)
+	static IterationParametersDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new IterationParametersDialog(parent);
@@ -24,14 +24,14 @@ class IterationParametersDialog extends ProceedCancelDialog implements ItemListe
 	boolean autoConvCrit;
 	boolean markIter;
 
-	
+
 	// Constructor for creating a bean
 	public IterationParametersDialog()
 	{
 		initComponents();
 	}
-	
-	private IterationParametersDialog(Main main)
+
+	private IterationParametersDialog(ChemEqlGuiController main)
 	{
 		super(main);
 		initComponents();
@@ -50,7 +50,7 @@ class IterationParametersDialog extends ProceedCancelDialog implements ItemListe
 			}
 		});
 	}
-	
+
 	private void maxIterationsChanged()
 	{
 		try
@@ -142,7 +142,7 @@ class IterationParametersDialog extends ProceedCancelDialog implements ItemListe
 
       pack();
    }//GEN-END:initComponents
-	
+
 	public void itemStateChanged(ItemEvent ev)
 	{
 		proceedButton.setEnabled(true);
@@ -152,7 +152,7 @@ class IterationParametersDialog extends ProceedCancelDialog implements ItemListe
 	{
 		super.doCancel();
 	}
-	
+
 	protected void doProceed()
 	{
 		maxIterations = currentMaxIterationsInput;

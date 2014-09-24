@@ -8,7 +8,7 @@ import java.awt.event.ComponentEvent;
 class ComponentRangeDialog extends ProceedCancelDialog
 {
 	private static ComponentRangeDialog INSTANCE;
-	static ComponentRangeDialog getInstance(Main parent)
+	static ComponentRangeDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new ComponentRangeDialog(parent);
@@ -24,8 +24,8 @@ class ComponentRangeDialog extends ProceedCancelDialog
 	{
 		initComponents();
 	}
-	
-	private ComponentRangeDialog(Main m)
+
+	private ComponentRangeDialog(ChemEqlGuiController m)
 	{
 		super(m);
 		initComponents();
@@ -49,7 +49,7 @@ class ComponentRangeDialog extends ProceedCancelDialog
 			}
 		});
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -204,16 +204,16 @@ class ComponentRangeDialog extends ProceedCancelDialog
 			main.pHrange = true;
 		main.outputFormat = OutputFormat.REGULAR;
 		main.compRangeIsLog = false;
-		main.numFormat.setSelected(NumFormatEnum.LINEAR,true);
+		main.setNumFormatToLinear();
 
-		main.formatMenu.setEnabled(false);
-		main.graphCmd.setEnabled(false);
-		main.pHrangeCmd.setEnabled(true);
+		main.formatMenu.setDisable(true);
+		main.graphMI.setDisable(true);
+		main.pHrangeMI.setDisable(false);
 		if (main.matrix.adsorption())
-			main.adsRangeCmd.setEnabled(true);
+			main.adsRangeMI.setDisable(false);
 		super.doCancel();
 	}
-	
+
 	protected void doProceed()
 	{
 		if (currentStart == 0)
@@ -232,7 +232,7 @@ class ComponentRangeDialog extends ProceedCancelDialog
 				+ " and step must be smaller than range between start and end!");
 		else if (linChecker.isSelected() && (currentStart < 0 || currentEnd < 0))
 			MyTools.showError("Negative concentrations are not sensible!");
-		else if (main.matrix.components[componentsCB.getSelectedIndex()].mode == Mode.SOLID_PHASE)
+		else if (main.matrix.components[componentsCB.getSelectedIndex()].getMode() == Mode.SOLID_PHASE)
 			MyTools.showError("Your matrix says this component is a solid phase.");
 		else if (componentsCB.getSelectedIndex() == main.matrix.totComp-1
 			&& main.matrix.isHorHplusAndFree())
@@ -247,20 +247,20 @@ class ComponentRangeDialog extends ProceedCancelDialog
 			if (logChecker.isSelected())
 			{
 				main.compRangeIsLog = true;
-				main.numFormat.setSelected(NumFormatEnum.LOGARITHMIC,true);
+				main.setNumFormatToLogarithmic();
 			}
 			else
 			{
-				main.compRangeIsLog = false;		
-				main.numFormat.setSelected(NumFormatEnum.LINEAR,true);
+				main.compRangeIsLog = false;
+				main.setNumFormatToLinear();
 			}
 			main.compRange = true;
 			main.pHrange = false;
 			main.outputFormat = OutputFormat.INTERVAL;
-			main.formatMenu.setEnabled(true);	/*activate formats*/
-			main.graphCmd.setEnabled(true);		/*activate graphics*/
-			main.pHrangeCmd.setEnabled(false);
-			main.adsRangeCmd.setEnabled(false);
+			main.formatMenu.setDisable(false);	/*activate formats*/
+			main.graphMI.setDisable(false);		/*activate graphics*/
+			main.pHrangeMI.setDisable(true);
+			main.adsRangeMI.setDisable(true);
 			super.doProceed();
 		}
 	}
@@ -274,5 +274,5 @@ class ComponentRangeDialog extends ProceedCancelDialog
    private javax.swing.JTextField startTF;
    private javax.swing.JTextField stepTF;
    // End of variables declaration//GEN-END:variables
-	
+
 }

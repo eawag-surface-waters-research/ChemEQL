@@ -7,18 +7,18 @@ import java.awt.event.ComponentEvent;
 class ActivityInputDialog extends ProceedCancelDialog
 {
 	private static ActivityInputDialog INSTANCE;
-	static ActivityInputDialog getInstance(Main parent)
+	static ActivityInputDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new ActivityInputDialog(parent);
 		return INSTANCE;
 	}
-	
+
 	private double currentIonicStr;
 	private double currentActivA;
 
-	
-	private ActivityInputDialog(Main parent)
+
+	private ActivityInputDialog(ChemEqlGuiController parent)
 	{
 		super(parent);
 		initComponents();
@@ -38,7 +38,7 @@ class ActivityInputDialog extends ProceedCancelDialog
 			}
 		});
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -191,11 +191,11 @@ class ActivityInputDialog extends ProceedCancelDialog
 
 	protected void doCancel()
 	{
-		main.calcActivCoeff.setSelected(ActivityEnum.NO,true);
+		main.setActivity(Activity.NO); // was main.calcActivCoeff.selectToggle(Activity.NO);
 		main.activityOutput = false;
 		super.doCancel();
 	}
-	
+
 	protected void doProceed()
 	{
 		if (currentActivA <= 0)

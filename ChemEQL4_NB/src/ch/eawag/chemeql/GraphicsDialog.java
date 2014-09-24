@@ -7,20 +7,20 @@ import java.awt.event.ComponentEvent;
 class GraphicsDialog extends ProceedCancelDialog
 {
 	private static GraphicsDialog INSTANCE;
-	static GraphicsDialog getInstance(Main parent)
+	static GraphicsDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new GraphicsDialog(parent);
 		return INSTANCE;
 	}
-	
+
 	// Constructor for creating a bean
 	public GraphicsDialog()
 	{
 		initComponents();
 	}
-	
-	private GraphicsDialog(Main parent)
+
+	private GraphicsDialog(ChemEqlGuiController parent)
 	{
 		super(parent);
 		initComponents();
@@ -34,7 +34,7 @@ class GraphicsDialog extends ProceedCancelDialog
 			}
 		});
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -65,14 +65,14 @@ class GraphicsDialog extends ProceedCancelDialog
 
       pack();
    }//GEN-END:initComponents
-	
+
 	protected void doCancel()
 	{
 		main.doDrawGraph = false;
 		main.drawSpecs = new int[0];
 		super.doCancel();
 	}
-	
+
 	protected void doProceed()
 	{
 		if (speciesList.getSelectedIndices().length > 10)

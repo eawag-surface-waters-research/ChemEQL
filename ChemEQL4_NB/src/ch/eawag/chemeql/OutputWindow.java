@@ -15,21 +15,21 @@ import java.io.IOException;
 
 class OutputWindow extends JInternalFrame
 {
-	private Main main;
-	private Matrix matrix;
+	private final ChemEqlGuiController main;
+	private final Matrix matrix;
 
-	private JScrollPane scroller;
+	private final JScrollPane scroller;
 
-	private DataTable intervalTable;
-	private PxPyTable pxpyTable;
-	private JPanel regularPanel;
+	private final DataTable intervalTable;
+	private final PxPyTable pxpyTable;
+	private final JPanel regularPanel;
 	private JTextArea notesTA;
 	private SpeciesTable speciesTable;
 	private ComponentsTable componentsTable;
 	private JTextField activityTF;
 
 
-	public OutputWindow(Main main, Matrix matrix)
+	public OutputWindow(ChemEqlGuiController main, Matrix matrix)
 	{
 		super("Data",true,true,true,true);
 		this.main = main;
@@ -40,7 +40,7 @@ class OutputWindow extends JInternalFrame
 //		readCount = 0;
 //		outputTitleFlag = false;
 
-		// create components		
+		// create components
 		regularPanel = createRegularPanel();
 		intervalTable = new DataTable(main);
 		pxpyTable = new PxPyTable(main,matrix.getPxPyOutputTableModel());
@@ -50,7 +50,7 @@ class OutputWindow extends JInternalFrame
 		scroller.setOpaque(false);
 		scroller.getViewport().setOpaque(false);
 		getContentPane().add(scroller,BorderLayout.CENTER);
-		
+
 		// textfield for (optionally) displaying notes while calculating
 		PlainDocument doc = matrix.getNotesDoc();
 		notesTA = new JTextArea(doc);
@@ -132,7 +132,7 @@ class OutputWindow extends JInternalFrame
 		gbc.fill = GridBagConstraints.VERTICAL;
 		gbc.weighty = 1.0f;
 		panel.add(new JPanel(),gbc);
-		
+
 		return panel;
 	}
 
@@ -178,7 +178,7 @@ class OutputWindow extends JInternalFrame
 		setColumnWidths(cm.getColumn(r++),width,width+30);
 		setColumnWidths(cm.getColumn(r++),50,90);
 		setColumnWidths(cm.getColumn(r++),70,110);
-		if (matrix.calculatedWithActivity)
+		if (matrix.calculatedWithActivity())
 			setColumnWidths(cm.getColumn(r++),70,110);
 		setColumnWidths(cm.getColumn(r++),50,80);
 
@@ -189,13 +189,13 @@ class OutputWindow extends JInternalFrame
 		setColumnWidths(cm.getColumn(2),60,90);
 		setColumnWidths(cm.getColumn(3),100,130);
 
-		if (matrix.calculatedWithActivity)
+		if (matrix.calculatedWithActivity())
 			activityTF.setText("Ionic strength:  "
-				+ main.settingsDialog.concentrationFormat.format(matrix.ionicStr) 
-				+ "       Approximation:  " + main.getCalcActivCoeff());
-		activityTF.setVisible(matrix.calculatedWithActivity);
+				+ main.settingsDialog.concentrationFormat.format(matrix.ionicStr)
+				+ "       Approximation:  " + main.getCalcActivityName());
+		activityTF.setVisible(matrix.calculatedWithActivity());
 	}
- 
+
 	private void updateInterval()
 	{
 		intervalTable.startItalic = matrix.startItalics;
@@ -213,7 +213,7 @@ class OutputWindow extends JInternalFrame
 		scroller.setViewportView(pxpyTable);
 	}
 
-	
+
 	private void setColumnWidths(TableColumn col, int min, int max)
 	{
 		col.setPreferredWidth(min);
@@ -244,13 +244,13 @@ class OutputWindow extends JInternalFrame
 
 	static class SpeciesTable extends MyTable
 	{
-		private Main main;
+		private ChemEqlGuiController main;
 		private TableCellRenderer speciesRenderer;
 		private TableCellRenderer matrixRenderer;
 		private TableCellRenderer logKRenderer;
 		private TableCellRenderer concRenderer;
 
-		SpeciesTable(Main main, TableModel model)
+		SpeciesTable(ChemEqlGuiController main, TableModel model)
 		{
 			super(model,false);
 			this.main = main;
@@ -273,7 +273,7 @@ class OutputWindow extends JInternalFrame
 				return logKRenderer;
 			if (col == ++c)
 				return concRenderer;
-			if (main.matrix.calculatedWithActivity)
+			if (main.matrix.calculatedWithActivity())
 				if (col == ++c)
 					return concRenderer;
 			// assert col == ++c
@@ -289,8 +289,8 @@ class OutputWindow extends JInternalFrame
 		private TableCellRenderer componentRenderer;
 		private TableCellRenderer modeRenderer;
 		private TableCellRenderer concRenderer;
-		
-		ComponentsTable(Main main, TableModel model)
+
+		ComponentsTable(ChemEqlGuiController main, TableModel model)
 		{
 			super(model,false);
 
@@ -310,7 +310,7 @@ class OutputWindow extends JInternalFrame
 				case 3: return concRenderer;
 				default: return null;
 			}
-		}		
+		}
 	}
 
 	// --- custom table for output data
@@ -324,7 +324,7 @@ class OutputWindow extends JInternalFrame
 		int startItalic;
 		int stopItalic;
 
-		DataTable(Main main)
+		DataTable(ChemEqlGuiController main)
 		{
 			super(new DefaultTableModel(),true);
 			linRenderer = new CustomConcentrationsRenderer(
@@ -361,7 +361,7 @@ class OutputWindow extends JInternalFrame
 		private TableCellRenderer numRenderer;
 		private TableCellRenderer strRenderer;
 
-		PxPyTable(Main main, TableModel model)
+		PxPyTable(ChemEqlGuiController main, TableModel model)
 		{
 			super(model,true);
 			numRenderer = new CustomNonExpoConcentrationsRenderer(

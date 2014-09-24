@@ -1,8 +1,9 @@
 package ch.eawag.chemeql;
 
+import java.awt.Frame;
 import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 
@@ -14,10 +15,10 @@ class SelectComponentsDialog extends JDialog
 	private DefaultListModel libraryListModel;
 	private DefaultListModel selectionListModel;
 	private double currentConcentrationInput;
-	private Main main;
+	private ChemEqlGuiController main;
 
 
-	static SelectComponentsDialog getInstance(Main parent)
+	static SelectComponentsDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new SelectComponentsDialog(parent);
@@ -25,9 +26,9 @@ class SelectComponentsDialog extends JDialog
 	}
 
 	/** Creates new form SelectComponentsDialog */
-	private SelectComponentsDialog(Main parent)
+	private SelectComponentsDialog(ChemEqlGuiController parent)
 	{
-		super(parent,true);
+		super((Frame)null, true);
 		main = parent;
 		libraryListModel = new DefaultListModel();
 		selectionListModel = new DefaultListModel();
@@ -371,12 +372,12 @@ class SelectComponentsDialog extends JDialog
 		if (selList.size() == 2)
 			doneButton.setEnabled(true);
 	}//GEN-LAST:event_addButtonActionPerformed
-	
+
 	private void doCancel()
 	{
 		int dialogResult = JOptionPane.showConfirmDialog(
 			this,"Do you want to dismiss dialog Select Components\nand all changes made therein?",
-			Main.AN,JOptionPane.YES_NO_OPTION);
+			ChemEql.APP_TITLE,JOptionPane.YES_NO_OPTION);
 		if (dialogResult == JOptionPane.YES_OPTION)
 		{
 		// assert dialogResult == JOptionPane.NO_OPTION || dialogResult == JOptionPane.CLOSED_OPTION;
@@ -410,5 +411,5 @@ class SelectComponentsDialog extends JDialog
    private javax.swing.JSeparator separator;
    private javax.swing.JRadioButton totalModeButton;
    // End of variables declaration//GEN-END:variables
-	
+
 }

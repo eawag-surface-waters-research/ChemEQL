@@ -8,7 +8,7 @@ class PHRangeDialog extends ProceedCancelDialog
 {
 	private static PHRangeDialog INSTANCE;
 
-	static PHRangeDialog getInstance(Main parent)
+	static PHRangeDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new PHRangeDialog(parent);
@@ -24,8 +24,8 @@ class PHRangeDialog extends ProceedCancelDialog
 	{
 		initComponents();
 	}
-	
-	private PHRangeDialog(Main main)
+
+	private PHRangeDialog(ChemEqlGuiController main)
 	{
 		super(main);
 		initComponents();
@@ -42,7 +42,7 @@ class PHRangeDialog extends ProceedCancelDialog
 			}
 		});
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -127,7 +127,7 @@ class PHRangeDialog extends ProceedCancelDialog
 
       pack();
    }//GEN-END:initComponents
-	
+
 	private void checkInputs()
 	{
 		try
@@ -151,15 +151,15 @@ class PHRangeDialog extends ProceedCancelDialog
 		/*cancel button, restore default*/
 		main.pHrange = false;
 		main.outputFormat = OutputFormat.REGULAR;
-		main.graphCmd.setEnabled(false);
-		main.formatMenu.setEnabled(false);
-		main.pHconstCmd.setEnabled(true);
-		main.compRangeCmd.setEnabled(true);
+		main.graphMI.setDisable(true);
+		main.formatMenu.setDisable(true);
+		main.pHconstMI.setDisable(false);
+		main.compRangeMI.setDisable(false);
 		if (main.matrix.adsorption())
-			main.adsRangeCmd.setEnabled(true);
+			main.adsRangeMI.setDisable(false);
 		super.doCancel();
 	}
-	
+
 	protected void doProceed()
 	{
 		if (currentStart >= currentEnd)
@@ -173,11 +173,11 @@ class PHRangeDialog extends ProceedCancelDialog
 			main.pHrangeStep = currentStep;
 			main.pHrange = true;
 			main.outputFormat = OutputFormat.INTERVAL;
-			main.graphCmd.setEnabled(true);
-			main.formatMenu.setEnabled(true);
-			main.pHconstCmd.setEnabled(false);
-			main.compRangeCmd.setEnabled(false);
-			main.adsRangeCmd.setEnabled(false);
+			main.graphMI.setDisable(false);
+			main.formatMenu.setDisable(false);
+			main.pHconstMI.setDisable(true);
+			main.compRangeMI.setDisable(true);
+			main.adsRangeMI.setDisable(true);
 			super.doProceed();
 		}
 	}
@@ -186,5 +186,5 @@ class PHRangeDialog extends ProceedCancelDialog
    private javax.swing.JTextField startTF;
    private javax.swing.JTextField stepTF;
    // End of variables declaration//GEN-END:variables
-	
+
 }

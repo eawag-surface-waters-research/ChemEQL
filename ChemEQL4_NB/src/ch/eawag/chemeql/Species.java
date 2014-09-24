@@ -34,7 +34,7 @@ class Species extends Object implements Serializable
 		constant = other.constant;
 		source = other.source;
 	}
-	
+
 	boolean isHPlusOrEMinus()
 	{
 		return name.equals("H+") || name.equals("e-");

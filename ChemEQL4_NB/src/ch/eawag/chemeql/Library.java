@@ -11,13 +11,11 @@ import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.Serializable;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
-import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitorInputStream;
 import javax.swing.event.ListDataListener;
 
@@ -42,7 +40,7 @@ class Library implements Serializable
 	private transient SpeciesListModel speciesListModel;
 	private transient ComboBoxModel speciesCBModel;
 	private transient ComboBoxModel componentsCBModel;
-	private transient Main main;
+//	private transient ChemEqlGuiController main;
 	private transient boolean isRegularLib;	// false: library is solid phases library
 
 	private static String defaultBinFileName(final boolean isRegularLib)
@@ -62,7 +60,7 @@ class Library implements Serializable
 	}
 
 	// read binary library file from the users home directory
-	static Library readBinLibrary(final Main m, final boolean isRegularLib)
+	static Library readBinLibrary(final boolean isRegularLib)
 	{
 		Library result = null;
 		try
@@ -70,7 +68,7 @@ class Library implements Serializable
 			ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(
 				new FileInputStream(binLibFile(isRegularLib))));
 			result = (Library)in.readObject();
-			result.initializeLibrary(m,isRegularLib);
+			result.initializeLibrary(isRegularLib);
 			in.close();
 		}
 		catch (Exception ex)
@@ -79,7 +77,7 @@ class Library implements Serializable
 			result = null;
 		}
 		return result;
-	}	
+	}
 
 	// write library as binary file to default location
 	String writeBinary()
@@ -102,17 +100,16 @@ class Library implements Serializable
 		return result;
 	}
 
-	Library(Main m, boolean regLibrary)
+	Library(boolean regLibrary)
 	{
-		initializeLibrary(m,regLibrary);
+		initializeLibrary(regLibrary);
 	}
 
-	private void initializeLibrary(Main m, boolean regLibrary)
+	private void initializeLibrary(boolean regLibrary)
 	{
-		main = m;
 		isRegularLib = regLibrary;
 	}
-	
+
 	String libraryType()
 	{
 		return isRegularLib ? "Regular" : "Solid Phases";
@@ -122,14 +119,14 @@ class Library implements Serializable
 	{
 		return defaultTextFileName(isRegularLib);
 	}
-	
+
 	AbstractListModel getComponentsListModel()
 	{
 		if (componentsListModel == null)
 			componentsListModel = new ComponentsListModel();
 		return componentsListModel;
 	}
-	
+
 	AbstractListModel getSpeciesListModel()
 	{
 		if (speciesListModel == null)
@@ -151,14 +148,14 @@ class Library implements Serializable
 		return componentsCBModel;
 	}
 
-	
+
 	/* reads library from an EXCEL-text file */
 	void importLib(final InputStream inStream, final String msg)
 		throws IOException
 	{
 		String s;
 		ProgressMonitorInputStream progrMon =
-			new ProgressMonitorInputStream(main,msg,inStream);
+			new ProgressMonitorInputStream(null, msg,inStream);	//TEST
 		progrMon.getProgressMonitor().setMillisToDecideToPopup(0);
 		progrMon.getProgressMonitor().setMillisToPopup(0);
 	 	InputStreamReader reader = new InputStreamReader(progrMon);
@@ -229,8 +226,8 @@ class Library implements Serializable
 					s = myRead.nextItem();
 					source = source + s;
 				}
-				
-				libSpecies[libTotSpec] = new Species(name,constant,source);				
+
+				libSpecies[libTotSpec] = new Species(name,constant,source);
 				libTotSpec++;
 				myRead.skipToEOL(); /*liest bis und mit 'CR' -> Zeilenende*/
 			} /* if not empty line */
@@ -253,7 +250,7 @@ class Library implements Serializable
 			writer.write(TAB);
 		}
 		writer.write(CR);			// writer.newLine() ??
-		
+
 		for (int a=0; a < libTotSpec; a++)
 		{
 			writer.write(libSpecies[a].name);
@@ -287,10 +284,10 @@ class Library implements Serializable
 		int i = 0;
 		while (!Character.isLetterOrDigit(str.charAt(i)))
 			i++;
-		
+
 		return i == 0 ? str : str.substring(i);
 	}
-	
+
 	void changedComponentName(String changedName, int i)
 	{
 		libCompNames[i] = changedName;
@@ -321,7 +318,7 @@ class Library implements Serializable
 
 		return insertNo;
 	}
-	
+
 
 	void deleteComponentAtIndex(final int deleteCompNo)
 	{
@@ -335,10 +332,10 @@ class Library implements Serializable
 		for (int b=deleteCompNo; b < libTotComp-1; b++)
 		{
 			libCompNames[b] = libCompNames[b+1];
-		
+
 			/*stoch. Koeffizienten in allen Specs löschen*/
 			for (int a=0; a < libTotSpec; a++)
-				libSpecMat[a][b] = libSpecMat[a][b+1];			
+				libSpecMat[a][b] = libSpecMat[a][b+1];
 		}
 		libTotComp--;
 		componentsListModel.removed(deleteCompNo);
@@ -404,8 +401,8 @@ class Library implements Serializable
 
 	String equationFor(int[] stoichCoeffs, String specName)
 	{
-		StringBuffer educts = new StringBuffer(30);
-		StringBuffer products = new StringBuffer(30);
+		StringBuilder educts = new StringBuilder(30);
+		StringBuilder products = new StringBuilder(30);
 
 		for (int a=0; a < stoichCoeffs.length; a++)
 		{
@@ -438,7 +435,7 @@ class Library implements Serializable
 		{
 			return libCompNames[index];
 		}
-		
+
 		public int getSize()
 		{
 			return libTotComp;
@@ -468,7 +465,7 @@ class Library implements Serializable
 		{
 			return libSpecies[index];
 		}
-		
+
 		public int getSize()
 		{
 			return libTotSpec;
@@ -497,7 +494,7 @@ class Library implements Serializable
 		private Object selectedSpecies = null;
 
 		public void addListDataListener(ListDataListener l) {}
-		public void removeListDataListener(ListDataListener l) {}	
+		public void removeListDataListener(ListDataListener l) {}
 
 		public Object getElementAt(int i)
 		{
@@ -528,7 +525,7 @@ class Library implements Serializable
 		private Object selectedComponent = null;
 
 		public void addListDataListener(ListDataListener l) {}
-		public void removeListDataListener(ListDataListener l) {}	
+		public void removeListDataListener(ListDataListener l) {}
 
 		public Object getElementAt(int i)
 		{

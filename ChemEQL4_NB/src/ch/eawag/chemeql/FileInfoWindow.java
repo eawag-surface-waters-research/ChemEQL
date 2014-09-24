@@ -1,25 +1,44 @@
 package ch.eawag.chemeql;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.table.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 
-class FileInfoWindow extends JInternalFrame 
+
+class FileInfoWindow extends JFrame
 {
 
-	private Matrix matrix;
-	private JTable componentsTable;
-	private JTable adsorptionParametersTable;
-	private JTextField multiCalculationTF;
-	private JTextField pHTF;
-	private JTable speciesTable;
+	private final Matrix matrix;
+	private final JTable componentsTable;
+	private final JTable adsorptionParametersTable;
+	private final JTextField multiCalculationTF;
+	private final JTextField pHTF;
+	private final JTable speciesTable;
 
-	FileInfoWindow(Main main, Matrix matrix)
+	FileInfoWindow(ChemEqlGuiController main, Matrix matrix)
 	{
-		super("",true,true,true,true);
+		super(matrix.toString());
 		this.matrix = matrix;
-		setTitle(matrix.toString());
 		setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 
 		// create components
@@ -146,8 +165,8 @@ class FileInfoWindow extends JInternalFrame
 		private TableCellEditor modeEditorPhaseCheckPrecip;
 		private TableCellRenderer concentrationRenderer;
 		private TableCellEditor concentrationEditor;
-		
-		ComponentTable(Main main, TableModel model)
+
+		ComponentTable(ChemEqlGuiController main, TableModel model)
 		{
 			super(model,false);
 			componentRenderer = new CustomRenderer(
@@ -160,7 +179,7 @@ class FileInfoWindow extends JInternalFrame
 			modeEditorPhaseCheckPrecip = new DefaultCellEditor(
 				new JComboBox(new Mode[]{Mode.SOLID_PHASE,Mode.CHECKPRECIP}));
 			concentrationRenderer = new CustomConcentrationsRenderer(
-				getFont(),SwingConstants.CENTER,main);
+				getFont(),SwingConstants.CENTER, main);
 			concentrationEditor = new CustomDoubleEditor(SwingConstants.CENTER);
 		}
 
@@ -174,7 +193,7 @@ class FileInfoWindow extends JInternalFrame
 				default: return null;
 			}
 		}
-		
+
 		public boolean isCellEditable(int row, int col)
 		{
 			return true;
@@ -232,7 +251,7 @@ class FileInfoWindow extends JInternalFrame
 				default: return null;
 			}
 		}
-	
+
 		public boolean isCellEditable(int row, int col)
 		{
 			return row > 0 && col > 0 && !(row == 4 && col > 1);
@@ -253,7 +272,7 @@ class FileInfoWindow extends JInternalFrame
 		private TableCellEditor logKEditor;
 		private TableCellRenderer logKSourceRenderer;
 
-		SpeciesTable(Main main, TableModel model)
+		SpeciesTable(ChemEqlGuiController main, TableModel model)
 		{
 			super(model,false);
 			logKRenderer = new CustomConstantsRenderer(getFont(),SwingConstants.RIGHT,main);
@@ -272,7 +291,7 @@ class FileInfoWindow extends JInternalFrame
 				default: return null;
 			}
 		}
-		
+
 		public boolean isCellEditable(int row, int col)
 		{
 			return col == 2;

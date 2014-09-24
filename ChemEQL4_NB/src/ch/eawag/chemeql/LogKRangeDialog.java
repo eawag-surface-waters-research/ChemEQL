@@ -9,13 +9,13 @@ import java.awt.event.ItemListener;
 class LogKRangeDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static LogKRangeDialog INSTANCE;
-	static LogKRangeDialog getInstance(Main parent)
+	static LogKRangeDialog getInstance(ChemEqlGuiController parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new LogKRangeDialog(parent);
 		return INSTANCE;
 	}
-	
+
 	private double currentStart;
 	private double currentEnd;
 	private double currentStep;
@@ -26,7 +26,7 @@ class LogKRangeDialog extends ProceedCancelDialog implements ItemListener
 		initComponents();
 	}
 
-	private LogKRangeDialog(Main parent)
+	private LogKRangeDialog(ChemEqlGuiController parent)
 	{
 		super(parent);
 		initComponents();
@@ -175,13 +175,13 @@ class LogKRangeDialog extends ProceedCancelDialog implements ItemListener
 
       pack();
    }//GEN-END:initComponents
-	
+
 	public void itemStateChanged(ItemEvent e)
 	{
 		logKTF.setText(MyTools.EXACT_2_DIGITS.format(
 			((Species)speciesCB.getSelectedItem()).constant));
 	}
-	
+
 	private void checkInputs()
 	{
 		try
@@ -209,16 +209,16 @@ class LogKRangeDialog extends ProceedCancelDialog implements ItemListener
 		if (main.matrix.adsorption())
 			main.adsRange = true;
 		main.outputFormat = OutputFormat.REGULAR;
-		main.numFormat.setSelected(NumFormatEnum.LINEAR,true);
-		main.formatMenu.setEnabled(false);
-		main.graphCmd.setEnabled(false);
-		main.pHrangeCmd.setEnabled(true);
-		main.compRangeCmd.setEnabled(true);
+		main.setNumFormatToLinear();
+		main.formatMenu.setDisable(true);
+		main.graphMI.setDisable(true);
+		main.pHrangeMI.setDisable(false);
+		main.compRangeMI.setDisable(false);
 		if (main.matrix.adsorption())
-			main.adsRangeCmd.setEnabled(true);
+			main.adsRangeMI.setDisable(false);
 		super.doCancel();
 	}
-	
+
 	protected void doProceed()
 	{
 		if (currentStart >= currentEnd)
@@ -241,11 +241,11 @@ class LogKRangeDialog extends ProceedCancelDialog implements ItemListener
 			main.pHrange = false;
 			main.adsRange = false;
 			main.outputFormat = OutputFormat.INTERVAL;
-			main.graphCmd.setEnabled(true);
-			main.formatMenu.setEnabled(true);
-			main.pHrangeCmd.setEnabled(false);
-			main.compRangeCmd.setEnabled(false);
-			main.adsRangeCmd.setEnabled(false);
+			main.graphMI.setDisable(false);
+			main.formatMenu.setDisable(false);
+			main.pHrangeMI.setDisable(true);
+			main.compRangeMI.setDisable(true);
+			main.adsRangeMI.setDisable(true);
 			super.doProceed();
 		}
 	}

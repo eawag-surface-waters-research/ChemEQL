@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.input.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.eawag.chemeql.ChemEqlGuiController">
+	<top>
+		<MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
+			<menus>
+				<Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
+					<items>
+						<MenuItem fx:id="openMI" mnemonicParsing="false" onAction="#openCmd" text="Open Matrix ...">
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+							</accelerator>
+						</MenuItem>
+						<MenuItem mnemonicParsing="false" onAction="#readLibCmd" text="Access Library ...">
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="L" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+							</accelerator>
+						</MenuItem>
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem fx:id="saveMatrixMI" disable="true" mnemonicParsing="false" onAction="#saveMatrixCmd" text="Save Matrix ..." />
+						<MenuItem fx:id="saveDataMI" disable="true" mnemonicParsing="false" onAction="#saveDataCmd" text="Save Data ...">
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+							</accelerator>
+						</MenuItem>
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem mnemonicParsing="false" onAction="#importLibCmd" text="Import Library ..." />
+						<MenuItem mnemonicParsing="false" onAction="#exportLibCmd" text="Export Library ..." />
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem fx:id="printMI" disable="true" mnemonicParsing="false" onAction="#printCmd" text="Print Selected Window">
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+							</accelerator>
+						</MenuItem>
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem mnemonicParsing="false" onAction="#settingsCmd" text="Settings ..." />
+						<MenuItem mnemonicParsing="false" onAction="#iterationParamsCmd" text="Iteration Parameters ..." />
+						<SeparatorMenuItem fx:id="quitSeparator" mnemonicParsing="false" />
+						<MenuItem fx:id="quitMI" mnemonicParsing="false" onAction="#quitCmd" text="Quit ...">
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="Q" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+							</accelerator>
+						</MenuItem>
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Libraries">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#editRegLibComponentsCmd" text="Edit Regular Lib. Components ..." />
+						<MenuItem mnemonicParsing="false" onAction="#editRegLibSpeciesCmd" text="Edit Regular Lib. Species ..." />
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem mnemonicParsing="false" onAction="#editSPLibComponentsCmd" text="Edit Solid Phases Lib. Components ..." />
+						<MenuItem mnemonicParsing="false" onAction="#editSPLibSpeciesCmd" text="Edit Solid Phases Lib. Species ..." />
+					</items>
+				</Menu>
+				<Menu fx:id="matrixMenu" disable="true" mnemonicParsing="false" text="Matrix">
+					<items>
+						<MenuItem fx:id="fileInfoMI" disable="true" mnemonicParsing="false" onAction="#fileInfoCmd" text="Show current matrix" />
+						<MenuItem fx:id="replaceHbyOHMI" disable="true" mnemonicParsing="false" onAction="#replaceHbyOHCmd" text="Replace H+ by OH-" />
+						<MenuItem fx:id="deleteSpeciesMI" disable="true" mnemonicParsing="false" onAction="#deleteSpeciesCmd" text="Delete Species ..." />
+						<MenuItem fx:id="solidPhasesMI" disable="true" mnemonicParsing="false" onAction="#solidPhasesCmd" text="Insert Solid Phase ..." />
+					</items>
+				</Menu>
+				<Menu fx:id="modeMenu" disable="true" mnemonicParsing="false" text="Options">
+					<items>
+						<MenuItem fx:id="restoreMI" disable="true" mnemonicParsing="false" onAction="#restoreCmd" text="Restore">
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="R" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+							</accelerator>
+						</MenuItem>
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem fx:id="pHconstMI" disable="true" mnemonicParsing="false" onAction="#pHconstCmd" text="Change pH ..." />
+						<MenuItem fx:id="pHrangeMI" disable="true" mnemonicParsing="false" onAction="#pHrangeCmd" text="pH range ..." />
+						<MenuItem fx:id="compRangeMI" disable="true" mnemonicParsing="false" onAction="#compRangeCmd" text="Component range ..." />
+						<MenuItem fx:id="adsRangeMI" disable="true" mnemonicParsing="false" onAction="#adsRangeCmd" text="Adsorption range ..." />
+						<MenuItem fx:id="logKrangeMI" disable="true" mnemonicParsing="false" onAction="#logKrangeCmd" text="log K range ..." />
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem fx:id="kinetikMI" disable="true" mnemonicParsing="false" onAction="#kinetikCmd" text="Kinetics ..." />
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem fx:id="pXpYMI" disable="true" mnemonicParsing="false" onAction="#pXpYCmd" text="pX-pY Diagram ..." />
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<Menu fx:id="formatMenu" mnemonicParsing="false" text="Format">
+							<items>
+								<RadioMenuItem fx:id="numFormatLinRMI" mnemonicParsing="false" selected="true" text="Linear">
+									<toggleGroup>
+										<ToggleGroup fx:id="numFormat" />
+									</toggleGroup>
+								</RadioMenuItem>
+								<RadioMenuItem fx:id="numFormatLogRMI" mnemonicParsing="false" text="Logarithmic" toggleGroup="$numFormat" />
+							</items>
+						</Menu>
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<!--Menu mnemonicParsing="false" text="Activity">
+						  <items>
+								<RadioMenuItem mnemonicParsing="false" selected="true" text="no" toggleGroup="$activityToggleGroup" />
+								<RadioMenuItem mnemonicParsing="false" text="Debye-Hückel ..." toggleGroup="$activityToggleGroup" />
+								<RadioMenuItem mnemonicParsing="false" text="Güntelberg ..." toggleGroup="$activityToggleGroup" />
+								<RadioMenuItem mnemonicParsing="false" text="Davies ..." toggleGroup="$activityToggleGroup" />
+								<SeparatorMenuItem mnemonicParsing="false" />
+								<MenuItem mnemonicParsing="false" onAction="#activityInfoCmd" text="Info ..." />
+						  </items>
+						</Menu-->
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem fx:id="graphMI" disable="true" mnemonicParsing="false" onAction="#graphCmd" text="Graphics ...">
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+							</accelerator>
+						</MenuItem>
+					</items>
+				</Menu>
+				<Menu fx:id="runMenu" disable="true" mnemonicParsing="false" text="Run">
+					<items>
+						<MenuItem fx:id="goMI" disable="true" mnemonicParsing="false" onAction="#goCmd" text="Go">
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="G" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+							</accelerator>
+						</MenuItem>
+						<MenuItem fx:id="stopMI" disable="true" mnemonicParsing="false" onAction="#stopCmd" text="Stop">
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="PERIOD" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+							</accelerator>
+						</MenuItem>
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Help">
+					<items>
+						<MenuItem mnemonicParsing="false" onAction="#aboutCmd" text="About" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+	</top>
+	<right>
+		<TitledPane alignment="CENTER" collapsible="false" maxHeight="9999.0" text="Options">
+			<content>
+				<ScrollPane hbarPolicy="NEVER" prefWidth="452.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
+					<content>
+						<VBox alignment="CENTER">
+							<children>
+								<TitledPane fx:id="pHOptions" text="pH">
+									<content>
+										<AnchorPane prefWidth="200.0" />
+									</content>
+								</TitledPane>
+								<TitledPane fx:id="pHRangeOptions" text="pH range">
+									<content>
+										<AnchorPane prefWidth="200.0" />
+									</content>
+								</TitledPane>
+								<TitledPane fx:id="componentRangeOptions" text="Component range">
+									<content>
+										<AnchorPane prefWidth="200.0" />
+									</content>
+								</TitledPane>
+								<TitledPane fx:id="adsorptionRange" text="Adsorption range">
+									<content>
+										<AnchorPane prefWidth="200.0">
+											<children>
+												<Label layoutX="14.0" layoutY="14.0" text="In case of several adsorbents, only the amount of the first adsorbent can be varied. Total solid concentration in [g/l] will be printed in the first column of the output." wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+												<Label layoutX="10.0" layoutY="66.0" text="Give the range of the particulate concentration in [g/l] :" AnchorPane.leftAnchor="0.0" />
+												<Label layoutY="90.0" text="from:" AnchorPane.leftAnchor="0.0" />
+												<TextField layoutX="53.0" layoutY="85.0" prefWidth="80.0" />
+												<TextField layoutX="177.0" layoutY="85.0" prefWidth="80.0" />
+												<Label layoutX="150.0" layoutY="90.0" text="to:" />
+												<TextField layoutX="311.0" layoutY="85.0" prefWidth="80.0" />
+												<Label layoutX="272.0" layoutY="90.0" text="step:" />
+											</children>
+											<padding>
+												<Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+											</padding>
+										</AnchorPane>
+									</content>
+								</TitledPane>
+								<TitledPane fx:id="logKRangeOptions" text="log K range">
+									<content>
+										<AnchorPane prefWidth="200.0" />
+									</content>
+								</TitledPane>
+								<TitledPane fx:id="kineticsOptions" text="Kinetics">
+									<content>
+										<VBox prefWidth="180.0" spacing="8.0">
+											<children>
+												<GridPane prefHeight="252.0" prefWidth="350.0">
+													<columnConstraints>
+														<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
+														<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
+													</columnConstraints>
+													<rowConstraints>
+														<RowConstraints prefHeight="24.0" valignment="BOTTOM" vgrow="NEVER" />
+														<RowConstraints prefHeight="22.0" vgrow="NEVER" />
+														<RowConstraints prefHeight="26.0" valignment="BOTTOM" vgrow="NEVER" />
+														<RowConstraints prefHeight="22.0" vgrow="NEVER" />
+														<RowConstraints prefHeight="22.0" vgrow="NEVER" />
+														<RowConstraints prefHeight="24.0" valignment="BOTTOM" vgrow="NEVER" />
+														<RowConstraints prefHeight="22.0" vgrow="NEVER" />
+														<RowConstraints prefHeight="22.0" vgrow="NEVER" />
+														<RowConstraints prefHeight="22.0" vgrow="NEVER" />
+														<RowConstraints prefHeight="24.0" valignment="BOTTOM" vgrow="NEVER" />
+														<RowConstraints prefHeight="22.0" vgrow="NEVER" />
+													</rowConstraints>
+													<children>
+														<Label text="zero order:">
+															<GridPane.margin>
+																<Insets bottom="2.0" />
+															</GridPane.margin>
+														</Label>
+														<RadioButton mnemonicParsing="false" text="cC -&gt; pP + ..." GridPane.rowIndex="1">
+															<GridPane.margin>
+																<Insets left="10.0" />
+															</GridPane.margin>
+															<toggleGroup>
+																<ToggleGroup fx:id="rateLawBG" />
+															</toggleGroup>
+														</RadioButton>
+														<Label text="-d[C]/dt = k" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+														<Label text="first order:" GridPane.rowIndex="2">
+															<GridPane.margin>
+																<Insets bottom="2.0" />
+															</GridPane.margin>
+														</Label>
+														<RadioButton mnemonicParsing="false" text="cC -&gt; pP + ..." toggleGroup="$rateLawBG" GridPane.rowIndex="3">
+															<GridPane.margin>
+																<Insets left="10.0" />
+															</GridPane.margin>
+														</RadioButton>
+														<Label text="-d[C]/dt = k[C]" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+														<RadioButton mnemonicParsing="false" text="C &lt;-&gt; S + ..." toggleGroup="$rateLawBG" GridPane.rowIndex="4">
+															<GridPane.margin>
+																<Insets left="10.0" />
+															</GridPane.margin>
+														</RadioButton>
+														<Label text="-d[C]/dt = k(f)[C] - k(b)[S] (reversible)" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+														<Label text="second order:" GridPane.rowIndex="5">
+															<GridPane.margin>
+																<Insets bottom="2.0" />
+															</GridPane.margin>
+														</Label>
+														<RadioButton mnemonicParsing="false" text="cC -&gt; pP + ..." toggleGroup="$rateLawBG" GridPane.rowIndex="6">
+															<GridPane.margin>
+																<Insets left="10.0" />
+															</GridPane.margin>
+														</RadioButton>
+														<Label text="-d[C]/dt = k[C][C]" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+														<RadioButton mnemonicParsing="false" text="C+D -&gt; P + ..." toggleGroup="$rateLawBG" GridPane.rowIndex="7">
+															<GridPane.margin>
+																<Insets left="10.0" right="6.0" />
+															</GridPane.margin>
+														</RadioButton>
+														<Label text="-d[C]/dt = k[C][D]" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+														<RadioButton mnemonicParsing="false" text="C -&gt; P + ..." toggleGroup="$rateLawBG" GridPane.rowIndex="8">
+															<GridPane.margin>
+																<Insets left="10.0" />
+															</GridPane.margin>
+														</RadioButton>
+														<Label text="-d[C]/dt = k[C][P]  (autocatalysis)" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+														<Label text="third order:" GridPane.rowIndex="9">
+															<GridPane.margin>
+																<Insets bottom="2.0" />
+															</GridPane.margin>
+														</Label>
+														<RadioButton mnemonicParsing="false" text="cC -&gt; pP + ..." toggleGroup="$rateLawBG" GridPane.rowIndex="10">
+															<GridPane.margin>
+																<Insets left="10.0" />
+															</GridPane.margin>
+														</RadioButton>
+														<Label text="-d[C] = k[C][C][C]" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+													</children>
+												</GridPane>
+												<Separator prefWidth="200.0" />
+												<GridPane hgap="8.0">
+													<columnConstraints>
+														<ColumnConstraints hgrow="SOMETIMES" />
+														<ColumnConstraints hgrow="SOMETIMES" />
+														<ColumnConstraints hgrow="SOMETIMES" />
+														<ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="139.0" />
+													</columnConstraints>
+													<rowConstraints>
+														<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+														<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+														<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+													</rowConstraints>
+													<children>
+														<ComboBox prefWidth="150.0" GridPane.columnIndex="1" />
+														<ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+														<ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+														<Label text="educt C:" />
+														<Label text="product:" GridPane.rowIndex="1" />
+														<Label text="educt D:" GridPane.rowIndex="2" />
+														<Label text="coeff. c:" GridPane.columnIndex="2" />
+														<Label text="coeff. p:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+														<Label text="coeff. d:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+														<TextField GridPane.columnIndex="3" />
+														<TextField GridPane.columnIndex="3" GridPane.rowIndex="1" />
+														<TextField GridPane.columnIndex="3" GridPane.rowIndex="2" />
+													</children>
+												</GridPane>
+												<Separator prefWidth="200.0" />
+												<GridPane hgap="6.0">
+													<columnConstraints>
+														<ColumnConstraints hgrow="SOMETIMES" />
+														<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+														<ColumnConstraints hgrow="SOMETIMES" />
+														<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+													</columnConstraints>
+													<rowConstraints>
+														<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+														<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+													</rowConstraints>
+													<children>
+														<TextField GridPane.columnIndex="3" GridPane.rowIndex="1" />
+														<TextField GridPane.columnIndex="3" />
+														<TextField GridPane.columnIndex="1" />
+														<TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+														<Label text="rate constant k =" />
+														<Label text="time interval dt =" GridPane.rowIndex="1" />
+														<Label text="k(back) =" GridPane.columnIndex="2" />
+														<Label text="time end =" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+													</children>
+												</GridPane>
+											</children>
+											<padding>
+												<Insets bottom="6.0" left="6.0" right="6.0" top="2.0" />
+											</padding>
+										</VBox>
+									</content>
+								</TitledPane>
+								<TitledPane fx:id="activityOptions" text="Activity" VBox.vgrow="ALWAYS">
+									<content>
+										<AnchorPane prefWidth="200.0">
+											<children>
+												<HBox alignment="TOP_CENTER" layoutX="8.0" layoutY="8.0" prefHeight="29.0" prefWidth="413.0" spacing="16.0">
+													<children>
+														<RadioButton fx:id="debyeHückelRB" layoutX="8.0" layoutY="8.0" mnemonicParsing="false" text="Debye-Hückel">
+															<toggleGroup>
+																<ToggleGroup fx:id="activityToggleGroup" />
+															</toggleGroup>
+														</RadioButton>
+														<RadioButton fx:id="güntelbergRB" layoutX="128.0" layoutY="8.0" mnemonicParsing="false" text="Güntelberg" toggleGroup="$activityToggleGroup" />
+														<RadioButton fx:id="daviesRB" layoutX="252.0" layoutY="8.0" mnemonicParsing="false" text="Davies" toggleGroup="$activityToggleGroup" />
+													</children>
+													<padding>
+														<Insets top="6.0" />
+													</padding>
+												</HBox>
+												<Separator layoutX="2.0" layoutY="45.0" prefWidth="200.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+												<RadioButton layoutX="8.0" layoutY="66.0" mnemonicParsing="false" text="Ionic strength     I =">
+													<toggleGroup>
+														<ToggleGroup fx:id="ionicBG" />
+													</toggleGroup>
+												</RadioButton>
+												<RadioButton layoutX="8.0" layoutY="104.0" mnemonicParsing="false" text="Calculate ionic strength according to matrix" toggleGroup="$ionicBG" />
+												<TextField layoutX="165.0" layoutY="62.0" prefHeight="26.0" prefWidth="153.0" />
+												<Label layoutX="90.0" layoutY="131.0" text="A = 1.82E6 (eT)-3/2 = " />
+												<TextField layoutX="239.0" layoutY="126.0" prefHeight="26.0" prefWidth="80.0" />
+												<Label layoutX="8.0" layoutY="170.0" text="Give output in:" />
+												<RadioButton layoutX="240.0" layoutY="169.0" mnemonicParsing="false" text="activities">
+													<toggleGroup>
+														<ToggleGroup fx:id="outputBG" />
+													</toggleGroup>
+												</RadioButton>
+												<RadioButton layoutX="114.0" layoutY="169.0" mnemonicParsing="false" text="concentrations" toggleGroup="$outputBG" />
+												<Button layoutX="361.0" layoutY="165.0" mnemonicParsing="false" onAction="#activityInfoCmd" text="Info..." />
+											</children>
+											<padding>
+												<Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+											</padding>
+										</AnchorPane>
+									</content>
+									<VBox.margin>
+										<Insets />
+									</VBox.margin>
+								</TitledPane>
+							</children>
+						</VBox>
+					</content>
+				</ScrollPane>
+			</content>
+			<BorderPane.margin>
+				<Insets />
+			</BorderPane.margin>
+		</TitledPane>
+	</right>
+	<center>
+		<SplitPane fx:id="centerSplitPane" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+			<items>
+				<fx:include fx:id="outputView" source="OutputWindow.fxml" />
+			</items>
+		</SplitPane>
+	</center>
+</BorderPane>
