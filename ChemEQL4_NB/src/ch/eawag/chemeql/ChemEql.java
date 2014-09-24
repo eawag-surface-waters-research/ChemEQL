@@ -12,10 +12,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.controlsfx.dialog.Dialog;
-import org.controlsfx.dialog.Dialog.Actions;
-import org.controlsfx.dialog.Dialogs;
 
 
 
@@ -113,20 +111,22 @@ public class ChemEql extends Application
 	public void start(Stage stage) throws Exception
 	{
 		mainStage = stage;
+		// set application icon
+		mainStage.getIcons().add(new Image("ch/eawag/chemeql/resources/icon.jpg"));
 		// put main menu top of the screen for Mac OS X (JDK 1.4+)
 		getLogger().config(System.getProperties().toString());
 		getLogger().info(i18n("startup-LOG", APP_TITLE));
 
 		Parent root = FXMLLoader.load(getClass().getResource("ChemEqlGui.fxml"));
 		Scene scene = new Scene(root);
-		stage.setScene(scene);
-		stage.setX(50);
-		stage.setY(30);
+		mainStage.setScene(scene);
+		mainStage.setX(50);
+		mainStage.setY(30);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		stage.setWidth(screenSize.width - 100);
-		stage.setWidth(screenSize.height - 60);
-		stage.setTitle(APP_TITLE);
-		stage.setOnCloseRequest(windowEvent -> {
+		mainStage.setWidth(screenSize.width - 100);
+		mainStage.setWidth(screenSize.height - 60);
+		mainStage.setTitle(APP_TITLE);
+		mainStage.setOnCloseRequest(windowEvent -> {
 			if (quitOk()) {
 				System.exit(0); // required to exit AWT
 			}
@@ -134,7 +134,7 @@ public class ChemEql extends Application
 				windowEvent.consume();
 			}
 		});
-		stage.show();
+		mainStage.show();
 
 //		FILE_CHOOSER = new JFileChooser(System.getProperty("user.home"));
 //		new Main();
