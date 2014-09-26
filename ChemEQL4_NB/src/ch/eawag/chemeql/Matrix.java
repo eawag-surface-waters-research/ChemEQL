@@ -2454,30 +2454,32 @@ class Matrix extends Object
 
 				errorEstX = Math.abs(components[ii[b]].getConc());
 
-				if (adsorption() && !severalSiteTypes) {
-					for (int c = 0; c < noOfAdsorbents; c++) {
+				if (adsorption()) {
+					if (severalSiteTypes) {
 						if (model == ModelEnum.STERN_L) {
-							if (ii[b] == chargeNo2[c]) {
-								errorEstX = Math.abs(components[chargeNo1[c]].getConc())
-										+ Math.abs(psi[3] * factor);
+							if (ii[b] == chargeNo2[0]) {
+								errorEstX = Math.abs(components[chargeNo1[0]].getConc()) + Math.abs(psi[3] * factor);
 							}
 						}
 						if (model == ModelEnum.TRIPLE_L) {
-							if (ii[b] == chargeNo3[c]) {
+							if (ii[b] == chargeNo3[0]) {
 								errorEstim[ii[b]] = errorEstim[ii[b]] + psi[3] * factor;
 							}
 						}
-					}		/*if adsorption*/
-				}
-				if (adsorption() && severalSiteTypes) {
-					if (model == ModelEnum.STERN_L) {
-						if (ii[b] == chargeNo2[0]) {
-							errorEstX = Math.abs(components[chargeNo1[0]].getConc()) + Math.abs(psi[3] * factor);
-						}
 					}
-					if (model == ModelEnum.TRIPLE_L) {
-						if (ii[b] == chargeNo3[0]) {
-							errorEstim[ii[b]] = errorEstim[ii[b]] + psi[3] * factor;
+					else {
+						for (int c = 0; c < noOfAdsorbents; c++) {
+							if (model == ModelEnum.STERN_L) {
+								if (ii[b] == chargeNo2[c]) {
+									errorEstX = Math.abs(components[chargeNo1[c]].getConc())
+											+ Math.abs(psi[3] * factor);
+								}
+							}
+							if (model == ModelEnum.TRIPLE_L) {
+								if (ii[b] == chargeNo3[c]) {
+									errorEstim[ii[b]] = errorEstim[ii[b]] + psi[3] * factor;
+								}
+							}
 						}
 					}
 				}		/*if adsorption*/
