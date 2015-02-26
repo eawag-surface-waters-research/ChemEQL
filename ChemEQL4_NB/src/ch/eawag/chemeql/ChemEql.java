@@ -119,6 +119,7 @@ public class ChemEql extends Application
 
 		Parent root = FXMLLoader.load(getClass().getResource("ChemEqlGui.fxml"));
 		Scene scene = new Scene(root);
+		scene.getStylesheets().add("ch/eawag/chemeql/ChemEqlGui.css");
 		mainStage.setScene(scene);
 		mainStage.setX(50);
 		mainStage.setY(30);

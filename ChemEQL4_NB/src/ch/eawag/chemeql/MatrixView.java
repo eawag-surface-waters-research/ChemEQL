@@ -23,142 +23,190 @@
  */
 package ch.eawag.chemeql;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.layout.BorderPane;
+import javafx.util.StringConverter;
 import org.controlsfx.control.spreadsheet.Grid;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
+import org.controlsfx.control.spreadsheet.SpreadsheetCellType.DoubleType;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
 /**
  *
  * @author kaibrassel
  */
-public class MatrixView extends SpreadsheetView
+public class MatrixView extends BorderPane
 {
-	private Matrix matrix;
-
-	static MatrixView create()
-	{
-		// create minimal presentation model for an empty matrix (i.e. without any components and species
-		Grid grid = new GridBase(3, 3);
-		ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-		List<String> modes = Arrays.asList("total", "free");
-		for (int row = 0; row < grid.getRowCount(); ++row) {
-			final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
-			for (int col = 0; col < grid.getColumnCount(); ++col) {
-				SpreadsheetCell cell;
-				if (row == 1) {
-					cell = SpreadsheetCellType.LIST(modes).createCell(row, col, 1, 1, modes.get(0));
-				}
-				else {
-					cell = SpreadsheetCellType.STRING.createCell(row, col, 1, 1, "");
-				}
-				list.add(cell);
-			}
-			rows.add(list);
-		}
-		grid.setRows(rows);
-		grid.setCellValue(0, 0, "Species");
-		grid.setCellValue(0, 1, "logK");
-		grid.setCellValue(0, 2, "Comment");
-		return new MatrixView(grid);
-	}
-
-	private MatrixView(Grid grid)
-	{
-		super(grid);
-		setFixingColumnsAllowed(false);
-		setFixingRowsAllowed(false);
-		setShowColumnHeader(false);
-		setShowRowHeader(false);
-	}
-
-	void setMatrix(Matrix newMatrix)
-	{
-		matrix = newMatrix;
-		Grid grid = new GridBase(matrix.totSpec + 3, matrix.totComp + 3);
-		ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
-		List<String> modes = Arrays.asList("total", "free");
-
-		// --- first row
-		SpreadsheetCell cell;
-		ObservableList<SpreadsheetCell> newRow = FXCollections.observableArrayList();
-		// empty cell for species column
-		newRow.add(createEmptyCell(0, 0));
-		// component names
-		for (int compIdx = 0; compIdx < matrix.totComp; ++compIdx) {
-			cell = SpreadsheetCellType.STRING.createCell(0, compIdx + 1, 1, 1, matrix.components[compIdx].getName());
-			cell.setEditable(false);
-			newRow.add(cell);
-		}
-		// empty cell for formation constants column and sources column
-		newRow.add(createEmptyCell(0, matrix.totComp + 1));
-		newRow.add(createEmptyCell(0, matrix.totComp + 2));
-		rows.add(newRow);
-
-		// --- second row
-		newRow = FXCollections.observableArrayList();
-		// empty cell for species column
-		newRow.add(createEmptyCell(1, 0));
-		// modes
-		for (int compIdx = 0; compIdx < matrix.totComp; ++compIdx) {
-			cell = SpreadsheetCellType.LIST(modes).createCell(1, compIdx + 1, 1, 1, matrix.components[compIdx].getName());
-			newRow.add(cell);
-		}
-		// empty cell for formation constants column and sources column
-		newRow.add(createEmptyCell(1, matrix.totComp + 1));
-		newRow.add(createEmptyCell(1, matrix.totComp + 2));
-		rows.add(newRow);
-
-		// --- species rows
-		for (int speciesIdx = 0; speciesIdx < matrix.totSpec; ++speciesIdx) {
-			newRow = FXCollections.observableArrayList();
-			// species name
-			cell = SpreadsheetCellType.STRING.createCell(speciesIdx + 2, 0, 1, 1, matrix.species[speciesIdx].name);
-			cell.setEditable(false);
-			newRow.add(cell);
-			// stoichiometric coefficients
-			for (int compIdx = 0; compIdx < matrix.totComp; ++compIdx) {
-				cell = SpreadsheetCellType.INTEGER.createCell(speciesIdx + 2, compIdx + 1, 1, 1,
-						(int)Math.round(matrix.speciesMat[speciesIdx][compIdx]));
-				newRow.add(cell);
-			}
-			// formation constants (logK)
-			cell = SpreadsheetCellType.DOUBLE.createCell(speciesIdx + 2, matrix.totComp, 1, 1,
-					matrix.species[speciesIdx].constant);
-			newRow.add(cell);
-			// source
-			cell = SpreadsheetCellType.STRING.createCell(speciesIdx + 2, matrix.totComp + 1, 1, 1,
-					matrix.species[speciesIdx].source);
-			newRow.add(cell);
-			rows.add(newRow);
-		};
-
-		// --- footer row with concentrations
-		newRow = FXCollections.observableArrayList();
-		newRow.add(createEmptyCell(matrix.totSpec + 2, 0));
-
-		// concentrations
-		for (int compIdx = 0; compIdx < matrix.totComp; ++compIdx) {
-			cell = SpreadsheetCellType.DOUBLE.createCell(matrix.totSpec + 2, compIdx + 1, 1, 1, 8.8); //TODO
-			newRow.add(cell);
-		}
-		// empty cell for formation constants column and comment column
-		newRow.add(createEmptyCell(matrix.totSpec + 2, matrix.totComp + 1));
-		newRow.add(createEmptyCell(matrix.totSpec + 2, matrix.totComp + 2));
-		rows.add(newRow);
-		grid.setRows(rows);
-		setGrid(grid);
-	}
-
-	private SpreadsheetCell createEmptyCell(int row, int col)
+	private static SpreadsheetCell createEmptyCell(int row, int col)
 	{
 		SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(row, col, 1, 1, "");
 		cell.setEditable(false);
 		return cell;
+	}
+
+//	static MatrixView create()
+//	{
+//		// create minimal presentation model for an empty matrix (i.e. without any components and species
+//		Grid grid = new GridBase(2, 2);
+//		ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
+//		for (int row = 0; row < grid.getRowCount(); ++row) {
+//			final ObservableList<SpreadsheetCell> list = FXCollections.observableArrayList();
+//			for (int col = 0; col < grid.getColumnCount(); ++col) {
+//				list.add(createEmptyCell(row, col));
+//			}
+//			rows.add(list);
+//		}
+//		grid.setRows(rows);
+//		return new MatrixView(grid);
+//	}
+//
+	private SpreadsheetView matrixTable;
+	private Matrix matrix;
+
+//	private MatrixView(Grid grid)
+//	{
+//	}
+	void setMatrix(Matrix newMatrix)
+	{
+		matrix = newMatrix;
+		Grid grid = new GridBase(matrix.totSpec + 3, matrix.totComp + 4);
+		ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
+		List<String> modes = Arrays.asList("total", "free");
+
+		// row with component names
+		int rowIdx = 0;
+		SpreadsheetCell cell;
+		ObservableList<SpreadsheetCell> newRow = FXCollections.observableArrayList();
+		// empty cells for running number and species columns
+		newRow.add(createEmptyCell(rowIdx, 0));
+		newRow.add(createEmptyCell(rowIdx, 1));
+		// components
+		for (int compIdx = 0; compIdx < matrix.totComp; ++compIdx) {
+			cell = SpreadsheetCellType.STRING.createCell(rowIdx, compIdx + 2, 1, 1, matrix.components[compIdx].getName());
+			cell.setEditable(false);
+			cell.getStyleClass().add("matrix-component");
+			newRow.add(cell);
+		}
+		// empty cells for formation constants column and sources column
+		newRow.add(createEmptyCell(rowIdx, matrix.totComp + 2));
+		newRow.add(createEmptyCell(rowIdx, matrix.totComp + 3));
+		rows.add(newRow);
+		rowIdx++;
+
+		// row with modes
+		newRow = FXCollections.observableArrayList();
+		// empty cell for species column
+		newRow.add(createEmptyCell(rowIdx, 0));
+		newRow.add(createEmptyCell(rowIdx, 1));
+		// modes
+		for (int compIdx = 0; compIdx < matrix.totComp; ++compIdx) {
+			cell = SpreadsheetCellType.LIST(modes).createCell(
+					rowIdx, compIdx + 2, 1, 1, matrix.components[compIdx].getName());
+			cell.getStyleClass().add("matrix-mode");
+			newRow.add(cell);
+		}
+		// empty cell for formation constants column and sources column
+		newRow.add(createEmptyCell(rowIdx, matrix.totComp + 2));
+		newRow.add(createEmptyCell(rowIdx, matrix.totComp + 3));
+		rows.add(newRow);
+		rowIdx++;
+
+		// row with concentrations
+		DoubleType cellType = new SpreadsheetCellType.DoubleType(
+				new CustomConcentrationsConverter(matrix.main.settingsDialog.concentrationFormat));
+		newRow = FXCollections.observableArrayList();
+		newRow.add(createEmptyCell(rowIdx, 0));
+		newRow.add(createEmptyCell(rowIdx, 1));
+		// concentrations
+		for (int compIdx = 0; compIdx < matrix.totComp; ++compIdx) {
+			cell = cellType.createCell(matrix.totSpec + 2, compIdx + 1, 1, 1, matrix.multiConcMatrix[0][compIdx]);
+			cell.getStyleClass().add("matrix-concentration");
+			newRow.add(cell);
+		}
+		// empty cell for formation constants column and comment column
+		newRow.add(createEmptyCell(rowIdx, matrix.totComp + 2));
+		newRow.add(createEmptyCell(rowIdx, matrix.totComp + 3));
+		rows.add(newRow);
+		rowIdx++;
+
+		// --- species rows
+		for (int speciesIdx = 0; speciesIdx < matrix.totSpec; ++speciesIdx) {
+			newRow = FXCollections.observableArrayList();
+			// running number
+			cell = SpreadsheetCellType.STRING.createCell(rowIdx, 0, 1, 1, String.valueOf(speciesIdx + 1) + ".");
+			cell.getStyleClass().add("matrix-species-number");
+			cell.setEditable(false);
+			newRow.add(cell);
+			// species name
+			cell = SpreadsheetCellType.STRING.createCell(rowIdx, 1, 1, 1, matrix.species[speciesIdx].name);
+			cell.setEditable(false);
+			cell.getStyleClass().add("matrix-species");
+			newRow.add(cell);
+			// stoichiometric coefficients
+			for (int compIdx = 0; compIdx < matrix.totComp; ++compIdx) {
+				cell = SpreadsheetCellType.INTEGER.createCell(rowIdx, compIdx + 2, 1, 1,
+						(int)Math.round(matrix.speciesMat[speciesIdx][compIdx]));
+				cell.getStyleClass().add("matrix-coeff");
+				newRow.add(cell);
+			}
+			// formation constants (logK)
+			cell = SpreadsheetCellType.DOUBLE.createCell(rowIdx, matrix.totComp + 1, 1, 1,
+					matrix.species[speciesIdx].constant);
+			cell.getStyleClass().add("matrix-logk");
+			newRow.add(cell);
+			// source
+			cell = SpreadsheetCellType.STRING.createCell(rowIdx, matrix.totComp + 2, 1, 1,
+					matrix.species[speciesIdx].source);
+			cell.getStyleClass().add("matrix-source");
+			newRow.add(cell);
+			rows.add(newRow);
+			rowIdx++;
+		};
+
+		// add view to GUI
+		grid.setRows(rows);
+		grid.spanColumn(2, 0, 0);
+		grid.spanRow(3, 0, 0);
+//		grid.getRows().get(0).get(0).getStyleClass().add("matrix-concentration"); // style for thicker border to species part
+		grid.spanColumn(2, 0, matrix.totComp + 2);
+		grid.spanRow(3, 0, matrix.totComp + 2);
+//		grid.getRows().get(0).get(matrix.totComp + 2).getStyleClass().add("matrix-concentration");
+
+		matrixTable = new SpreadsheetView(grid);
+		matrixTable.getStyleClass().add("matrix");
+		matrixTable.setShowColumnHeader(false);
+		matrixTable.setFixingColumnsAllowed(false);
+		matrixTable.setShowRowHeader(false);
+		matrixTable.setFixingRowsAllowed(false);
+		this.setCenter(matrixTable);
+
+	}
+
+	static private class CustomConcentrationsConverter extends StringConverter<Double>
+	{
+		private final DecimalFormat format;
+
+		CustomConcentrationsConverter(DecimalFormat format)
+		{
+			this.format = format;
+		}
+
+		@Override
+		public String toString(Double val)
+		{
+			return val == 0.0 ? "0.0" : (val == 1.0 ? "1.0" : format.format(val));
+		}
+
+		@Override
+		public Double fromString(String s)
+		{
+			return Double.parseDouble(s);
+		}
 	}
 }

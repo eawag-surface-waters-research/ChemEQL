@@ -1,0 +1,34 @@
+.spreadsheet-cell {
+    -fx-padding: 0px 3px 0px 3px;
+    -fx-border-color: lightgray;
+    -fx-border-width : 0.3px;
+    -fx-background-color: -fx-table-cell-border-color,white;
+}
+.spreadsheet-cell.matrix-component {
+	-fx-alignment: CENTER;
+	-fx-font-weight: bold;
+}
+.spreadsheet-cell.matrix-mode {
+	-fx-alignment: CENTER;
+}
+.spreadsheet-cell.matrix-concentration {
+	-fx-alignment: CENTER;
+   -fx-border-width : 0.3 0.3 2.0 0.3px;
+}
+.spreadsheet-cell.matrix-species-number {
+	-fx-alignment: CENTER_RIGHT;
+}
+.spreadsheet-cell.matrix-species {
+	-fx-alignment: CENTER_LEFT;
+}
+.spreadsheet-cell.matrix-coeff {
+	-fx-alignment: CENTER;
+}
+.spreadsheet-cell.matrix-logk {
+	-fx-alignment: CENTER_RIGHT;
+	-fx-font: cursive;
+}
+.spreadsheet-cell.matrix-source {
+	-fx-alignment: CENTER_LEFT;
+	-fx-font-size: small;
+}

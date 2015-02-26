@@ -1,6 +1,5 @@
 package ch.eawag.chemeql;
 
-import java.awt.Cursor;
 import java.awt.Color;
 import javax.swing.text.PlainDocument;
 import javax.swing.text.BadLocationException;
@@ -853,8 +852,8 @@ class Matrix extends Object
 
 		totComp = 0;
 		for (int b = 0; b < lib.libTotComp; b++) /*nicht ausgew‰hlte Komponenten rauswerfen*/ {
-			for (int c = 0; c < selectedComponents.length; c++) {
-				Component selComp = (Component)selectedComponents[c];
+			for (Object selectedComponent : selectedComponents) {
+				Component selComp = (Component)selectedComponent;
 				if (lib.libCompNames[b].equals(selComp.getName())) {
 					components[totComp].copyFrom(selComp);
 					if (components[totComp].getConc() == 0) {

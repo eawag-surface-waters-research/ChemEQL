@@ -944,7 +944,7 @@ public class ChemEqlGuiController
 
 	private void createAllWindows()
 	{
-		matrixView = MatrixView.create();
+		matrixView = new MatrixView();
 		centerSplitPane.getItems().add(0, matrixView);
 //		matrixView.setVisible(false);
 //		matrixView.addInternalFrameListener(new InternalFrameAdapter()
