@@ -42,7 +42,7 @@ class Library implements Serializable
 	private transient SpeciesListModel speciesListModel;
 	private transient ComboBoxModel speciesCBModel;
 	private transient ComboBoxModel componentsCBModel;
-	private transient Main main;
+	private transient ChemEQL3 main;
 	private transient boolean isRegularLib;	// false: library is solid phases library
 
 	private static String defaultBinFileName(final boolean isRegularLib)
@@ -62,7 +62,7 @@ class Library implements Serializable
 	}
 
 	// read binary library file from the users home directory
-	static Library readBinLibrary(final Main m, final boolean isRegularLib)
+	static Library readBinLibrary(final ChemEQL3 m, final boolean isRegularLib)
 	{
 		Library result = null;
 		try
@@ -102,12 +102,12 @@ class Library implements Serializable
 		return result;
 	}
 
-	Library(Main m, boolean regLibrary)
+	Library(ChemEQL3 m, boolean regLibrary)
 	{
 		initializeLibrary(m,regLibrary);
 	}
 
-	private void initializeLibrary(Main m, boolean regLibrary)
+	private void initializeLibrary(ChemEQL3 m, boolean regLibrary)
 	{
 		main = m;
 		isRegularLib = regLibrary;

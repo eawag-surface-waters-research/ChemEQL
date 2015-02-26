@@ -14,10 +14,10 @@ class SelectComponentsDialog extends JDialog
 	private DefaultListModel libraryListModel;
 	private DefaultListModel selectionListModel;
 	private double currentConcentrationInput;
-	private Main main;
+	private ChemEQL3 main;
 
 
-	static SelectComponentsDialog getInstance(Main parent)
+	static SelectComponentsDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new SelectComponentsDialog(parent);
@@ -25,7 +25,7 @@ class SelectComponentsDialog extends JDialog
 	}
 
 	/** Creates new form SelectComponentsDialog */
-	private SelectComponentsDialog(Main parent)
+	private SelectComponentsDialog(ChemEQL3 parent)
 	{
 		super(parent,true);
 		main = parent;
@@ -376,7 +376,7 @@ class SelectComponentsDialog extends JDialog
 	{
 		int dialogResult = JOptionPane.showConfirmDialog(
 			this,"Do you want to dismiss dialog Select Components\nand all changes made therein?",
-			Main.AN,JOptionPane.YES_NO_OPTION);
+			ChemEQL3.AN,JOptionPane.YES_NO_OPTION);
 		if (dialogResult == JOptionPane.YES_OPTION)
 		{
 		// assert dialogResult == JOptionPane.NO_OPTION || dialogResult == JOptionPane.CLOSED_OPTION;

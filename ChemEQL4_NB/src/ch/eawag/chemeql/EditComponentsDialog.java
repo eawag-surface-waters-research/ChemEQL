@@ -11,7 +11,7 @@ import javax.swing.event.ListSelectionEvent;
 class EditComponentsDialog extends ProceedCancelDialog
 {
 	private static EditComponentsDialog INSTANCE;
-	static EditComponentsDialog getInstance(Main parent)
+	static EditComponentsDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new EditComponentsDialog(parent);
@@ -26,7 +26,7 @@ class EditComponentsDialog extends ProceedCancelDialog
 		initComponents();
 	}
 
-	private EditComponentsDialog(Main parent)
+	private EditComponentsDialog(ChemEQL3 parent)
 	{
 		super(parent);
 		getRootPane().setDefaultButton(null);
@@ -77,7 +77,7 @@ class EditComponentsDialog extends ProceedCancelDialog
 			{
 				String newComp = JOptionPane.showInputDialog(
 					EditComponentsDialog.this,
-					"Name of new component?",Main.AN,JOptionPane.QUESTION_MESSAGE);
+					"Name of new component?",ChemEQL3.AN,JOptionPane.QUESTION_MESSAGE);
 				if (newComp == null || newComp.length() == 0)
 					; // user canceled dialog
 				else
@@ -260,7 +260,7 @@ class EditComponentsDialog extends ProceedCancelDialog
 		{
 			if (JOptionPane.showConfirmDialog(this,
 				"Do you really want to dismiss all changes made in this dialog?",
-				Main.AN,JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
+				ChemEQL3.AN,JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
 			{
 				main.reloadLibrary(library);
 				super.doCancel();

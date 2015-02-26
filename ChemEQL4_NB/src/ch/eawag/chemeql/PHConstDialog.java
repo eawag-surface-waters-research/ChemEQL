@@ -7,7 +7,7 @@ import java.awt.event.ComponentEvent;
 class PHConstDialog extends ProceedCancelDialog
 {
 	private static PHConstDialog INSTANCE;
-	static PHConstDialog getInstance(Main parent)
+	static PHConstDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new PHConstDialog(parent);
@@ -22,7 +22,7 @@ class PHConstDialog extends ProceedCancelDialog
 		initComponents();
 	}
 	
-	private PHConstDialog(Main m)
+	private PHConstDialog(ChemEQL3 m)
 	{
 		super(m);
 		initComponents();

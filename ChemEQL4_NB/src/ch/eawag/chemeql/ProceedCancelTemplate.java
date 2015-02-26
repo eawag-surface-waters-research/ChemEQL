@@ -9,7 +9,7 @@ import java.awt.event.ItemListener;
 class ProceedCancelTemplate extends ProceedCancelDialog implements ItemListener
 {
 	private static ProceedCancelTemplate INSTANCE;
-	static ProceedCancelTemplate getInstance(Main parent)
+	static ProceedCancelTemplate getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new ProceedCancelTemplate(parent);
@@ -22,7 +22,7 @@ class ProceedCancelTemplate extends ProceedCancelDialog implements ItemListener
 		initComponents();
 	}
 
-	private ProceedCancelTemplate(Main parent)
+	private ProceedCancelTemplate(ChemEQL3 parent)
 	{
 		super(parent);
 		initComponents();

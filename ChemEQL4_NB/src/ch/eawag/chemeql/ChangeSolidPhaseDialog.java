@@ -8,7 +8,7 @@ import javax.swing.*;
 class ChangeSolidPhaseDialog extends ProceedCancelDialog
 {
 	private static ChangeSolidPhaseDialog INSTANCE;
-	static ChangeSolidPhaseDialog getInstance(Main parent)
+	static ChangeSolidPhaseDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new ChangeSolidPhaseDialog(parent);
@@ -17,7 +17,7 @@ class ChangeSolidPhaseDialog extends ProceedCancelDialog
 
 	private double currentLogInput;
 
-	private ChangeSolidPhaseDialog(Main parent)
+	private ChangeSolidPhaseDialog(ChemEQL3 parent)
 	{
 		super(parent);
 		initComponents();

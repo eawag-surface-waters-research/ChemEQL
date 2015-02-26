@@ -8,7 +8,7 @@ class PHRangeDialog extends ProceedCancelDialog
 {
 	private static PHRangeDialog INSTANCE;
 
-	static PHRangeDialog getInstance(Main parent)
+	static PHRangeDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new PHRangeDialog(parent);
@@ -25,7 +25,7 @@ class PHRangeDialog extends ProceedCancelDialog
 		initComponents();
 	}
 	
-	private PHRangeDialog(Main main)
+	private PHRangeDialog(ChemEQL3 main)
 	{
 		super(main);
 		initComponents();

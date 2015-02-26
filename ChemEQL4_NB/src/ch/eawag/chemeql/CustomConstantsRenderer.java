@@ -5,9 +5,9 @@ import java.awt.Font;
 
 class CustomConstantsRenderer extends CustomRenderer
 {
-	private Main main;
+	private ChemEQL3 main;
 
-	CustomConstantsRenderer(Font font, int alignment, Main m)
+	CustomConstantsRenderer(Font font, int alignment, ChemEQL3 m)
 	{
 		super(font,alignment);
 		main = m;

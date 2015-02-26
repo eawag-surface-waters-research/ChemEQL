@@ -15,7 +15,7 @@ import java.io.IOException;
 
 class OutputWindow extends JInternalFrame
 {
-	private Main main;
+	private ChemEQL3 main;
 	private Matrix matrix;
 
 	private JScrollPane scroller;
@@ -29,7 +29,7 @@ class OutputWindow extends JInternalFrame
 	private JTextField activityTF;
 
 
-	public OutputWindow(Main main, Matrix matrix)
+	public OutputWindow(ChemEQL3 main, Matrix matrix)
 	{
 		super("Data",true,true,true,true);
 		this.main = main;
@@ -244,13 +244,13 @@ class OutputWindow extends JInternalFrame
 
 	static class SpeciesTable extends MyTable
 	{
-		private Main main;
+		private ChemEQL3 main;
 		private TableCellRenderer speciesRenderer;
 		private TableCellRenderer matrixRenderer;
 		private TableCellRenderer logKRenderer;
 		private TableCellRenderer concRenderer;
 
-		SpeciesTable(Main main, TableModel model)
+		SpeciesTable(ChemEQL3 main, TableModel model)
 		{
 			super(model,false);
 			this.main = main;
@@ -290,7 +290,7 @@ class OutputWindow extends JInternalFrame
 		private TableCellRenderer modeRenderer;
 		private TableCellRenderer concRenderer;
 		
-		ComponentsTable(Main main, TableModel model)
+		ComponentsTable(ChemEQL3 main, TableModel model)
 		{
 			super(model,false);
 
@@ -324,7 +324,7 @@ class OutputWindow extends JInternalFrame
 		int startItalic;
 		int stopItalic;
 
-		DataTable(Main main)
+		DataTable(ChemEQL3 main)
 		{
 			super(new DefaultTableModel(),true);
 			linRenderer = new CustomConcentrationsRenderer(
@@ -361,7 +361,7 @@ class OutputWindow extends JInternalFrame
 		private TableCellRenderer numRenderer;
 		private TableCellRenderer strRenderer;
 
-		PxPyTable(Main main, TableModel model)
+		PxPyTable(ChemEQL3 main, TableModel model)
 		{
 			super(model,true);
 			numRenderer = new CustomNonExpoConcentrationsRenderer(

@@ -84,10 +84,10 @@ public class MyTools extends Object
 		c.setBorder(null);
 		c.setOpaque(false);
 		if (isWarning)
-			JOptionPane.showMessageDialog(null,c,Main.AN + " Warning",
+			JOptionPane.showMessageDialog(null,c,ChemEQL3.AN + " Warning",
 				JOptionPane.WARNING_MESSAGE);
 		else
-			JOptionPane.showMessageDialog(null,c,Main.AN + " Error",
+			JOptionPane.showMessageDialog(null,c,ChemEQL3.AN + " Error",
 				JOptionPane.ERROR_MESSAGE);
 	}
 }

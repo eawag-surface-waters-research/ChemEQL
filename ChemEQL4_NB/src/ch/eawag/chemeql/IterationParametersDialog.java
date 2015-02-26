@@ -9,7 +9,7 @@ import java.awt.event.ItemListener;
 class IterationParametersDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static IterationParametersDialog INSTANCE;
-	static IterationParametersDialog getInstance(Main parent)
+	static IterationParametersDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new IterationParametersDialog(parent);
@@ -31,7 +31,7 @@ class IterationParametersDialog extends ProceedCancelDialog implements ItemListe
 		initComponents();
 	}
 	
-	private IterationParametersDialog(Main main)
+	private IterationParametersDialog(ChemEQL3 main)
 	{
 		super(main);
 		initComponents();

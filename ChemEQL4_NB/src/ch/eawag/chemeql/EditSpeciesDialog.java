@@ -10,7 +10,7 @@ import javax.swing.event.ListSelectionEvent;
 class EditSpeciesDialog extends ProceedCancelDialog
 {
 	private static EditSpeciesDialog INSTANCE;
-	static EditSpeciesDialog getInstance(Main parent)
+	static EditSpeciesDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new EditSpeciesDialog(parent);
@@ -25,7 +25,7 @@ class EditSpeciesDialog extends ProceedCancelDialog
 		initComponents();
 	}
 
-	private EditSpeciesDialog(Main parent)
+	private EditSpeciesDialog(ChemEQL3 parent)
 	{
 		super(parent);
 		getRootPane().setDefaultButton(null);
@@ -352,7 +352,7 @@ class EditSpeciesDialog extends ProceedCancelDialog
 		{
 			if (JOptionPane.showConfirmDialog(this,
 				"Do you really want to dismiss all changes made in this dialog?",
-				Main.AN,JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
+				ChemEQL3.AN,JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
 			{
 				main.reloadLibrary(library);
 				super.doCancel();

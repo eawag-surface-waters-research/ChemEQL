@@ -15,7 +15,7 @@ class FileInfoWindow extends JInternalFrame
 	private JTextField pHTF;
 	private JTable speciesTable;
 
-	FileInfoWindow(Main main, Matrix matrix)
+	FileInfoWindow(ChemEQL3 main, Matrix matrix)
 	{
 		super("",true,true,true,true);
 		this.matrix = matrix;
@@ -147,7 +147,7 @@ class FileInfoWindow extends JInternalFrame
 		private TableCellRenderer concentrationRenderer;
 		private TableCellEditor concentrationEditor;
 		
-		ComponentTable(Main main, TableModel model)
+		ComponentTable(ChemEQL3 main, TableModel model)
 		{
 			super(model,false);
 			componentRenderer = new CustomRenderer(
@@ -253,7 +253,7 @@ class FileInfoWindow extends JInternalFrame
 		private TableCellEditor logKEditor;
 		private TableCellRenderer logKSourceRenderer;
 
-		SpeciesTable(Main main, TableModel model)
+		SpeciesTable(ChemEQL3 main, TableModel model)
 		{
 			super(model,false);
 			logKRenderer = new CustomConstantsRenderer(getFont(),SwingConstants.RIGHT,main);

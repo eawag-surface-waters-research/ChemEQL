@@ -7,7 +7,7 @@ import java.awt.event.ComponentEvent;
 class AdsorptionRangeDialog extends ProceedCancelDialog
 {
 	private static AdsorptionRangeDialog INSTANCE;
-	static AdsorptionRangeDialog getInstance(Main parent)
+	static AdsorptionRangeDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new AdsorptionRangeDialog(parent);
@@ -24,7 +24,7 @@ class AdsorptionRangeDialog extends ProceedCancelDialog
 		initComponents();
 	}
 	
-	private AdsorptionRangeDialog(Main parent)
+	private AdsorptionRangeDialog(ChemEQL3 parent)
 	{
 		super(parent);
 		initComponents();

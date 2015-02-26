@@ -9,7 +9,7 @@ import java.awt.event.ItemListener;
 public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static PxPyDiagramDialog INSTANCE;
-	static PxPyDiagramDialog getInstance(Main parent)
+	static PxPyDiagramDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new PxPyDiagramDialog(parent);
@@ -29,7 +29,7 @@ public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListen
 		initComponents();
 	}
 	
-	private PxPyDiagramDialog(Main parent)
+	private PxPyDiagramDialog(ChemEQL3 parent)
 	{
 		super(parent);
 		initComponents();

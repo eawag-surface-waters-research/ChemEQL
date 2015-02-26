@@ -39,7 +39,7 @@ import de.vseit.showit.DataCollection;
 //	}
 
 
-public class Main extends JFrame
+public class ChemEQL3 extends JFrame
 {
 	static final boolean TESTING = false;
 
@@ -63,7 +63,7 @@ public class Main extends JFrame
 		
 		public String getDescription()
 		{
-			return Main.AN+" Matrices";
+			return ChemEQL3.AN+" Matrices";
 		}
 	};
    private static FileFilter XLS_FILTER = new FileFilter()
@@ -144,17 +144,17 @@ public class Main extends JFrame
 		
 		// put main menu top of the screen for Mac OS X (JDK 1.4+)
 		System.setProperty("apple.laf.useScreenMenuBar","true");
-      System.setProperty("com.apple.mrj.application.apple.menu.about.name",Main.AN);
+      System.setProperty("com.apple.mrj.application.apple.menu.about.name",ChemEQL3.AN);
 		if (TESTING)
 			System.out.println(System.getProperties().toString());
 
 		// create file chooser *after* setting the L&F
 		FILE_CHOOSER = new JFileChooser(System.getProperty("user.home"));
-		new Main();
+		new ChemEQL3();
 	}
 
 
-	private Main()
+	private ChemEQL3()
 	{
 		System.out.println("Starting "+AN+", version 3.01 (8th of Sept. 2009)");
 
@@ -199,7 +199,7 @@ public class Main extends JFrame
 		
 		
 		// show welcome
-		new SplashScreen(Main.class.getResource("resources/startup.gif"), this, 1300);
+		new SplashScreen(ChemEQL3.class.getResource("resources/startup.gif"), this, 1300);
 
 		// import standard libraries from jar file if binary libs don't exist yet
 		try
@@ -208,9 +208,8 @@ public class Main extends JFrame
 			if (!Library.binLibFile(true).exists())
 			{
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				regLibrary = new Library(Main.this,true);
-				regLibrary.importLib(
-					Main.class.getResourceAsStream("resources/CQL.Library"),
+				regLibrary = new Library(ChemEQL3.this,true);
+				regLibrary.importLib(ChemEQL3.class.getResourceAsStream("resources/CQL.Library"),
 					"Importing standard regular library");
 				String path = regLibrary.writeBinary();
 				System.out.println("Regular" + t + path);
@@ -218,9 +217,8 @@ public class Main extends JFrame
 			if (!Library.binLibFile(false).exists())
 			{
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				spLibrary = new Library(Main.this,false);
-				spLibrary.importLib(
-					Main.class.getResourceAsStream("resources/CQL.spLibrary"),
+				spLibrary = new Library(ChemEQL3.this,false);
+				spLibrary.importLib(ChemEQL3.class.getResourceAsStream("resources/CQL.spLibrary"),
 					"Importing standard solid phases library");
 				String path = spLibrary.writeBinary();
 				System.out.println("Solid phases" + t + path);
@@ -247,7 +245,7 @@ public class Main extends JFrame
 			try
 			{
 				Class osxAdapter = Class.forName("ch.eawag.chemeql.OSXAdapter");
-				Class[] defArgs = {Main.class};
+				Class[] defArgs = {ChemEQL3.class};
 				Method registerMethod =
 					osxAdapter.getDeclaredMethod("registerMacOSXApplication", defArgs);
 				if (registerMethod != null)
@@ -437,13 +435,13 @@ public class Main extends JFrame
 				{
 					lib.importLib(inStream,msg);
 					String path = lib.writeBinary();
-					JOptionPane.showMessageDialog(Main.this,
+					JOptionPane.showMessageDialog(ChemEQL3.this,
 						(lib == regLibrary ? "Regular" : "Solid phases") +
 						" library sucessfully imported and stored\nas binary file at "
 						+ path + ".",AN,JOptionPane.INFORMATION_MESSAGE);
 					if (lib == regLibrary)
 					{
-						SelectComponentsDialog.getInstance(Main.this).show(regLibrary);
+						SelectComponentsDialog.getInstance(ChemEQL3.this).show(regLibrary);
 						if (matrixIsLoaded)
 						{
 							saveMatrixCmd.setEnabled(true);
@@ -803,7 +801,7 @@ public class Main extends JFrame
 					FILE_CHOOSER.setDialogTitle("Open matrix");
 					FILE_CHOOSER.addChoosableFileFilter(CQL_FILTER);
 					FILE_CHOOSER.setFileFilter(CQL_FILTER);
-					int returnVal = FILE_CHOOSER.showOpenDialog(Main.this);
+					int returnVal = FILE_CHOOSER.showOpenDialog(ChemEQL3.this);
 					if (returnVal == JFileChooser.APPROVE_OPTION)
 					{
 						// user has not canceled file dialog: go read my matrix!
@@ -842,10 +840,10 @@ public class Main extends JFrame
 				/* eine binäre Bibliothek aus dem Preferences-Folder einlesen */
 				flushMatrixProc();
 				if (regLibrary == null) /* falls binäre Library noch nie geöffnet...*/
-					regLibrary = Library.readBinLibrary(Main.this,true);
+					regLibrary = Library.readBinLibrary(ChemEQL3.this,true);
 				if (regLibrary == null) return;// Error while reading library: Exit!
 
-				SelectComponentsDialog.getInstance(Main.this).show(regLibrary);
+				SelectComponentsDialog.getInstance(ChemEQL3.this).show(regLibrary);
 
 				if (matrixIsLoaded)
 				{
@@ -871,7 +869,7 @@ public class Main extends JFrame
 					FILE_CHOOSER.setFileFilter(CQL_FILTER);
 					File file = new File(FILE_CHOOSER.getCurrentDirectory(),"z.cql");
 					FILE_CHOOSER.setSelectedFile(file);
-					int returnVal = FILE_CHOOSER.showSaveDialog(Main.this);
+					int returnVal = FILE_CHOOSER.showSaveDialog(ChemEQL3.this);
 					if (returnVal == JFileChooser.CANCEL_OPTION) return;		// Exit!
 					
 					// user has not canceled file dialog: save if file is new or
@@ -879,7 +877,7 @@ public class Main extends JFrame
 					file = FILE_CHOOSER.getSelectedFile();
 					if (!file.getName().endsWith(".cql"))
 						file = new File(file.getParentFile(),file.getName() + ".cql");
-					if (!file.exists() || JOptionPane.showConfirmDialog(Main.this,
+					if (!file.exists() || JOptionPane.showConfirmDialog(ChemEQL3.this,
 						"Replace existing matrix '" + file.getName() + "'?",
 						"Confirm",JOptionPane.YES_NO_OPTION)
 						== JOptionPane.YES_OPTION)
@@ -918,7 +916,7 @@ public class Main extends JFrame
 					FILE_CHOOSER.setFileFilter(XLS_FILTER);
 					File file = new File(FILE_CHOOSER.getCurrentDirectory(),"z.xls");
 					FILE_CHOOSER.setSelectedFile(file);
-					int returnVal = FILE_CHOOSER.showSaveDialog(Main.this);
+					int returnVal = FILE_CHOOSER.showSaveDialog(ChemEQL3.this);
 					if (returnVal == JFileChooser.CANCEL_OPTION) return;		// Exit!
 					
 					// user has not canceled file dialog: save if file is new or
@@ -926,7 +924,7 @@ public class Main extends JFrame
 					file = FILE_CHOOSER.getSelectedFile();
 					if (!file.getName().endsWith(".xls"))
 						file = new File(file.getParentFile(),file.getName() + ".xls");
-					if (!file.exists() || JOptionPane.showConfirmDialog(Main.this,
+					if (!file.exists() || JOptionPane.showConfirmDialog(ChemEQL3.this,
 						"Replace existing data file '" + file.getName() + "'?",
 						"Confirm",JOptionPane.YES_NO_OPTION)
 						== JOptionPane.YES_OPTION)
@@ -1054,9 +1052,9 @@ public class Main extends JFrame
 			public void actionPerformed(ActionEvent evt)
 			{
 				if (regLibrary == null)
-					regLibrary = Library.readBinLibrary(Main.this,true);
+					regLibrary = Library.readBinLibrary(ChemEQL3.this,true);
 				if (regLibrary == null) return;// Error while reading library: Exit!
-				EditComponentsDialog.getInstance(Main.this).show(regLibrary);
+				EditComponentsDialog.getInstance(ChemEQL3.this).show(regLibrary);
 			}
 		});
 		libraryMenu.add(editRegLibComponentsCmd);
@@ -1067,9 +1065,9 @@ public class Main extends JFrame
 			public void actionPerformed(ActionEvent evt)
 			{
 				if (regLibrary == null)
-					regLibrary = Library.readBinLibrary(Main.this,true);
+					regLibrary = Library.readBinLibrary(ChemEQL3.this,true);
 				if (regLibrary == null) return;// Error while reading library: Exit!
-				EditSpeciesDialog.getInstance(Main.this).show(regLibrary);
+				EditSpeciesDialog.getInstance(ChemEQL3.this).show(regLibrary);
 			}
 		});
 		libraryMenu.add(editRegLibSpeciesCmd);
@@ -1082,9 +1080,9 @@ public class Main extends JFrame
 			public void actionPerformed(ActionEvent evt)
 			{
 				if (spLibrary == null)
-					spLibrary = Library.readBinLibrary(Main.this,false);
+					spLibrary = Library.readBinLibrary(ChemEQL3.this,false);
 				if (spLibrary == null) return;// Error while reading library: Exit!
-				EditComponentsDialog.getInstance(Main.this).show(spLibrary);
+				EditComponentsDialog.getInstance(ChemEQL3.this).show(spLibrary);
 			}
 		});
 		libraryMenu.add(editSPLibComponentsCmd);
@@ -1095,9 +1093,9 @@ public class Main extends JFrame
 			public void actionPerformed(ActionEvent evt)
 			{
 				if (spLibrary == null)
-					spLibrary = Library.readBinLibrary(Main.this,false);
+					spLibrary = Library.readBinLibrary(ChemEQL3.this,false);
 				if (spLibrary == null) return;// Error while reading library: Exit!
-				EditSpeciesDialog.getInstance(Main.this).show(spLibrary);
+				EditSpeciesDialog.getInstance(ChemEQL3.this).show(spLibrary);
 			}
 		});
 		libraryMenu.add(editSPLibSpeciesCmd);
@@ -1140,7 +1138,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				DeleteSpeciesDialog.getInstance(Main.this).setVisible(true);
+				DeleteSpeciesDialog.getInstance(ChemEQL3.this).setVisible(true);
 				drawFileInfoWindow(true);
 			}
 		});
@@ -1153,7 +1151,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				ChangeSolidPhaseDialog.getInstance(Main.this).setVisible(true);
+				ChangeSolidPhaseDialog.getInstance(ChemEQL3.this).setVisible(true);
 				drawFileInfoWindow(true);
 			}
 		});
@@ -1186,7 +1184,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				PHConstDialog.getInstance(Main.this).setVisible(true);
+				PHConstDialog.getInstance(ChemEQL3.this).setVisible(true);
 			}
 		});
 		modeMenu.add(pHconstCmd);
@@ -1197,7 +1195,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				PHRangeDialog.getInstance(Main.this).setVisible(true);
+				PHRangeDialog.getInstance(ChemEQL3.this).setVisible(true);
 			}
 		});
 		modeMenu.add(pHrangeCmd);
@@ -1208,7 +1206,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				ComponentRangeDialog.getInstance(Main.this).setVisible(true);
+				ComponentRangeDialog.getInstance(ChemEQL3.this).setVisible(true);
 			}
 		});
 		modeMenu.add(compRangeCmd);
@@ -1219,7 +1217,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				AdsorptionRangeDialog.getInstance(Main.this).setVisible(true);
+				AdsorptionRangeDialog.getInstance(ChemEQL3.this).setVisible(true);
 			}
 		});
 		
@@ -1231,7 +1229,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				LogKRangeDialog.getInstance(Main.this).setVisible(true);
+				LogKRangeDialog.getInstance(ChemEQL3.this).setVisible(true);
 			}
 		});
 		modeMenu.add(logKrangeCmd);
@@ -1244,7 +1242,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				KineticsDialog.getInstance(Main.this).setVisible(true);
+				KineticsDialog.getInstance(ChemEQL3.this).setVisible(true);
 			}
 		});
 		modeMenu.add(kinetikCmd);
@@ -1257,7 +1255,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				PxPyDiagramDialog.getInstance(Main.this).setVisible(true);
+				PxPyDiagramDialog.getInstance(ChemEQL3.this).setVisible(true);
 			}
 		});
 		modeMenu.add(pXpYCmd);
@@ -1286,7 +1284,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				ActivityInputDialog.getInstance(Main.this).setVisible(true);
+				ActivityInputDialog.getInstance(ChemEQL3.this).setVisible(true);
 			}
 		};
 		
@@ -1331,7 +1329,7 @@ public class Main extends JFrame
 				tp.setEditable(false);
 				try
 				{
-					tp.setPage(Main.class.getResource("resources/activityHelp.html"));
+					tp.setPage(ChemEQL3.class.getResource("resources/activityHelp.html"));
 				}
 				catch (IOException ex)
 				{ex.printStackTrace();}
@@ -1370,7 +1368,7 @@ public class Main extends JFrame
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
-				GraphicsDialog.getInstance(Main.this).setVisible(true);
+				GraphicsDialog.getInstance(ChemEQL3.this).setVisible(true);
 			}
 		});
 		modeMenu.add(graphCmd);
@@ -1481,6 +1479,6 @@ public class Main extends JFrame
 
 	void showAboutScreen()
 	{
-		new SplashScreen(Main.class.getResource("resources/about.gif"), this, 20000);
+		new SplashScreen(ChemEQL3.class.getResource("resources/about.gif"), this, 20000);
 	}
 }

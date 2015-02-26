@@ -40,7 +40,7 @@ class Matrix extends Object
 	private static final int multiConcLines = 200;
 	private static final int maxParticles = 5;
 
-	Main main;
+	ChemEQL3 main;
 	private String name;
 
 	int totComp;
@@ -132,7 +132,7 @@ class Matrix extends Object
 	int stopItalics;
 
 	
-	Matrix(Main m)
+	Matrix(ChemEQL3 m)
 	{
 		main = m;
 		name = "New Matrix";
@@ -472,7 +472,7 @@ class Matrix extends Object
 		if (!myRead.isItemEmpty())	/*checks if first field in matrix is empty or remark*/
 		{
 			throw new DataFormatException(
-			"Error reading matrixfile: This file is not a legal "+Main.AN+" matrix or has wrong formats");
+			"Error reading matrixfile: This file is not a legal "+ChemEQL3.AN+" matrix or has wrong formats");
 		}
 		
 		myRead.skipLine();	/* eine Zeile ¸berspringen */
@@ -481,7 +481,7 @@ class Matrix extends Object
 		if (!myRead.isItemEmpty())		/*checks if first field in the second line is empty or remark*/
 		{
 			throw new DataFormatException(
-			"Error reading matrixfile: This file is not a legal "+Main.AN+" matrix or has wrong formats");
+			"Error reading matrixfile: This file is not a legal "+ChemEQL3.AN+" matrix or has wrong formats");
 		}
 		
 		totComp = 0;	/*Zeile mit 'modes': Counts the number of Components*/
@@ -502,7 +502,7 @@ class Matrix extends Object
 		if (totComp < 2)
 		{
 			throw new DataFormatException("Error reading matrixfile: This file is not a legal "
-				+Main.AN+" matrix or has wrong formats");
+				+ChemEQL3.AN+" matrix or has wrong formats");
 		}
 		
 		totSpec = 0;	/* we count the speciesMat along checking the logK-column */
@@ -2413,7 +2413,7 @@ class Matrix extends Object
 									+ " can be changed to"
 									+ MyTools.SCI_NOTATION.format(10*convergenceCriteria),
 								"(Data are not reliable if the criteria is > 1e-5)"},
-								Main.AN+": Iterations do not converge!",
+								ChemEQL3.AN+": Iterations do not converge!",
 							JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.WARNING_MESSAGE,null,new String[]
 							{"Do it","Abort"},null);
@@ -2772,8 +2772,8 @@ class Matrix extends Object
 				return new Double(species[row].constant);
 			if (col == c++)
 				return new Double(speConc[row]);
-			if (calculatedWithActivity)	// cannot use Main.isCalcActivCoeff(), since meanwhile
-				if (col == c++)				// Main.restoreProc has resetted calcActivCoeff to no.
+			if (calculatedWithActivity)	// cannot use ChemEQL3.isCalcActivCoeff(), since meanwhile
+				if (col == c++)				// ChemEQL3.restoreProc has resetted calcActivCoeff to no.
 					return new Double(MyTools.expo(10,logfSpec[row]) * speConc[row]);
 			// assert col == c;
 			return new Double(

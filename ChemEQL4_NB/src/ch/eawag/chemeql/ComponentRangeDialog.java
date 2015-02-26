@@ -8,7 +8,7 @@ import java.awt.event.ComponentEvent;
 class ComponentRangeDialog extends ProceedCancelDialog
 {
 	private static ComponentRangeDialog INSTANCE;
-	static ComponentRangeDialog getInstance(Main parent)
+	static ComponentRangeDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new ComponentRangeDialog(parent);
@@ -25,7 +25,7 @@ class ComponentRangeDialog extends ProceedCancelDialog
 		initComponents();
 	}
 	
-	private ComponentRangeDialog(Main m)
+	private ComponentRangeDialog(ChemEQL3 m)
 	{
 		super(m);
 		initComponents();

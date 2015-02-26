@@ -9,7 +9,7 @@ import java.awt.event.ItemListener;
 class LogKRangeDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static LogKRangeDialog INSTANCE;
-	static LogKRangeDialog getInstance(Main parent)
+	static LogKRangeDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new LogKRangeDialog(parent);
@@ -26,7 +26,7 @@ class LogKRangeDialog extends ProceedCancelDialog implements ItemListener
 		initComponents();
 	}
 
-	private LogKRangeDialog(Main parent)
+	private LogKRangeDialog(ChemEQL3 parent)
 	{
 		super(parent);
 		initComponents();

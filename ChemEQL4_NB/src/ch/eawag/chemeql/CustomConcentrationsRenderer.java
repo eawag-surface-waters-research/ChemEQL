@@ -5,9 +5,9 @@ import java.awt.Font;
 
 class CustomConcentrationsRenderer extends CustomRenderer
 {
-	private Main main;
+	private ChemEQL3 main;
 
-	CustomConcentrationsRenderer(Font font, int alignment, Main m)
+	CustomConcentrationsRenderer(Font font, int alignment, ChemEQL3 m)
 	{
 		super(font,alignment);
 		main = m;

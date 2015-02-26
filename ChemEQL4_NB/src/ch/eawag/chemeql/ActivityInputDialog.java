@@ -7,7 +7,7 @@ import java.awt.event.ComponentEvent;
 class ActivityInputDialog extends ProceedCancelDialog
 {
 	private static ActivityInputDialog INSTANCE;
-	static ActivityInputDialog getInstance(Main parent)
+	static ActivityInputDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new ActivityInputDialog(parent);
@@ -18,7 +18,7 @@ class ActivityInputDialog extends ProceedCancelDialog
 	private double currentActivA;
 
 	
-	private ActivityInputDialog(Main parent)
+	private ActivityInputDialog(ChemEQL3 parent)
 	{
 		super(parent);
 		initComponents();

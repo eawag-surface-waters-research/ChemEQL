@@ -13,7 +13,7 @@ class SettingsDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static SettingsDialog INSTANCE;
 	
-	static SettingsDialog getInstance(Main parent)
+	static SettingsDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new SettingsDialog(parent);
@@ -39,7 +39,7 @@ class SettingsDialog extends ProceedCancelDialog implements ItemListener
 		initComponents();
 	}
 
-	private SettingsDialog(Main main)
+	private SettingsDialog(ChemEQL3 main)
 	{
 		super(main);
 		initComponents();

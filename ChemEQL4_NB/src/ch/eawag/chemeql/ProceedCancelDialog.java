@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class ProceedCancelDialog extends JDialog
 {
-	protected Main main;
+	protected ChemEQL3 main;
 
 	// Constructor for creating bean
 	public ProceedCancelDialog()
@@ -13,7 +13,7 @@ public class ProceedCancelDialog extends JDialog
 		this(null);
 	}
 
-	protected ProceedCancelDialog(Main main)
+	protected ProceedCancelDialog(ChemEQL3 main)
 	{
 		super(main);
 		this.main = main;

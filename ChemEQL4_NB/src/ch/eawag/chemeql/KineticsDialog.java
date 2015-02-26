@@ -10,7 +10,7 @@ import javax.swing.JRadioButton;
 class KineticsDialog extends ProceedCancelDialog implements ActionListener
 {
 	private static KineticsDialog INSTANCE;
-	static KineticsDialog getInstance(Main parent)
+	static KineticsDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new KineticsDialog(parent);
@@ -28,7 +28,7 @@ class KineticsDialog extends ProceedCancelDialog implements ActionListener
 		initComponents();
 	}
 	
-	private KineticsDialog(Main parent)
+	private KineticsDialog(ChemEQL3 parent)
 	{
 		super(parent);
 		initComponents();

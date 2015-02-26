@@ -7,7 +7,7 @@ import java.awt.event.ComponentEvent;
 class GraphicsDialog extends ProceedCancelDialog
 {
 	private static GraphicsDialog INSTANCE;
-	static GraphicsDialog getInstance(Main parent)
+	static GraphicsDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new GraphicsDialog(parent);
@@ -20,7 +20,7 @@ class GraphicsDialog extends ProceedCancelDialog
 		initComponents();
 	}
 	
-	private GraphicsDialog(Main parent)
+	private GraphicsDialog(ChemEQL3 parent)
 	{
 		super(parent);
 		initComponents();

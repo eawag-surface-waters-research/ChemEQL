@@ -7,14 +7,14 @@ import java.awt.event.ComponentEvent;
 class DeleteSpeciesDialog extends ProceedCancelDialog
 {
 	private static DeleteSpeciesDialog INSTANCE;
-	static DeleteSpeciesDialog getInstance(Main parent)
+	static DeleteSpeciesDialog getInstance(ChemEQL3 parent)
 	{
 		if (INSTANCE == null)
 			INSTANCE = new DeleteSpeciesDialog(parent);
 		return INSTANCE;
 	}
 
-	private DeleteSpeciesDialog(Main parent)
+	private DeleteSpeciesDialog(ChemEQL3 parent)
 	{
 		super(parent);
 		initComponents();
