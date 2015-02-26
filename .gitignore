@@ -4,3 +4,11 @@
 *.jar
 *.war
 *.ear
+/ChemEQL4_NB/nbproject/private/
+/JaxbTest/nbproject/private/
+/ChemEQL4_NB/build/
+/ChemEQL4_NB/dist/
+/Test/target/
+/Test/nbproject/private/
+/Test/dist/
+/Test/build/
