@@ -9,38 +9,38 @@
 <?import javafx.scene.layout.*?>
 
 <VBox prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.eawag.chemeql.MatrixInfoController">
-   <children>
-      <TableView fx:id="componentsTable" prefHeight="140.0" prefWidth="200.0">
-        <columns>
-          <TableColumn editable="false" prefWidth="126.0" sortable="false" text="Species" />
-          <TableColumn prefWidth="129.0" sortable="false" text="Stoich. Matrix" />
-            <TableColumn prefWidth="86.0" sortable="false" text="Log K" />
-            <TableColumn prefWidth="107.0" sortable="false" text="Conc. [mol/l]" />
-            <TableColumn minWidth="8.0" prefWidth="109.0" sortable="false" text="Log conc." />
-        </columns>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </TableView>
-      <TableView fx:id="adsorptionParametersTable" prefHeight="140.0" prefWidth="200.0">
-         <columns>
-            <TableColumn prefWidth="75.0" text="C1" />
-            <TableColumn prefWidth="75.0" text="C2" />
-         </columns>
-         <VBox.margin>
-            <Insets left="8.0" top="25.0" />
-         </VBox.margin>
-         <padding>
-            <Insets bottom="15.0" />
-         </padding>
-      </TableView>
-      <TextField fx:id="multiCalculationTF" editable="false" text="-&gt; Calculation with an array of concentrations" />
-      <TextField fx:id="pHTF" editable="false" text="pHTF" />
-      <TableView fx:id="speciesTable" prefHeight="200.0" prefWidth="200.0">
-         <columns>
-            <TableColumn prefWidth="75.0" text="C1" />
-            <TableColumn prefWidth="75.0" text="C2" />
-         </columns>
-      </TableView>
-   </children>
+	<children>
+		<TableView fx:id="componentsTable" prefHeight="140.0" prefWidth="200.0">
+			<columns>
+				<TableColumn editable="false" prefWidth="126.0" sortable="false" text="Species" />
+				<TableColumn prefWidth="129.0" sortable="false" text="Stoich. Matrix" />
+				<TableColumn prefWidth="86.0" sortable="false" text="Log K" />
+				<TableColumn prefWidth="107.0" sortable="false" text="Conc. [mol/l]" />
+				<TableColumn minWidth="8.0" prefWidth="109.0" sortable="false" text="Log conc." />
+			</columns>
+			<VBox.margin>
+				<Insets />
+			</VBox.margin>
+		</TableView>
+		<TableView fx:id="adsorptionParametersTable" prefHeight="140.0" prefWidth="200.0">
+			<columns>
+				<TableColumn prefWidth="75.0" text="C1" />
+				<TableColumn prefWidth="75.0" text="C2" />
+			</columns>
+			<VBox.margin>
+				<Insets left="8.0" top="25.0" />
+			</VBox.margin>
+			<padding>
+				<Insets bottom="15.0" />
+			</padding>
+		</TableView>
+		<TextField fx:id="multiCalculationTF" editable="false" text="-&gt; Calculation with an array of concentrations" />
+		<TextField fx:id="pHTF" editable="false" text="pHTF" />
+		<TableView fx:id="speciesTable" prefHeight="200.0" prefWidth="200.0">
+			<columns>
+				<TableColumn prefWidth="75.0" text="C1" />
+				<TableColumn prefWidth="75.0" text="C2" />
+			</columns>
+		</TableView>
+	</children>
 </VBox>

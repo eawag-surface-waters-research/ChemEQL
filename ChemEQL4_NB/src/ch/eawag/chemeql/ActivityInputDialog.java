@@ -7,26 +7,25 @@ import java.awt.event.ComponentEvent;
 class ActivityInputDialog extends ProceedCancelDialog
 {
 	private static ActivityInputDialog INSTANCE;
-	static ActivityInputDialog getInstance(ChemEqlGuiController parent)
-	{
-		if (INSTANCE == null)
+
+	static ActivityInputDialog getInstance(ChemEqlGuiController parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new ActivityInputDialog(parent);
+		}
 		return INSTANCE;
 	}
 
 	private double currentIonicStr;
 	private double currentActivA;
 
-
-	private ActivityInputDialog(ChemEqlGuiController parent)
-	{
+	private ActivityInputDialog(ChemEqlGuiController parent) {
 		super(parent);
 		initComponents();
-		setLocation(300,250);
-		addComponentListener(new ComponentAdapter() {
+		setLocation(300, 250);
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent e)
-			{
+			public void componentShown(ComponentEvent e) {
 				currentActivA = 0.5;
 				ionicStrTF.setEnabled(true);
 				ionicStrTF.setText("");
@@ -174,36 +173,32 @@ class ActivityInputDialog extends ProceedCancelDialog
 		checkInputs();
 	}//GEN-LAST:event_varIonicStrRBActionPerformed
 
-	private void checkInputs()
-	{
-		try
-		{
+	private void checkInputs() {
+		try {
 			currentActivA = Double.parseDouble(activATF.getText());
-			if (fixIonicStrRB.isSelected())
+			if (fixIonicStrRB.isSelected()) {
 				currentIonicStr = Double.parseDouble(ionicStrTF.getText());
+			}
 			proceedButton.setEnabled(true);
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			proceedButton.setEnabled(false);
 		}
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		main.setActivity(Activity.NO); // was main.calcActivCoeff.selectToggle(Activity.NO);
 		main.activityOutput = false;
 		super.doCancel();
 	}
 
-	protected void doProceed()
-	{
-		if (currentActivA <= 0)
+	protected void doProceed() {
+		if (currentActivA <= 0) {
 			MyTools.showError("Constant A must be > 0 !");
-		else if (fixIonicStrRB.isSelected() && currentIonicStr <= 0)
+		}
+		else if (fixIonicStrRB.isSelected() && currentIonicStr <= 0) {
 			MyTools.showError("Ionic strength must be > 0 !");
-		else
-		{
+		}
+		else {
 			main.matrix.activA = currentActivA;
 			main.matrix.ionicStr = currentIonicStr;
 			main.matrix.fixionicStr = fixIonicStrRB.isSelected();

@@ -28,7 +28,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 
 
 /**
@@ -61,8 +60,7 @@ public class MatrixInfoController
 	private Matrix matrix;
 
 	@FXML
-	void initialize()
-	{
+	void initialize() {
 		assert componentsTable != null :
 				"fx:id=\"componentsTable\" was not injected: check your FXML file 'MatrixInfo.fxml'.";
 		assert speciesTable != null : "fx:id=\"speciesTable\" was not injected: check your FXML file 'MatrixInfo.fxml'.";
@@ -73,8 +71,7 @@ public class MatrixInfoController
 		assert pHTF != null : "fx:id=\"pHTF\" was not injected: check your FXML file 'MatrixInfo.fxml'.";
 	}
 
-	void setMatrix(Matrix matrix)
-	{
+	void setMatrix(Matrix matrix) {
 		this.matrix = matrix;
 		update();
 		// create components
@@ -93,8 +90,7 @@ public class MatrixInfoController
 //		speciesTable = new SpeciesTable(main,matrix.getSpeciesTableModel());
 	}
 
-	void update()
-	{
+	void update() {
 //		((AbstractTableModel)componentsTable.getModel()).fireTableStructureChanged();
 //		TableColumnModel cm = componentsTable.getColumnModel();
 //		for (int i=0; i<cm.getColumnCount(); i++)

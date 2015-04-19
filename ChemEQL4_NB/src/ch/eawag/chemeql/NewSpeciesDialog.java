@@ -1,21 +1,21 @@
 package ch.eawag.chemeql;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusAdapter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 
 class NewSpeciesDialog extends ProceedCancelDialog
 {
 	private static NewSpeciesDialog INSTANCE;
-	static NewSpeciesDialog getInstance()
-	{
-		if (INSTANCE == null)
+
+	static NewSpeciesDialog getInstance() {
+		if (INSTANCE == null) {
 			INSTANCE = new NewSpeciesDialog();
+		}
 		return INSTANCE;
 	}
-
 
 	private Library library;
 	private String newSpec;
@@ -24,94 +24,86 @@ class NewSpeciesDialog extends ProceedCancelDialog
 	private int[] myStoichCoeffs;
 
 	// Constructor for creating a bean
-	public NewSpeciesDialog()
-	{
+	public NewSpeciesDialog() {
 		super();
 		initComponents();
 
 		nameTF.addFocusListener(new FocusAdapter()
 		{
-			public void focusLost(FocusEvent e)
-			{
-				if (nameTF.getText().length() == 0)
+			public void focusLost(FocusEvent e) {
+				if (nameTF.getText().length() == 0) {
 					nameTF.setText(newSpec);
-				else
-				{
+				}
+				else {
 					newSpec = nameTF.getText();
-					if (library.nameAlreadyInUse(newSpec))
+					if (library.nameAlreadyInUse(newSpec)) {
 						MyTools.showWarning("A species with this name already exists!");
+					}
 					plusEductButton.setEnabled(true);
 					plusProductButton.setEnabled(true);
-					equationTF.setText(library.equationFor(myStoichCoeffs,newSpec));
+					equationTF.setText(library.equationFor(myStoichCoeffs, newSpec));
 				}
 			}
 		});
 
 		nameTF.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				nameTF.transferFocus();	// let focusLost above do the work
 			}
 		});
 
 		coeffTF.addFocusListener(new FocusAdapter()
 		{
-			public void focusGained(FocusEvent e)
-			{
+			public void focusGained(FocusEvent e) {
 				coeffTF.selectAll();
 			}
 		});
-		
+
 		plusEductButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				updateEquation(false);
 			}
 		});
 
 		plusProductButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				updateEquation(true);
 			}
 		});
 
-		setLocation(300,150);		
+		setLocation(300, 150);
 	}
 
-	private void updateEquation(boolean isProduct)
-	{
+	private void updateEquation(boolean isProduct) {
 		// assert newSpec.length() > 0;
-		try
-		{
+		try {
 			currentCoeff = Integer.parseInt(coeffTF.getText());
-			if (currentCoeff < 0)
+			if (currentCoeff < 0) {
 				coeffTF.setText(Integer.toString(Math.abs(currentCoeff)));
-			if (currentCoeff != 0)
-				if ((currentCoeff > 0) == isProduct)
+			}
+			if (currentCoeff != 0) {
+				if ((currentCoeff > 0) == isProduct) {
 					currentCoeff = -currentCoeff;
+				}
+			}
 			myStoichCoeffs[componentsCB.getSelectedIndex()] = currentCoeff;
-			equationTF.setText(library.equationFor(myStoichCoeffs,newSpec));
-		}
-		catch (NumberFormatException ex)
-		{
+			equationTF.setText(library.equationFor(myStoichCoeffs, newSpec));
+		} catch (NumberFormatException ex) {
 			MyTools.showError("Stoichometric coefficient must be an integer!");
 		}
 	}
 
-	void show(Library lib)
-	{
-		if (library != lib)
-		{
+	void show(Library lib) {
+		if (library != lib) {
 			library = lib;
 			componentsCB.setModel(library.getComponentsCBModel());
 		}
 		componentsCB.setSelectedIndex(0);
 		myStoichCoeffs = new int[library.libColumns];
-			// automatically initialized with 0
+		// automatically initialized with 0
 
 		newSpec = "";
 
@@ -126,43 +118,39 @@ class NewSpeciesDialog extends ProceedCancelDialog
 		super.setVisible(true);
 	}
 
-	int[] stoichCoeffs()
-	{
+	int[] stoichCoeffs() {
 		return myStoichCoeffs;
 	}
 
-	Species newSpecies()
-	{
+	Species newSpecies() {
 		return newSpecies;
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		newSpecies = null;
 		super.doCancel();
 	}
 
-	protected void doProceed()
-	{
+	protected void doProceed() {
 		// assert newSpec.length() > 0;
 
-		if (nameTF.getText().length() == 0)
+		if (nameTF.getText().length() == 0) {
 			MyTools.showError("Please provide a name for the new Species!");
-		else if (equationTF.getText().startsWith(Library.EQUALS_STRING))
+		}
+		else if (equationTF.getText().startsWith(Library.EQUALS_STRING)) {
 			MyTools.showError("Equation still incomplete!");
-		else
-			try
-			{
+		}
+		else {
+			try {
 				double logK = Double.parseDouble(logKTF.getText());
-				newSpecies = new Species(newSpec,logK,litTF.getText());
+				newSpecies = new Species(newSpec, logK, litTF.getText());
 				super.doProceed();
-			}
-			catch (NumberFormatException ex)
-			{
+			} catch (NumberFormatException ex) {
 				MyTools.showError("Log K input is missing or in wrong format!");
 			}
+		}
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is

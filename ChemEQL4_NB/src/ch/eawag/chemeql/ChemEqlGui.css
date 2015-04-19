@@ -1,8 +1,8 @@
 .spreadsheet-cell {
-    -fx-padding: 0px 3px 0px 3px;
-    -fx-border-color: lightgray;
-    -fx-border-width : 0.3px;
-    -fx-background-color: -fx-table-cell-border-color,white;
+	-fx-padding: 0px 3px 0px 3px;
+	-fx-border-color: lightgray;
+	-fx-border-width : 0.3px;
+	-fx-background-color: -fx-table-cell-border-color,white;
 }
 .spreadsheet-cell.matrix-component {
 	-fx-alignment: CENTER;

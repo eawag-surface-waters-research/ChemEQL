@@ -37,14 +37,14 @@ import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType.DoubleType;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
+
 /**
  *
  * @author kaibrassel
  */
 public class MatrixView extends BorderPane
 {
-	private static SpreadsheetCell createEmptyCell(int row, int col)
-	{
+	private static SpreadsheetCell createEmptyCell(int row, int col) {
 		SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(row, col, 1, 1, "");
 		cell.setEditable(false);
 		return cell;
@@ -72,8 +72,7 @@ public class MatrixView extends BorderPane
 //	private MatrixView(Grid grid)
 //	{
 //	}
-	void setMatrix(Matrix newMatrix)
-	{
+	void setMatrix(Matrix newMatrix) {
 		matrix = newMatrix;
 		Grid grid = new GridBase(matrix.totSpec + 3, matrix.totComp + 4);
 		ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
@@ -188,24 +187,22 @@ public class MatrixView extends BorderPane
 
 	}
 
+
 	static private class CustomConcentrationsConverter extends StringConverter<Double>
 	{
 		private final DecimalFormat format;
 
-		CustomConcentrationsConverter(DecimalFormat format)
-		{
+		CustomConcentrationsConverter(DecimalFormat format) {
 			this.format = format;
 		}
 
 		@Override
-		public String toString(Double val)
-		{
+		public String toString(Double val) {
 			return val == 0.0 ? "0.0" : (val == 1.0 ? "1.0" : format.format(val));
 		}
 
 		@Override
-		public Double fromString(String s)
-		{
+		public Double fromString(String s) {
 			return Double.parseDouble(s);
 		}
 	}

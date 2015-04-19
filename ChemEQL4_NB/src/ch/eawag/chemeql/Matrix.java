@@ -1,34 +1,46 @@
 package ch.eawag.chemeql;
 
+import de.vseit.showit.ColorEnum;
+import de.vseit.showit.LineEnum;
+import de.vseit.showit.MarkerEnum;
+import de.vseit.showit.PlotView;
+import de.vseit.showit.SizeEnum;
 import java.awt.Color;
-import javax.swing.text.PlainDocument;
-import javax.swing.text.BadLocationException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListDataListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import de.vseit.showit.PlotView;
-import de.vseit.showit.ColorEnum;
-import de.vseit.showit.MarkerEnum;
-import de.vseit.showit.LineEnum;
-import de.vseit.showit.SizeEnum;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 
 class Matrix extends Object
 {
 	private static final double B1 = 6.022E23;	/* Avogadro's number  -->  sites /mol */
+
 	// B1 is never used!!
+
 	private static final double B2 = 0.1174;		/* (8EEoRT *1000)^1/2  -->  Cm-2(mol l-1)1/2 */
+
 	private static final double B3 = 19.46;		/* F/2RT   -->  V-1 */
+
 	private static final double B4 = 0.0256;		/* RT/F  -->  V */
+
 	private static final double B5 = 0.05916;		/* log10 RT/F  -->  V */
+
 	private static final double B6 = 9.6487E4;	/* F  -->  C/mol */
+
 	private static final double ROUNDING_ERROR_RELAXATION = 1000000.0;
 
 	private static final char TAB = Tokenizer.TAB;
@@ -46,9 +58,12 @@ class Matrix extends Object
 	int totSpec;
 	int multiConc;
 	int compNo;	/*to calculate a component range*/
+
 	int specNo;	/*to calculate a range of log K*/
+
 	private int totLimComp;
 	private int noOfSolidPhases;	/*solid phases with activity=1*/
+
 	private int noOfCheckPrecip;	/*components that are to be checked for precipitation*/
 
 	private boolean severalAdsorbents;
@@ -129,8 +144,7 @@ class Matrix extends Object
 	int startItalics;
 	int stopItalics;
 
-	Matrix(ChemEqlGuiController m)
-	{
+	Matrix(ChemEqlGuiController m) {
 		main = m;
 		name = "New Matrix";
 		for (int a = 0; a < lines; a++) {
@@ -141,18 +155,15 @@ class Matrix extends Object
 		}
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		return name;
 	}
 
-	PlainDocument getNotesDoc()
-	{
+	PlainDocument getNotesDoc() {
 		return notesDoc;
 	}
 
-	private void writeNote(final String note)
-	{
+	private void writeNote(final String note) {
 		try {
 			SwingUtilities.invokeAndWait(() -> {
 				try {
@@ -168,59 +179,48 @@ class Matrix extends Object
 		return activity != Activity.NO;
 	}
 
-	AbstractTableModel getComponentsTableModel()
-	{
+	AbstractTableModel getComponentsTableModel() {
 		return new ComponentsTableModel();
 	}
 
-	AbstractTableModel getAdsorptionTableModel()
-	{
+	AbstractTableModel getAdsorptionTableModel() {
 		return new AdsorptionTableModel();
 	}
 
-	AbstractTableModel getSpeciesTableModel()
-	{
+	AbstractTableModel getSpeciesTableModel() {
 		return new SpeciesTableModel();
 	}
 
-	AbstractTableModel getSpeciesOutputTableModel()
-	{
+	AbstractTableModel getSpeciesOutputTableModel() {
 		return new SpeciesOutputTableModel();
 	}
 
-	AbstractTableModel getComponentsOutputTableModel()
-	{
+	AbstractTableModel getComponentsOutputTableModel() {
 		return new ComponentsOutputTableModel();
 	}
 
-	AbstractTableModel getPxPyOutputTableModel()
-	{
+	AbstractTableModel getPxPyOutputTableModel() {
 		return new PxPyOutputTableModel();
 	}
 
-	DefaultTableModel getDataTableModel()
-	{
+	DefaultTableModel getDataTableModel() {
 		return dataTableModel;
 	}
 
-	SpeciesNamesModel createSpeciesNamesModel()
-	{
+	SpeciesNamesModel createSpeciesNamesModel() {
 		return new SpeciesNamesModel();
 	}
 
-	ComboBoxModel createComponentsCBModel()
-	{
+	ComboBoxModel createComponentsCBModel() {
 		return new ComponentsCBModel();
 	}
 
-	ComboBoxModel createSpecialComponentsCBModel()
-	{
+	ComboBoxModel createSpecialComponentsCBModel() {
 		return new SpecialComponentsCBModel();
 	}
 
 	// replaces DrawTitles in module DataHandling
-	private void initIntervalOutput()
-	{
+	private void initIntervalOutput() {
 		dataTableModel = new DefaultTableModel();
 		dataTableRow = new ArrayList<>(20);
 		startItalics = Integer.MAX_VALUE;	// assume: no italic output
@@ -268,8 +268,7 @@ class Matrix extends Object
 		/*writeDraw('log K (', specNames[specNo], ')');*/
 	}
 
-	private void addOutputData(boolean log)
-	{
+	private void addOutputData(boolean log) {
 		dataTableRow.clear();
 		if (log) {
 			addOutputDataLog();
@@ -280,8 +279,7 @@ class Matrix extends Object
 		dataTableModel.addRow(dataTableRow.toArray());
 	}
 
-	private void addOutputDataLin()
-	{
+	private void addOutputDataLin() {
 		if (main.compRange && !main.adsRange && (noOfCheckPrecip == 0)) {
 			dataTableRow.add(compRangeStart);
 		}
@@ -328,8 +326,7 @@ class Matrix extends Object
 		}
 	}
 
-	private void addOutputDataLog()
-	{
+	private void addOutputDataLog() {
 		if (main.compRange && !main.adsRange && noOfCheckPrecip == 0) {
 			dataTableRow.add(main.compRangeIsLog ? compRangeStart : MyTools.myLog(compRangeStart));
 		}
@@ -378,8 +375,7 @@ class Matrix extends Object
 		}
 	}
 
-	void initialize()
-	{
+	void initialize() {
 		compNo = 0;
 		specNo = 0;
 		for (int a = 0; a < lines; a++) {
@@ -413,8 +409,7 @@ class Matrix extends Object
 // -----------------------------------------------------------------------------
 // --- matrix commands  --------------------------------------------------------
 // -----------------------------------------------------------------------------
-	void replaceHbyOHProc()
-	{
+	void replaceHbyOHProc() {
 		double logKw = 0;
 
 		String itemString = main.replaceHbyOHMI.getText();
@@ -466,8 +461,7 @@ class Matrix extends Object
 // -----------------------------------------------------------------------------
 
 	/* reads input matrix from an EXCEL-text file */
-	void datInput(File inputFile) throws IOException
-	{
+	void datInput(File inputFile) throws IOException {
 		String s;
 		String z;
 
@@ -696,8 +690,7 @@ class Matrix extends Object
 
 	} // end of datInput
 
-	void save(File outputFile) throws IOException
-	{
+	void save(File outputFile) throws IOException {
 		FileWriter fileWriter = new FileWriter(outputFile);
 
 		fileWriter.write(TAB);											/*erstes Feld leer*/
@@ -810,8 +803,7 @@ class Matrix extends Object
 // -----------------------------------------------------------------------------
 
 	/*sucht die zu den ausgew‰hlten Componenten gehˆrigen Spezies aus der Library*/
-	void buildMyChoiceMatrixAndTransfer(Library lib, Object[] selectedComponents)
-	{
+	void buildMyChoiceMatrixAndTransfer(Library lib, Object[] selectedComponents) {
 		boolean chooseSpecies;
 		boolean isAComp;
 		int[][] myBufMat = new int[lines][Library.libColumns];
@@ -892,8 +884,7 @@ class Matrix extends Object
 	}
 
 	/*setzt Defaultwerte, Comp.Reihenfolge etc.*/
-	void defaultsDatInput()
-	{
+	void defaultsDatInput() {
 		severalAdsorbents = false;
 		severalSiteTypes = false;
 		noOfAdsorbents = 0;			/*counter for various adsorbents*/
@@ -928,8 +919,7 @@ class Matrix extends Object
 		reorderComponents();
 	}
 
-	void reorderComponents()
-	{
+	void reorderComponents() {
 		int j = 0;			/*ii: sequence in which the components have to be arranged for the calculation*/
 
 		for (int c = 1; c <= 8; c++) {
@@ -942,8 +932,7 @@ class Matrix extends Object
 	}
 
 	// returns false when aborting with error, otherwise true
-	boolean recalculate(int replaceCompNo, int spLibSpecNo)
-	{
+	boolean recalculate(int replaceCompNo, int spLibSpecNo) {
 		int[] jj = new int[20];
 		int[] kk = new int[20];
 		Library spLib = main.spLibrary;
@@ -1029,8 +1018,7 @@ class Matrix extends Object
 
 
 	/*neu z‰hlen von noOfSolidPhases, noOfCheckPrecip und totLimComp und einsetzen der Konz.*/
-	void adjustConcEstim()
-	{
+	void adjustConcEstim() {
 		totLimComp = totComp;
 		noOfSolidPhases = 0;
 		noOfCheckPrecip = 0;
@@ -1091,19 +1079,16 @@ class Matrix extends Object
 
 	}
 
-	boolean adsorption()
-	{
+	boolean adsorption() {
 		return noOfAdsorbents > 0;
 	}
 
-	boolean isHorHplusAndFree()
-	{
+	boolean isHorHplusAndFree() {
 		return (isLastCompName("H") || isLastCompName("H+"))
-				&& components[totComp - 1].getMode( )== Mode.FREE;
+				&& components[totComp - 1].getMode() == Mode.FREE;
 	}
 
-	boolean isTotal()
-	{
+	boolean isTotal() {
 		for (int b = 0; b < totComp; b++) {
 			if (components[b].getMode() == Mode.TOTAL) {
 				return true;
@@ -1112,18 +1097,15 @@ class Matrix extends Object
 		return false;
 	}
 
-	boolean isLastCompName(String s)
-	{
+	boolean isLastCompName(String s) {
 		return components[totComp - 1].getName().equals(s);
 	}
 
-	double getMultiConcForLast()
-	{
+	double getMultiConcForLast() {
 		return multiConcMatrix[0][totComp - 1];
 	}
 
-	boolean speciesMatrixAllInt()
-	{
+	boolean speciesMatrixAllInt() {
 		printInteger = true;
 		for (int a = 0; a < totSpec; a++) {
 			for (int b = 0; b < totComp; b++) {
@@ -1139,8 +1121,7 @@ class Matrix extends Object
 // -----------------------------------------------------------------------------
 // --- matrix computations -----------------------------------------------------
 // -----------------------------------------------------------------------------
-	void runProc(Activity activity)
-	{
+	void runProc(Activity activity) {
 //		main.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 		this.activity = activity;
@@ -1267,8 +1248,7 @@ class Matrix extends Object
 //		main.setCursor(Cursor.getDefaultCursor());
 	}
 
-	private void calcPHInterval()			/*pH=interval or pH=constant*/
-	{
+	private void calcPHInterval() /*pH=interval or pH=constant*/ {
 		boolean log = main.isLogNumFormat();
 		if (main.doDrawGraph) {
 			initializeGraphicsSettings();
@@ -1305,8 +1285,7 @@ class Matrix extends Object
 		}
 	}
 
-	private void calcCompRangePH(boolean pHfix)
-	{
+	private void calcCompRangePH(boolean pHfix) {
 		initIntervalOutput();
 		if (main.doDrawGraph) {
 			initializeGraphicsSettings();
@@ -1371,8 +1350,7 @@ class Matrix extends Object
 		}
 	}
 
-	private void calcSimpleEquilibrium()
-	{
+	private void calcSimpleEquilibrium() {
 		if (!checkSolubility()) /*falls etwas ausf‰llt, ist die Speziierung schon in 'checkSolubility' gerechnet*/ {
 			calculation();
 			if (calculatedWithActivity()) {
@@ -1391,8 +1369,7 @@ class Matrix extends Object
 		}
 	}
 
-	private void calcAdsRange()
-	{
+	private void calcAdsRange() {
 		boolean log = main.isLogNumFormat();
 		initIntervalOutput();
 		if (main.doDrawGraph) {
@@ -1434,8 +1411,7 @@ class Matrix extends Object
 		}
 	}
 
-	private void calcLogKrange()
-	{
+	private void calcLogKrange() {
 		boolean log = main.isLogNumFormat();
 		initIntervalOutput();
 		if (main.doDrawGraph) {
@@ -1481,9 +1457,7 @@ class Matrix extends Object
 		}
 	}
 
-	private void calcKinetik()	/*reactionOrder, reactionRate, kinComp, timeInc, rateConst */
-
-	{
+	private void calcKinetik() /*reactionOrder, reactionRate, kinComp, timeInc, rateConst */ {
 		boolean log = main.isLogNumFormat();
 		initIntervalOutput();
 		if (main.doDrawGraph) {
@@ -1591,9 +1565,9 @@ class Matrix extends Object
 				if ((Po <= 0)) {
 					Po = 1e-20;
 				}
-				Ct
-						= 1 / coeffC * (Co - (Co * Po * (coeffP * Math.exp(rateConst * kinTimeInc * (Co + Po)) - coeffC)) / (coeffC * Co + coeffP * Po * Math.
-						exp(rateConst * kinTimeInc * (Co + Po))));
+				Ct =
+						1 / coeffC * (Co - (Co * Po * (coeffP * Math.exp(rateConst * kinTimeInc * (Co + Po)) - coeffC)) / (coeffC * Co + coeffP * Po * Math
+						.exp(rateConst * kinTimeInc * (Co + Po))));
 			}
 
 			/** ** sollte OK sein *** */
@@ -1644,8 +1618,7 @@ class Matrix extends Object
 	}
 
 	// "subroutine" for calcpXpY()
-	private void changeSolidSpecLogK(boolean[] gases)
-	{
+	private void changeSolidSpecLogK(boolean[] gases) {
 		String myName;
 		for (int a = 0; a < pXpYspecs; a++) {
 			myName = species[a].name;				/*untersuche den Namen nach '(s)'*/
@@ -1673,8 +1646,7 @@ class Matrix extends Object
 
 	// "subroutine" of calcpXpY(). Returns dominating species as well as gas info
 	// encoded as sign of the return value
-	private int searchDominatingSpecies(boolean[] gases)
-	{
+	private int searchDominatingSpecies(boolean[] gases) {
 		double dominatingSpecConc = 0;	/*diejenige Spezies mit der hˆchsten Konz suchen*/
 
 		int dominatingSpec = 0;
@@ -1698,8 +1670,7 @@ class Matrix extends Object
 		return dominatingSpec;
 	}
 
-	private void calcpXpY()
-	{
+	private void calcpXpY() {
 		int x;
 		int oldSpec;
 		int newSpec;
@@ -1976,8 +1947,7 @@ class Matrix extends Object
 	/*calculates the maximum soluble concentration and compares to the original total concentration.*/
 	/*'errorEstim' is the max soluble con., 'amountPrecipitated' gives the amount of eventually*/
 	/*precipitated concentration of the component in moles/liter. It returns a boolean true if (precipitation occured */
-	private boolean checkSolubility()
-	{
+	private boolean checkSolubility() {
 		if (noOfCheckPrecip == 0) {
 			return false; // in case precipitation is not possible
 		}
@@ -2023,8 +1993,7 @@ class Matrix extends Object
 
 
 	/*reads charges from the names on the coefficient file*/
-	private int readChargesFromName(String n)
-	{
+	private int readChargesFromName(String n) {
 		int result = 0;
 		for (int i = 0; i < n.length(); i++) {
 			if (n.charAt(i) == '+') /*jedes '+' im Namen z‰hlt als 1 positive Ladung*/ {
@@ -2038,8 +2007,7 @@ class Matrix extends Object
 	}
 
 	/** * Kcorr=[A1][A2]/[A3], K(I=0)=(A1)(A2)/(A3) , Kcorr=K(I=0)*f3/(f1f2) ** */
-	private void calcActivityCoefficients()
-	{
+	private void calcActivityCoefficients() {
 		int counter;
 		boolean ok;
 		boolean allDissolved;
@@ -2146,8 +2114,8 @@ class Matrix extends Object
 
 					}
 					else {
-						logfSpec[a]
-								= -activA * zSpec[a] * zSpec[a] * (Math.sqrt(ionicStr) / (1 + Math.sqrt(ionicStr)) - 0.2 * ionicStr);
+						logfSpec[a] =
+								-activA * zSpec[a] * zSpec[a] * (Math.sqrt(ionicStr) / (1 + Math.sqrt(ionicStr)) - 0.2 * ionicStr);
 					}
 				}
 				for (int b = 0; b < totComp; b++) {
@@ -2157,8 +2125,8 @@ class Matrix extends Object
 						logfComp[b] = 0;
 					}
 					else {
-						logfComp[b]
-								= -activA * zComp[b] * zComp[b] * (Math.sqrt(ionicStr) / (1 + Math.sqrt(ionicStr)) - 0.2 * ionicStr);
+						logfComp[b] =
+								-activA * zComp[b] * zComp[b] * (Math.sqrt(ionicStr) / (1 + Math.sqrt(ionicStr)) - 0.2 * ionicStr);
 					}
 				}
 				break;
@@ -2204,8 +2172,7 @@ class Matrix extends Object
 	}	/*CalcActivityCoefficients*/
 
 
-	private double[] calculatePsiAndSigma(int c)
-	{
+	private double[] calculatePsiAndSigma(int c) {
 		double psi0 = 0;
 		double psi1 = 0;
 		double psi2 = 0;
@@ -2284,16 +2251,15 @@ class Matrix extends Object
 		return new double[]{psi0, psi1, psi2, psi3, factor};
 	}
 
-	private void modifyDerivatives(int c, double[] psi)
-	{
+	private void modifyDerivatives(int c, double[] psi) {
 		double factor = psi[4];
 		if (model == ModelEnum.CONSTANT_CAP) {
 			jacob[chargeNo1[c]][chargeNo1[c]] += +innerCap[c] * B4 / compConc[chargeNo1[c]] * factor;
 		}
 
 		else if (model == ModelEnum.DIFFUSE_GTL) {
-			jacob[chargeNo1[c]][chargeNo1[c]]
-					+= +B3 * B2 * Math.sqrt(ionicStr) * MyTools.myCosh(B3 * psi[0]) * B4 / compConc[chargeNo1[c]] * factor;
+			jacob[chargeNo1[c]][chargeNo1[c]] +=
+					+B3 * B2 * Math.sqrt(ionicStr) * MyTools.myCosh(B3 * psi[0]) * B4 / compConc[chargeNo1[c]] * factor;
 		}
 
 		else if (model == ModelEnum.STERN_L) {
@@ -2307,8 +2273,8 @@ class Matrix extends Object
 		else if (model == ModelEnum.TRIPLE_L) {
 			jacob[chargeNo2[c]][chargeNo3[c]] = -outerCap[c] * B4 / compConc[chargeNo3[c]] * factor;
 			jacob[chargeNo3[c]][chargeNo2[c]] = -outerCap[c] * B4 / compConc[chargeNo2[c]] * factor;
-			jacob[chargeNo3[c]][chargeNo3[c]]
-					= (outerCap[c] + B3 * B2 * Math.sqrt(ionicStr) * MyTools.myCosh(B3 * psi[2])) * B4 / compConc[chargeNo3[c]] * factor;
+			jacob[chargeNo3[c]][chargeNo3[c]] =
+					(outerCap[c] + B3 * B2 * Math.sqrt(ionicStr) * MyTools.myCosh(B3 * psi[2])) * B4 / compConc[chargeNo3[c]] * factor;
 			jacob[chargeNo1[c]][chargeNo2[c]] += -innerCap[c] * B4 / compConc[chargeNo2[c]] * factor;
 			jacob[chargeNo2[c]][chargeNo1[c]] += -innerCap[c] * B4 / compConc[chargeNo1[c]] * factor;
 			jacob[chargeNo2[c]][chargeNo2[c]] += +(innerCap[c] + outerCap[c]) * B4 / compConc[chargeNo2[c]] * factor;
@@ -2316,8 +2282,7 @@ class Matrix extends Object
 		}
 	}
 
-	private void invertMatrix(double[][] d, int n)
-	{
+	private void invertMatrix(double[][] d, int n) {
 		int[] l1 = new int[columns];
 		int[] k1 = new int[columns];
 		int i2;
@@ -2405,8 +2370,7 @@ class Matrix extends Object
 	}
 
 	/* ----- Mass law equations: calc. of free con. in mol/l according to estimation: ----- */
-	private void calculation()
-	{
+	private void calculation() {
 		double[][] jacobRed;
 		double[] psi = new double[4];
 		double factor = Double.NaN;
@@ -2610,8 +2574,7 @@ class Matrix extends Object
 	private static final DecimalFormat DEF_FORMAT = new DecimalFormat("0.0E0");
 
 	// initialize data samples and settings for axis and data
-	private void initializeGraphicsSettings()
-	{
+	private void initializeGraphicsSettings() {
 		main.graphicsData.initializeDataList(this, SpeciesData.class);
 
 		// init draw settings
@@ -2654,18 +2617,15 @@ class Matrix extends Object
 // --- TableModel for components in file info window ---------------------------
 	class ComponentsTableModel extends AbstractTableModel
 	{
-		public int getColumnCount()
-		{
+		public int getColumnCount() {
 			return totComp;
 		}
 
-		public int getRowCount()
-		{
+		public int getRowCount() {
 			return 3;
 		}
 
-		public Object getValueAt(int row, int col)
-		{
+		public Object getValueAt(int row, int col) {
 			switch (row) {
 			case 0:
 				return components[col].getName();
@@ -2678,8 +2638,7 @@ class Matrix extends Object
 			}
 		}
 
-		public void setValueAt(Object val, int row, int col)
-		{
+		public void setValueAt(Object val, int row, int col) {
 			switch (row) {
 			case 0:	// change component name
 				if (components[col].getName().equals((String)val)) {
@@ -2740,7 +2699,7 @@ class Matrix extends Object
 
 				multiConcMatrix[0][col] = v;
 
-				for (int b = 0; b < totComp; b++) /*neue Konzentrationen einsetzen*/  {
+				for (int b = 0; b < totComp; b++) /*neue Konzentrationen einsetzen*/ {
 					components[b].setConc(multiConcMatrix[0][b]);
 				}
 				adjustConcEstim();
@@ -2763,13 +2722,11 @@ class Matrix extends Object
 	// --- TableModel for adsorbant parameters in file info window --------------
 	class AdsorptionTableModel extends AbstractTableModel
 	{
-		public int getColumnCount()
-		{
+		public int getColumnCount() {
 			return noOfAdsorbents + 1;
 		}
 
-		public int getRowCount()
-		{
+		public int getRowCount() {
 			if (!adsorption()) {
 				return 1;
 			}
@@ -2784,8 +2741,7 @@ class Matrix extends Object
 			return result;
 		}
 
-		public Object getValueAt(int row, int col)
-		{
+		public Object getValueAt(int row, int col) {
 			if (col == 0) {
 				switch (row) {
 				case 0:
@@ -2828,8 +2784,7 @@ class Matrix extends Object
 			}
 		}
 
-		public void setValueAt(Object val, int row, int col)
-		{
+		public void setValueAt(Object val, int row, int col) {
 			double oldV = 0;
 			// assert: col > 0 && row > 0 && row <= 6
 			double v = ((Double)val).doubleValue();
@@ -2869,18 +2824,15 @@ class Matrix extends Object
 
 	class SpeciesTableModel extends AbstractTableModel
 	{
-		public int getColumnCount()
-		{
+		public int getColumnCount() {
 			return 4;
 		}
 
-		public int getRowCount()
-		{
+		public int getRowCount() {
 			return totSpec;
 		}
 
-		public Object getValueAt(int row, int col)
-		{
+		public Object getValueAt(int row, int col) {
 			switch (col) {
 			case 0:
 				return Integer.toString(row + 1) + ".";
@@ -2895,8 +2847,7 @@ class Matrix extends Object
 			}
 		}
 
-		public void setValueAt(Object val, int row, int col)
-		{
+		public void setValueAt(Object val, int row, int col) {
 			if (col == 2) {
 				if (val == null) {
 					return;		// number format error
@@ -2915,18 +2866,15 @@ class Matrix extends Object
 	// --- TableModel for species results in output window ----------------------
 	class SpeciesOutputTableModel extends AbstractTableModel
 	{
-		public int getColumnCount()
-		{
+		public int getColumnCount() {
 			return calculatedWithActivity() ? 6 : 5;
 		}
 
-		public int getRowCount()
-		{
+		public int getRowCount() {
 			return totSpec;
 		}
 
-		public String getColumnName(int col)
-		{
+		public String getColumnName(int col) {
 			int c = 0;
 			if (col == c++) {
 				return "Species";
@@ -2949,8 +2897,7 @@ class Matrix extends Object
 			return "Log conc.";
 		}
 
-		public Object getValueAt(int row, int col)
-		{
+		public Object getValueAt(int row, int col) {
 			int c = 0;
 			if (col == c++) {
 				return species[row].name;
@@ -2978,10 +2925,8 @@ class Matrix extends Object
 			if (col == c++) {
 				return speConc[row];
 			}
-			if (calculatedWithActivity())
-			{
-				if (col == c++)
-				{
+			if (calculatedWithActivity()) {
+				if (col == c++) {
 					return MyTools.expo(10, logfSpec[row]) * speConc[row];
 				}
 			}
@@ -2997,18 +2942,15 @@ class Matrix extends Object
 
 	class ComponentsOutputTableModel extends AbstractTableModel
 	{
-		public int getColumnCount()
-		{
+		public int getColumnCount() {
 			return 4;
 		}
 
-		public int getRowCount()
-		{
+		public int getRowCount() {
 			return totComp;
 		}
 
-		public String getColumnName(int col)
-		{
+		public String getColumnName(int col) {
 			switch (col) {
 			case 0:
 				return "Components";
@@ -3023,8 +2965,7 @@ class Matrix extends Object
 			}
 		}
 
-		public Object getValueAt(int row, int col)
-		{
+		public Object getValueAt(int row, int col) {
 			if (col == 0) {
 				return components[row].getName();
 			}
@@ -3073,13 +3014,11 @@ class Matrix extends Object
 
 	class PxPyOutputTableModel extends AbstractTableModel
 	{
-		public int getColumnCount()
-		{
+		public int getColumnCount() {
 			return 4;
 		}
 
-		public int getRowCount()
-		{
+		public int getRowCount() {
 			if (main.graphicsData == null) {
 				return 0;
 			}
@@ -3087,8 +3026,7 @@ class Matrix extends Object
 			return list == null ? 0 : list.size();
 		}
 
-		public String getColumnName(int col)
-		{
+		public String getColumnName(int col) {
 			switch (col) {
 			case 0:
 				return "-log " + components[xComp].getName();
@@ -3099,8 +3037,7 @@ class Matrix extends Object
 			}
 		}
 
-		public Object getValueAt(int row, int col)
-		{
+		public Object getValueAt(int row, int col) {
 			PxPyData data = (PxPyData)main.graphicsData.getDataList(
 					Matrix.this, PxPyData.class).get(row);
 			switch (col) {
@@ -3124,31 +3061,25 @@ class Matrix extends Object
 	{
 		private int deleteSpecNo = 0;
 
-		public void addListDataListener(ListDataListener l)
-		{
+		public void addListDataListener(ListDataListener l) {
 		}
 
-		public void removeListDataListener(ListDataListener l)
-		{
+		public void removeListDataListener(ListDataListener l) {
 		}
 
-		public Object getElementAt(int i)
-		{
+		public Object getElementAt(int i) {
 			return species[i];
 		}
 
-		public int getSize()
-		{
+		public int getSize() {
 			return totSpec;
 		}
 
-		public Object getSelectedItem()
-		{
+		public Object getSelectedItem() {
 			return species[deleteSpecNo];
 		}
 
-		public void setSelectedItem(Object anItem)
-		{
+		public void setSelectedItem(Object anItem) {
 			for (int i = 0; i < totSpec; i++) {
 				if (anItem == species[i]) {
 					deleteSpecNo = i;
@@ -3157,8 +3088,7 @@ class Matrix extends Object
 			}
 		}
 
-		void deleteSelectedSpecies()
-		{
+		void deleteSelectedSpecies() {
 			for (int a = deleteSpecNo; a < totSpec - 1; a++) /*von da an abw‰rts alle Species um 1 zur¸ckverschieben*/ {
 				species[a] = species[a + 1];
 				for (int b = 0; b < totComp; b++) {
@@ -3177,31 +3107,25 @@ class Matrix extends Object
 	{
 		protected Object selectedComponent = null;
 
-		public void addListDataListener(ListDataListener l)
-		{
+		public void addListDataListener(ListDataListener l) {
 		}
 
-		public void removeListDataListener(ListDataListener l)
-		{
+		public void removeListDataListener(ListDataListener l) {
 		}
 
-		public Object getElementAt(int i)
-		{
+		public Object getElementAt(int i) {
 			return components[i];
 		}
 
-		public int getSize()
-		{
+		public int getSize() {
 			return totComp;
 		}
 
-		public Object getSelectedItem()
-		{
+		public Object getSelectedItem() {
 			return selectedComponent;
 		}
 
-		public void setSelectedItem(Object anItem)
-		{
+		public void setSelectedItem(Object anItem) {
 			selectedComponent = anItem;
 		}
 	}
@@ -3210,8 +3134,7 @@ class Matrix extends Object
 
 	class SpecialComponentsCBModel extends ComponentsCBModel
 	{
-		public void setSelectedItem(Object anItem)
-		{
+		public void setSelectedItem(Object anItem) {
 			if (!((Component)anItem).isModeSolidPhaseOrCheckPrecip()) {
 				selectedComponent = anItem;
 			}

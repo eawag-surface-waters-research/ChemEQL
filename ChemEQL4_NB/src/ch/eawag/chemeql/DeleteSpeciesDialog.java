@@ -7,28 +7,27 @@ import java.awt.event.ComponentEvent;
 class DeleteSpeciesDialog extends ProceedCancelDialog
 {
 	private static DeleteSpeciesDialog INSTANCE;
-	static DeleteSpeciesDialog getInstance(ChemEqlGuiController parent)
-	{
-		if (INSTANCE == null)
+
+	static DeleteSpeciesDialog getInstance(ChemEqlGuiController parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new DeleteSpeciesDialog(parent);
+		}
 		return INSTANCE;
 	}
 
-	private DeleteSpeciesDialog(ChemEqlGuiController parent)
-	{
+	private DeleteSpeciesDialog(ChemEqlGuiController parent) {
 		super(parent);
 		initComponents();
 		speciesList.setMaximumRowCount(12);
-		setLocation(600,150);
-		addComponentListener(new ComponentAdapter() {
+		setLocation(600, 150);
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent arg0)
-			{
+			public void componentShown(ComponentEvent arg0) {
 				speciesList.setModel(main.matrix.createSpeciesNamesModel());
 			}
 		});
 	}
-
 
 	/** This method is called from within the constructor to
 	 * initialize the form.
@@ -54,8 +53,7 @@ class DeleteSpeciesDialog extends ProceedCancelDialog
       pack();
    }//GEN-END:initComponents
 
-	protected void doProceed()
-	{
+	protected void doProceed() {
 		((Matrix.SpeciesNamesModel)speciesList.getModel()).deleteSelectedSpecies();
 		super.doProceed();
 	}

@@ -19,10 +19,11 @@ import javax.swing.JTextField;
 class KineticsDialog extends ProceedCancelDialog implements ActionListener
 {
 	private static KineticsDialog INSTANCE;
-	static KineticsDialog getInstance(ChemEqlGuiController parent)
-	{
-		if (INSTANCE == null)
+
+	static KineticsDialog getInstance(ChemEqlGuiController parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new KineticsDialog(parent);
+		}
 		return INSTANCE;
 	}
 
@@ -32,16 +33,14 @@ class KineticsDialog extends ProceedCancelDialog implements ActionListener
 	private double currentKinTimeEnd, currentKinTimeInc;
 
 	// Constructor for creating a bean
-	public KineticsDialog()
-	{
+	public KineticsDialog() {
 		initComponents();
 	}
 
-	private KineticsDialog(ChemEqlGuiController parent)
-	{
+	private KineticsDialog(ChemEqlGuiController parent) {
 		super(parent);
 		initComponents();
-		setLocation(300,100);
+		setLocation(300, 100);
 		rb2.addActionListener(this);
 		rb3.addActionListener(this);
 		rb4.addActionListener(this);
@@ -49,10 +48,10 @@ class KineticsDialog extends ProceedCancelDialog implements ActionListener
 		rb6.addActionListener(this);
 		rb7.addActionListener(this);
 		rb8.addActionListener(this);
-		addComponentListener(new ComponentAdapter() {
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent ev)
-			{
+			public void componentShown(ComponentEvent ev) {
 				main.outputFormat = OutputFormat.INTERVAL;
 				proceedButton.setEnabled(false);
 				rb2.setSelected(true);
@@ -73,15 +72,14 @@ class KineticsDialog extends ProceedCancelDialog implements ActionListener
 				kinCompP16.setModel(main.matrix.createComponentsCBModel());
 				kinCompP16.setSelectedIndex(1);
 				kinCompD19.setModel(main.matrix.createComponentsCBModel());
-				kinCompD19.setSelectedIndex(Math.min(2,kinCompD19.getItemCount()-1));
+				kinCompD19.setSelectedIndex(Math.min(2, kinCompD19.getItemCount() - 1));
 
 				enableKinCompD(false);
 			}
 		});
 	}
 
-	private void enableKinCompD(boolean enabled)
-	{
+	private void enableKinCompD(boolean enabled) {
 		eductDLabel19.setEnabled(enabled);
 		kinCompD19.setEnabled(enabled);
 		coeffDLabel20.setEnabled(enabled);
@@ -476,37 +474,34 @@ class KineticsDialog extends ProceedCancelDialog implements ActionListener
 
    private void rb2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_rb2ActionPerformed
    {//GEN-HEADEREND:event_rb2ActionPerformed
-      // TODO add your handling code here:
+		// TODO add your handling code here:
    }//GEN-LAST:event_rb2ActionPerformed
 
    private void rb5ActionPerformed(ActionEvent evt)//GEN-FIRST:event_rb5ActionPerformed
    {//GEN-HEADEREND:event_rb5ActionPerformed
-      // TODO add your handling code here:
+		// TODO add your handling code here:
    }//GEN-LAST:event_rb5ActionPerformed
 
    private void rb6ActionPerformed(ActionEvent evt)//GEN-FIRST:event_rb6ActionPerformed
    {//GEN-HEADEREND:event_rb6ActionPerformed
-      // TODO add your handling code here:
+		// TODO add your handling code here:
    }//GEN-LAST:event_rb6ActionPerformed
 
    private void rb8ActionPerformed(ActionEvent evt)//GEN-FIRST:event_rb8ActionPerformed
    {//GEN-HEADEREND:event_rb8ActionPerformed
-      // TODO add your handling code here:
+		// TODO add your handling code here:
    }//GEN-LAST:event_rb8ActionPerformed
 
-	public void actionPerformed(ActionEvent e)
-	{
+	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
-		if (source == rb4)
-		{
+		if (source == rb4) {
 			MyTools.showWarning("Not in function yet!");	// delete this line if rb4 gets functional
 			oldSelection.doClick();								// delete this line if rb4 gets functional
 			return;													// delete this line if rb4 gets functional
 //			kBackLabel24.setEnabled(true);					// uncomment this line if rb4 gets functional
 //			kBackTF25.setEnabled(true);						// uncomment this line if rb4 gets functional
 		}
-		else
-		{
+		else {
 			kBackLabel24.setEnabled(false);
 			kBackTF25.setEnabled(false);
 		}
@@ -515,74 +510,80 @@ class KineticsDialog extends ProceedCancelDialog implements ActionListener
 		oldSelection = (JRadioButton)source;				// delete this line if rb4 gets functional
 	}
 
-	private void checkInputs()
-	{
-		try
-		{
+	private void checkInputs() {
+		try {
 			currentCoeffC = Integer.parseInt(coeffCTF15.getText());
 			currentCoeffP = Integer.parseInt(coeffPTF18.getText());
-			if (rb6.isSelected())
+			if (rb6.isSelected()) {
 				currentCoeffD = Integer.parseInt(coeffDTF21.getText());
+			}
 			currentRateConst = Double.parseDouble(rateKTF23.getText());
-			if (rb4.isSelected())
+			if (rb4.isSelected()) {
 				currentKBack = Double.parseDouble(kBackTF25.getText());
+			}
 			currentKinTimeInc = Double.parseDouble(intervalTF27.getText());
 			currentKinTimeEnd = Double.parseDouble(endTF29.getText());
 			proceedButton.setEnabled(true);
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			proceedButton.setEnabled(false);
 		}
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		/*cancel button, restore old value*/
 		main.doKinetik = false;
 		main.graphMI.setDisable(true);
 		main.formatMenu.setDisable(true);
 		main.compRangeMI.setDisable(false);
 		main.logKrangeMI.setDisable(false);
-		if (main.matrix.isHorHplusAndFree())
+		if (main.matrix.isHorHplusAndFree()) {
 			main.pHrangeMI.setDisable(false);
-		if (main.matrix.adsorption())
+		}
+		if (main.matrix.adsorption()) {
 			main.adsRangeMI.setDisable(false);
+		}
 		super.doCancel();
 	}
 
-	protected void doProceed()
-	{
-		if (((Component)kinCompC13.getSelectedItem()).getConc() <= 0)
+	protected void doProceed() {
+		if (((Component)kinCompC13.getSelectedItem()).getConc() <= 0) {
 			MyTools.showError("Error in matrix: Concentration of the kinetic component must be > 0!");
-		else if (currentKinTimeInc > currentKinTimeEnd)
+		}
+		else if (currentKinTimeInc > currentKinTimeEnd) {
 			MyTools.showError("Input error: Time increment must be smaller than time range!");
-		else
-		{
+		}
+		else {
 			main.outputFormat = OutputFormat.INTERVAL;
 			main.doKinetik = true;
 			main.graphMI.setDisable(false);				/*activate graphics*/
+
 			main.formatMenu.setDisable(false);			/*activate formats*/
+
 			main.pHrangeMI.setDisable(true);
 			main.compRangeMI.setDisable(true);
 			main.adsRangeMI.setDisable(true);
 			main.logKrangeMI.setDisable(true);
 
 			// set reaction order
-			if (rb2.isSelected())
+			if (rb2.isSelected()) {
 				main.matrix.reactionOrder = 0;
-			else if (rb3.isSelected())
+			}
+			else if (rb3.isSelected()) {
 				main.matrix.reactionOrder = 10;
-			else if (rb4.isSelected())
+			}
+			else if (rb4.isSelected()) {
 				main.matrix.reactionOrder = 11;
-			else if (rb5.isSelected())
+			}
+			else if (rb5.isSelected()) {
 				main.matrix.reactionOrder = 20;
-			else if (rb6.isSelected())
+			}
+			else if (rb6.isSelected()) {
 				main.matrix.reactionOrder = 21;
-			else if (rb7.isSelected())
+			}
+			else if (rb7.isSelected()) {
 				main.matrix.reactionOrder = 22;
-			else
-			{
+			}
+			else {
 				// assert rb8.isSelected();
 				main.matrix.reactionOrder = 30;
 			}

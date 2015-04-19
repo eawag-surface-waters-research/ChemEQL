@@ -7,32 +7,31 @@ import java.awt.event.ComponentEvent;
 class PHConstDialog extends ProceedCancelDialog
 {
 	private static PHConstDialog INSTANCE;
-	static PHConstDialog getInstance(ChemEqlGuiController parent)
-	{
-		if (INSTANCE == null)
+
+	static PHConstDialog getInstance(ChemEqlGuiController parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new PHConstDialog(parent);
+		}
 		return INSTANCE;
 	}
 
 	private double currentPHInput;
 
 	// Constructor for creating a bean
-	public PHConstDialog()
-	{
+	public PHConstDialog() {
 		initComponents();
 	}
 
-	private PHConstDialog(ChemEqlGuiController m)
-	{
+	private PHConstDialog(ChemEqlGuiController m) {
 		super(m);
 		initComponents();
-		setLocation(300,250);
-		addComponentListener(new ComponentAdapter() {
+		setLocation(300, 250);
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent ev)
-			{
+			public void componentShown(ComponentEvent ev) {
 				pHTF.setText(MyTools.EXACT_3_DIGITS.format(
-					-MyTools.myLog(main.matrix.getMultiConcForLast())));
+						-MyTools.myLog(main.matrix.getMultiConcForLast())));
 				pHTF.selectAll();
 			}
 		});
@@ -68,24 +67,20 @@ class PHConstDialog extends ProceedCancelDialog
       pack();
    }//GEN-END:initComponents
 
-	private void pHValueChanged()
-	{
-		try
-		{
+	private void pHValueChanged() {
+		try {
 			currentPHInput =
-				Double.parseDouble(pHTF.getText());
+					Double.parseDouble(pHTF.getText());
 			proceedButton.setEnabled(true);
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			currentPHInput = Double.NaN;
 			proceedButton.setEnabled(false);
 		}
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		main.pHrangeStart = MyTools.myLog(main.matrix.getMultiConcForLast()); /*restore old value*/
+
 		main.pHrangeEnd = main.pHrangeStart;
 		main.pHrangeStep = main.pHrangeStart;
 		main.pHrangeMI.setDisable(false);
@@ -94,14 +89,13 @@ class PHConstDialog extends ProceedCancelDialog
 		super.doCancel();
 	}
 
-	protected void doProceed()
-	{
+	protected void doProceed() {
 		main.pHrangeStart = currentPHInput;
 		main.pHrangeEnd = main.pHrangeStart;
 		main.pHrangeStep = main.pHrangeStart;
-		int lastIdx = main.matrix.totComp-1;
+		int lastIdx = main.matrix.totComp - 1;
 		main.matrix.concEstim[lastIdx] = -main.pHrangeStart;
-		main.matrix.multiConcMatrix[0][lastIdx] = MyTools.expo(10,-main.pHrangeStart);
+		main.matrix.multiConcMatrix[0][lastIdx] = MyTools.expo(10, -main.pHrangeStart);
 		if (!main.adsRange) {
 			main.outputFormat = OutputFormat.REGULAR;
 		}

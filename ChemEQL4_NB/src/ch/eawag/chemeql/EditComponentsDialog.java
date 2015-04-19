@@ -3,7 +3,6 @@ package ch.eawag.chemeql;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
@@ -11,23 +10,22 @@ import javax.swing.event.ListSelectionEvent;
 class EditComponentsDialog extends ProceedCancelDialog
 {
 	private static EditComponentsDialog INSTANCE;
-	static EditComponentsDialog getInstance(ChemEqlGuiController parent)
-	{
-		if (INSTANCE == null)
+
+	static EditComponentsDialog getInstance(ChemEqlGuiController parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new EditComponentsDialog(parent);
+		}
 		return INSTANCE;
 	}
 
 	private Library library;
 
 	// Constructor for creating a bean
-	public EditComponentsDialog()
-	{
+	public EditComponentsDialog() {
 		initComponents();
 	}
 
-	private EditComponentsDialog(ChemEqlGuiController parent)
-	{
+	private EditComponentsDialog(ChemEqlGuiController parent) {
 		super(parent);
 		getRootPane().setDefaultButton(null);
 		initComponents();
@@ -36,26 +34,25 @@ class EditComponentsDialog extends ProceedCancelDialog
 		componentsScroller.setMaximumSize(componentsScroller.getPreferredSize());
 		componentsList.addListSelectionListener(new ListSelectionListener()
 		{
-			public void valueChanged(ListSelectionEvent evt)
-			{
+			public void valueChanged(ListSelectionEvent evt) {
 				updateData();
 			}
 		});
 
 		acceptButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent ev)
-			{
+			public void actionPerformed(ActionEvent ev) {
 				String newName = nameTF.getText();
 				int l = newName.length();
-				if (l == 0)
+				if (l == 0) {
 					MyTools.showError("Please provide a name!");
-				else if (l > 50)
+				}
+				else if (l > 50) {
 					MyTools.showError("Name too long!");
-				else
-				{
+				}
+				else {
 					library.changedComponentName(
-						newName,componentsList.getSelectedIndex());
+							newName, componentsList.getSelectedIndex());
 					resetButton.setEnabled(false);
 					acceptButton.setEnabled(false);
 					proceedButton.setEnabled(true);
@@ -65,25 +62,22 @@ class EditComponentsDialog extends ProceedCancelDialog
 
 		resetButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent ev)
-			{
+			public void actionPerformed(ActionEvent ev) {
 				updateData();
 			}
 		});
 
 		newButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent ev)
-			{
+			public void actionPerformed(ActionEvent ev) {
 				String newComp = JOptionPane.showInputDialog(
-					EditComponentsDialog.this,
-					"Name of new component?",ChemEql.APP_TITLE,JOptionPane.QUESTION_MESSAGE);
+						EditComponentsDialog.this,
+						"Name of new component?", ChemEql.APP_TITLE, JOptionPane.QUESTION_MESSAGE);
 				if (newComp == null || newComp.length() == 0)
 					; // user canceled dialog
-				else
-				{
+				else {
 					int i = componentsList.getSelectedIndex();
-					library.insertComponent(newComp,i);
+					library.insertComponent(newComp, i);
 					componentsList.ensureIndexIsVisible(i);
 					componentsList.setSelectedIndex(i);
 					proceedButton.setEnabled(true);
@@ -93,21 +87,18 @@ class EditComponentsDialog extends ProceedCancelDialog
 
 		deleteButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent ev)
-			{
+			public void actionPerformed(ActionEvent ev) {
 				int i = componentsList.getSelectedIndex();
 				componentsList.clearSelection();
 				library.deleteComponentAtIndex(i);
 				proceedButton.setEnabled(true);
 			}
 		});
-		setLocation(100,100);
+		setLocation(100, 100);
 	}
 
-	void show(Library lib)
-	{
-		if (library != lib)
-		{
+	void show(Library lib) {
+		if (library != lib) {
 			library = lib;
 			setTitle("Edit Components (" + library.libraryType() + " Library)");
 			componentsList.setModel(library.getComponentsListModel());
@@ -123,8 +114,7 @@ class EditComponentsDialog extends ProceedCancelDialog
 		super.setVisible(true);
 	}
 
-	private void updateData()
-	{
+	private void updateData() {
 		int i = componentsList.getSelectedIndex();
 		componentsList.ensureIndexIsVisible(i);
 		boolean compSelected = i >= 0;
@@ -136,8 +126,7 @@ class EditComponentsDialog extends ProceedCancelDialog
 		deleteButton.setEnabled(compSelected);
 	}
 
-	private void setEditPanelEnabled(boolean enabled)
-	{
+	private void setEditPanelEnabled(boolean enabled) {
 		nameTF.setEnabled(enabled);
 	}
 
@@ -248,30 +237,26 @@ class EditComponentsDialog extends ProceedCancelDialog
       pack();
    }//GEN-END:initComponents
 
-	private void didEdit()
-	{
+	private void didEdit() {
 		resetButton.setEnabled(true);
 		acceptButton.setEnabled(true);
 	}
 
-	protected void doCancel()
-	{
-		if (proceedButton.isEnabled())
-		{
+	protected void doCancel() {
+		if (proceedButton.isEnabled()) {
 			if (JOptionPane.showConfirmDialog(this,
-				"Do you really want to dismiss all changes made in this dialog?",
-				ChemEql.APP_TITLE,JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
-			{
+					"Do you really want to dismiss all changes made in this dialog?",
+					ChemEql.APP_TITLE, JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
 				main.reloadLibrary(library);
 				super.doCancel();
 			}
 		}
-		else
+		else {
 			super.doCancel();
+		}
 	}
 
-	protected void doProceed()
-	{
+	protected void doProceed() {
 		library.writeBinary();
 		super.doProceed();
 	}

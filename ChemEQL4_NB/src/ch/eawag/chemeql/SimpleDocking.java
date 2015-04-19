@@ -23,92 +23,103 @@
  */
 package ch.eawag.chemeql;
 
-
 import javafx.application.Application;
 import javafx.geometry.Orientation;
-import javafx.scene.*;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.stage.*;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
-public class SimpleDocking extends Application {
-    public void start(final Stage stage) throws Exception {
-        final SplitPane rootPane = new SplitPane();
-        rootPane.setOrientation(Orientation.VERTICAL);
 
-        final FlowPane dockedArea = new FlowPane();
-        dockedArea.getChildren().add(new Label("Some docked content"));
+public class SimpleDocking extends Application
+{
+	public void start(final Stage stage) throws Exception {
+		final SplitPane rootPane = new SplitPane();
+		rootPane.setOrientation(Orientation.VERTICAL);
 
-        final FlowPane centerArea = new FlowPane();
-        final Button undockButton = new Button("Undock");
-        centerArea.getChildren().add(undockButton);
+		final FlowPane dockedArea = new FlowPane();
+		dockedArea.getChildren().add(new Label("Some docked content"));
 
-        rootPane.getItems().addAll(centerArea, dockedArea);
+		final FlowPane centerArea = new FlowPane();
+		final Button undockButton = new Button("Undock");
+		centerArea.getChildren().add(undockButton);
 
-        stage.setScene(new Scene(rootPane, 300, 300));
-        stage.show();
+		rootPane.getItems().addAll(centerArea, dockedArea);
 
-        final Dialog dialog = new Dialog(stage);
-        undockButton.disableProperty().bind(dialog.showingProperty());
-        undockButton.setOnAction(actionEvent -> {
-            rootPane.getItems().remove(dockedArea);
+		stage.setScene(new Scene(rootPane, 300, 300));
+		stage.show();
 
-            dialog.setOnHidden(windowEvent -> {
-                rootPane.getItems().add(dockedArea);
-            });
-            dialog.setContent(dockedArea);
-            dialog.show(stage);
-        });
-    }
+		final Dialog dialog = new Dialog(stage);
+		undockButton.disableProperty().bind(dialog.showingProperty());
+		undockButton.setOnAction(actionEvent -> {
+			rootPane.getItems().remove(dockedArea);
 
-    private class Dialog extends Popup {
-        private BorderPane root;
+			dialog.setOnHidden(windowEvent -> {
+				rootPane.getItems().add(dockedArea);
+			});
+			dialog.setContent(dockedArea);
+			dialog.show(stage);
+		});
+	}
 
-        private Dialog(Window parent) {
-            root = new BorderPane();
-            root.setPrefSize(200, 200);
-            root.setStyle("-fx-border-width: 1; -fx-border-color: gray");
-            root.setTop(buildTitleBar());
-            setX(parent.getX() + 50);
-            setY(parent.getY() + 50);
-            getContent().add(root);
-        }
 
-        public void setContent(Node content) {
-            root.setCenter(content);
-        }
+	private class Dialog extends Popup
+	{
+		private BorderPane root;
 
-        private Node buildTitleBar() {
-            BorderPane pane = new BorderPane();
-            pane.setStyle("-fx-background-color: burlywood; -fx-padding: 5");
+		private Dialog(Window parent) {
+			root = new BorderPane();
+			root.setPrefSize(200, 200);
+			root.setStyle("-fx-border-width: 1; -fx-border-color: gray");
+			root.setTop(buildTitleBar());
+			setX(parent.getX() + 50);
+			setY(parent.getY() + 50);
+			getContent().add(root);
+		}
 
-            final Delta dragDelta = new Delta();
-            pane.setOnMousePressed(mouseEvent -> {
-                dragDelta.x = getX() - mouseEvent.getScreenX();
-                dragDelta.y = getY() - mouseEvent.getScreenY();
-            });
-            pane.setOnMouseDragged(mouseEvent -> {
-                setX(mouseEvent.getScreenX() + dragDelta.x);
-                setY(mouseEvent.getScreenY() + dragDelta.y);
-            });
+		public void setContent(Node content) {
+			root.setCenter(content);
+		}
 
-            Label title = new Label("My Dialog");
-            title.setStyle("-fx-text-fill: midnightblue;");
-            pane.setLeft(title);
+		private Node buildTitleBar() {
+			BorderPane pane = new BorderPane();
+			pane.setStyle("-fx-background-color: burlywood; -fx-padding: 5");
 
-            Button closeButton = new Button("X");
-            closeButton.setOnAction(actionEvent -> hide());
-            pane.setRight(closeButton);
+			final Delta dragDelta = new Delta();
+			pane.setOnMousePressed(mouseEvent -> {
+				dragDelta.x = getX() - mouseEvent.getScreenX();
+				dragDelta.y = getY() - mouseEvent.getScreenY();
+			});
+			pane.setOnMouseDragged(mouseEvent -> {
+				setX(mouseEvent.getScreenX() + dragDelta.x);
+				setY(mouseEvent.getScreenY() + dragDelta.y);
+			});
 
-            return pane;
-        }
-    }
+			Label title = new Label("My Dialog");
+			title.setStyle("-fx-text-fill: midnightblue;");
+			pane.setLeft(title);
 
-    private static class Delta {
-        double x, y;
-    }
+			Button closeButton = new Button("X");
+			closeButton.setOnAction(actionEvent -> hide());
+			pane.setRight(closeButton);
 
-    public static void main(String[] args) throws Exception {
-        launch(args);
-    }
+			return pane;
+		}
+	}
+
+
+	private static class Delta
+	{
+		double x, y;
+	}
+
+	public static void main(String[] args) throws Exception {
+		launch(args);
+	}
 }

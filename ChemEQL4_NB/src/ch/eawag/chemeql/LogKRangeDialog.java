@@ -9,10 +9,11 @@ import java.awt.event.ItemListener;
 class LogKRangeDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static LogKRangeDialog INSTANCE;
-	static LogKRangeDialog getInstance(ChemEqlGuiController parent)
-	{
-		if (INSTANCE == null)
+
+	static LogKRangeDialog getInstance(ChemEqlGuiController parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new LogKRangeDialog(parent);
+		}
 		return INSTANCE;
 	}
 
@@ -21,25 +22,23 @@ class LogKRangeDialog extends ProceedCancelDialog implements ItemListener
 	private double currentStep;
 
 	// Constructor for creating a bean
-	public LogKRangeDialog()
-	{
+	public LogKRangeDialog() {
 		initComponents();
 	}
 
-	private LogKRangeDialog(ChemEqlGuiController parent)
-	{
+	private LogKRangeDialog(ChemEqlGuiController parent) {
 		super(parent);
 		initComponents();
-		setLocation(300,250);
+		setLocation(300, 250);
 		speciesCB.addItemListener(this);
-		addComponentListener(new ComponentAdapter() {
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent ev)
-			{
+			public void componentShown(ComponentEvent ev) {
 				speciesCB.setModel(main.matrix.createSpeciesNamesModel());
 				speciesCB.setSelectedIndex(0);
 				logKTF.setText(MyTools.EXACT_2_DIGITS.format(
-					((Species)speciesCB.getItemAt(0)).constant));
+						((Species)speciesCB.getItemAt(0)).constant));
 				startTF.setText("");
 				endTF.setText("");
 				stepTF.setText("");
@@ -176,23 +175,18 @@ class LogKRangeDialog extends ProceedCancelDialog implements ItemListener
       pack();
    }//GEN-END:initComponents
 
-	public void itemStateChanged(ItemEvent e)
-	{
+	public void itemStateChanged(ItemEvent e) {
 		logKTF.setText(MyTools.EXACT_2_DIGITS.format(
-			((Species)speciesCB.getSelectedItem()).constant));
+				((Species)speciesCB.getSelectedItem()).constant));
 	}
 
-	private void checkInputs()
-	{
-		try
-		{
+	private void checkInputs() {
+		try {
 			currentStart = Double.parseDouble(startTF.getText());
 			currentEnd = Double.parseDouble(endTF.getText());
 			currentStep = Double.parseDouble(stepTF.getText());
 			proceedButton.setEnabled(true);
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			currentStart = Double.NaN;
 			currentEnd = Double.NaN;
 			currentStep = Double.NaN;
@@ -200,38 +194,42 @@ class LogKRangeDialog extends ProceedCancelDialog implements ItemListener
 		}
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		/*cancel, restore default*/
 		main.logKrange = false;
-		if (main.matrix.isHorHplusAndFree())
+		if (main.matrix.isHorHplusAndFree()) {
 			main.pHrange = true;
-		if (main.matrix.adsorption())
+		}
+		if (main.matrix.adsorption()) {
 			main.adsRange = true;
+		}
 		main.outputFormat = OutputFormat.REGULAR;
 		main.setNumFormatToLinear();
 		main.formatMenu.setDisable(true);
 		main.graphMI.setDisable(true);
 		main.pHrangeMI.setDisable(false);
 		main.compRangeMI.setDisable(false);
-		if (main.matrix.adsorption())
+		if (main.matrix.adsorption()) {
 			main.adsRangeMI.setDisable(false);
+		}
 		super.doCancel();
 	}
 
-	protected void doProceed()
-	{
-		if (currentStart >= currentEnd)
+	protected void doProceed() {
+		if (currentStart >= currentEnd) {
 			MyTools.showError("Start logK must be smaller than end logK,"
-				+ " step must be > 0!");
-		else if (currentStep <= 0)
+					+ " step must be > 0!");
+		}
+		else if (currentStep <= 0) {
 			MyTools.showError("Step must be > 0!");
-		else if (currentEnd - currentStart < currentStep)
+		}
+		else if (currentEnd - currentStart < currentStep) {
 			MyTools.showError("Range too small or step to large!");
-		else if (main.matrix.oldConstantMemory[speciesCB.getSelectedIndex()] == 0)
+		}
+		else if (main.matrix.oldConstantMemory[speciesCB.getSelectedIndex()] == 0) {
 			MyTools.showError("This species is a component with log K=0. Do not change it!");
-		else
-		{
+		}
+		else {
 			main.matrix.specNo = speciesCB.getSelectedIndex();
 			main.matrix.logKrangeStart = currentStart;
 			main.matrix.logKrangeEnd = currentEnd;

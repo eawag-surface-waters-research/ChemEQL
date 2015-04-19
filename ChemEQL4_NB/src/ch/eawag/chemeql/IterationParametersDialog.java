@@ -9,10 +9,11 @@ import java.awt.event.ItemListener;
 class IterationParametersDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static IterationParametersDialog INSTANCE;
-	static IterationParametersDialog getInstance(ChemEqlGuiController parent)
-	{
-		if (INSTANCE == null)
+
+	static IterationParametersDialog getInstance(ChemEqlGuiController parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new IterationParametersDialog(parent);
+		}
 		return INSTANCE;
 	}
 
@@ -24,24 +25,21 @@ class IterationParametersDialog extends ProceedCancelDialog implements ItemListe
 	boolean autoConvCrit;
 	boolean markIter;
 
-
 	// Constructor for creating a bean
-	public IterationParametersDialog()
-	{
+	public IterationParametersDialog() {
 		initComponents();
 	}
 
-	private IterationParametersDialog(ChemEqlGuiController main)
-	{
+	private IterationParametersDialog(ChemEqlGuiController main) {
 		super(main);
 		initComponents();
 		displayAutoAdaptCriteriaChecker.addItemListener(this);
 		displayIterationsChecker.addItemListener(this);
-		setLocation(300,350);
-		addComponentListener(new ComponentAdapter() {
+		setLocation(300, 350);
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent arg0)
-			{
+			public void componentShown(ComponentEvent arg0) {
 				maxIterationsTF.setText(Integer.toString(maxIterations));
 				initialCriteriaTF.setText(Double.toString(INITIAL_CONV_CRIT));
 				displayAutoAdaptCriteriaChecker.setSelected(autoConvCrit);
@@ -51,15 +49,11 @@ class IterationParametersDialog extends ProceedCancelDialog implements ItemListe
 		});
 	}
 
-	private void maxIterationsChanged()
-	{
-		try
-		{
+	private void maxIterationsChanged() {
+		try {
 			currentMaxIterationsInput = Integer.parseInt(maxIterationsTF.getText());
 			proceedButton.setEnabled(true);
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			proceedButton.setEnabled(false);
 		}
 	}
@@ -143,18 +137,15 @@ class IterationParametersDialog extends ProceedCancelDialog implements ItemListe
       pack();
    }//GEN-END:initComponents
 
-	public void itemStateChanged(ItemEvent ev)
-	{
+	public void itemStateChanged(ItemEvent ev) {
 		proceedButton.setEnabled(true);
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		super.doCancel();
 	}
 
-	protected void doProceed()
-	{
+	protected void doProceed() {
 		maxIterations = currentMaxIterationsInput;
 		autoConvCrit = displayAutoAdaptCriteriaChecker.isSelected();
 		markIter = displayIterationsChecker.isSelected();

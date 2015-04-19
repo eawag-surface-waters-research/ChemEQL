@@ -1,6 +1,7 @@
 package ch.eawag.chemeql;
 
-import javax.swing.*;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 
 public class ProceedCancelDialog extends JDialog
@@ -8,13 +9,11 @@ public class ProceedCancelDialog extends JDialog
 	protected ChemEqlGuiController main;
 
 	// Constructor for creating bean
-	public ProceedCancelDialog()
-	{
+	public ProceedCancelDialog() {
 		this(null);
 	}
 
-	protected ProceedCancelDialog(ChemEqlGuiController main)
-	{
+	protected ProceedCancelDialog(ChemEqlGuiController main) {
 		super();
 		this.main = main;
 		setRootPaneCheckingEnabled(false);	// required for letting the IDE sett a layout
@@ -23,31 +22,25 @@ public class ProceedCancelDialog extends JDialog
 		getRootPane().setDefaultButton(proceedButton);
 	}
 
-	public void setProceedButtonText(String value)
-	{
+	public void setProceedButtonText(String value) {
 		proceedButton.setText(value);
 	}
 
-	public String getProceedButtonText()
-	{
+	public String getProceedButtonText() {
 		return proceedButton.getText();
 	}
 
-	public void setCancelButtonText(String value)
-	{
+	public void setCancelButtonText(String value) {
 		cancelButton.setText(value);
 	}
 
-	public String getCancelButtonText()
-	{
+	public String getCancelButtonText() {
 		return cancelButton.getText();
 	}
 
-	public JPanel getControls()
-	{
+	public JPanel getControls() {
 		return controlsPanel;
 	}
-
 
 	/** This method is called from within the constructor to
 	 * initialize the form.
@@ -117,13 +110,11 @@ public class ProceedCancelDialog extends JDialog
    protected javax.swing.JButton proceedButton;
    // End of variables declaration//GEN-END:variables
 
-	protected void doProceed()
-	{
+	protected void doProceed() {
 		setVisible(false);
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		setVisible(false);
 	}
 }

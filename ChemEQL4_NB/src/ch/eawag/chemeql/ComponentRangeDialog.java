@@ -4,14 +4,14 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 
-
 class ComponentRangeDialog extends ProceedCancelDialog
 {
 	private static ComponentRangeDialog INSTANCE;
-	static ComponentRangeDialog getInstance(ChemEqlGuiController parent)
-	{
-		if (INSTANCE == null)
+
+	static ComponentRangeDialog getInstance(ChemEqlGuiController parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new ComponentRangeDialog(parent);
+		}
 		return INSTANCE;
 	}
 
@@ -20,25 +20,23 @@ class ComponentRangeDialog extends ProceedCancelDialog
 	private double currentStep;
 
 	// Constructor for creating a bean
-	public ComponentRangeDialog()
-	{
+	public ComponentRangeDialog() {
 		initComponents();
 	}
 
-	private ComponentRangeDialog(ChemEqlGuiController m)
-	{
+	private ComponentRangeDialog(ChemEqlGuiController m) {
 		super(m);
 		initComponents();
-		setLocation(300,250);
-		addComponentListener(new ComponentAdapter() {
+		setLocation(300, 250);
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent arg0)
-			{
+			public void componentShown(ComponentEvent arg0) {
 				componentsCB.setModel(main.matrix.createComponentsCBModel());
 				componentsCB.setSelectedIndex(0);
 				main.pHfix = main.matrix.isHorHplusAndFree();
 				infoTF.setText("* * *  pH is"
-					+ (main.pHfix ? " " : " not ") + "constant  * * *");
+						+ (main.pHfix ? " " : " not ") + "constant  * * *");
 				linChecker.setSelected(true);
 				startTF.setText("");
 				endTF.setText("");
@@ -178,17 +176,13 @@ class ComponentRangeDialog extends ProceedCancelDialog
       pack();
    }//GEN-END:initComponents
 
-	private void checkInputs()
-	{
-		try
-		{
+	private void checkInputs() {
+		try {
 			currentStart = Double.parseDouble(startTF.getText());
 			currentEnd = Double.parseDouble(endTF.getText());
 			currentStep = Double.parseDouble(stepTF.getText());
 			proceedButton.setEnabled(true);
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			currentStart = Double.NaN;
 			currentEnd = Double.NaN;
 			currentStep = Double.NaN;
@@ -196,12 +190,12 @@ class ComponentRangeDialog extends ProceedCancelDialog
 		}
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		/*cancel, restore default*/
 		main.compRange = false;
-		if(main.matrix.isHorHplusAndFree())
+		if (main.matrix.isHorHplusAndFree()) {
 			main.pHrange = true;
+		}
 		main.outputFormat = OutputFormat.REGULAR;
 		main.compRangeIsLog = false;
 		main.setNumFormatToLinear();
@@ -209,48 +203,50 @@ class ComponentRangeDialog extends ProceedCancelDialog
 		main.formatMenu.setDisable(true);
 		main.graphMI.setDisable(true);
 		main.pHrangeMI.setDisable(false);
-		if (main.matrix.adsorption())
+		if (main.matrix.adsorption()) {
 			main.adsRangeMI.setDisable(false);
+		}
 		super.doCancel();
 	}
 
-	protected void doProceed()
-	{
-		if (currentStart == 0)
-		{
+	protected void doProceed() {
+		if (currentStart == 0) {
 			MyTools.showError("Error in concentration range: "
-				+ "Start concentration can`t be zero! Try a very small number.");
+					+ "Start concentration can`t be zero! Try a very small number.");
 			startTF.setText("1e-20");		/*erste Komponente schreiben*/
+
 		}
-		else if (logChecker.isSelected() &&
-			(currentStart >= currentEnd || currentStep <= 0 || currentStep >= (currentEnd - currentStart)))
+		else if (logChecker.isSelected()
+				&& (currentStart >= currentEnd || currentStep <= 0 || currentStep >= (currentEnd - currentStart))) {
 			MyTools.showError("Start concentration must be smaller than end concentration!"
-				+ " Give step in log units, e.g. from \"-8\" to \"-2\" step \"0.5\"");
-		else if (linChecker.isSelected() &&
-			(currentStart >= currentEnd || currentStep >= (currentEnd - currentStart)))
+					+ " Give step in log units, e.g. from \"-8\" to \"-2\" step \"0.5\"");
+		}
+		else if (linChecker.isSelected()
+				&& (currentStart >= currentEnd || currentStep >= (currentEnd - currentStart))) {
 			MyTools.showError("Start concentration must be smaller than end concentration"
-				+ " and step must be smaller than range between start and end!");
-		else if (linChecker.isSelected() && (currentStart < 0 || currentEnd < 0))
+					+ " and step must be smaller than range between start and end!");
+		}
+		else if (linChecker.isSelected() && (currentStart < 0 || currentEnd < 0)) {
 			MyTools.showError("Negative concentrations are not sensible!");
-		else if (main.matrix.components[componentsCB.getSelectedIndex()].getMode() == Mode.SOLID_PHASE)
+		}
+		else if (main.matrix.components[componentsCB.getSelectedIndex()].getMode() == Mode.SOLID_PHASE) {
 			MyTools.showError("Your matrix says this component is a solid phase.");
-		else if (componentsCB.getSelectedIndex() == main.matrix.totComp-1
-			&& main.matrix.isHorHplusAndFree())
+		}
+		else if (componentsCB.getSelectedIndex() == main.matrix.totComp - 1
+				&& main.matrix.isHorHplusAndFree()) {
 			MyTools.showError("Your matrix says this component is the pH which is held constant."
-				+ " Choose command \"pH range ...\"!");
-		else
-		{
+					+ " Choose command \"pH range ...\"!");
+		}
+		else {
 			main.matrix.compRangeStart = currentStart;
 			main.matrix.compRangeEnd = currentEnd;
 			main.matrix.compRangeStep = currentStep;
 			main.matrix.compNo = componentsCB.getSelectedIndex();
-			if (logChecker.isSelected())
-			{
+			if (logChecker.isSelected()) {
 				main.compRangeIsLog = true;
 				main.setNumFormatToLogarithmic();
 			}
-			else
-			{
+			else {
 				main.compRangeIsLog = false;
 				main.setNumFormatToLinear();
 			}
@@ -258,7 +254,9 @@ class ComponentRangeDialog extends ProceedCancelDialog
 			main.pHrange = false;
 			main.outputFormat = OutputFormat.INTERVAL;
 			main.formatMenu.setDisable(false);	/*activate formats*/
+
 			main.graphMI.setDisable(false);		/*activate graphics*/
+
 			main.pHrangeMI.setDisable(true);
 			main.adsRangeMI.setDisable(true);
 			super.doProceed();

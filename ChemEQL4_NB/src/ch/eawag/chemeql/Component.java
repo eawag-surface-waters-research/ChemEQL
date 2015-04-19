@@ -7,77 +7,62 @@ class Component extends Object
 	private double conc;
 	private Mode mode;
 
-
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 
-	public void setName(String value)
-	{
+	public void setName(String value) {
 		name = value;
 	}
 
-
-	public double getConc()
-	{
+	public double getConc() {
 		return conc;
 	}
 
-	public void setConc(double value)
-	{
+	public void setConc(double value) {
 		conc = value;
 	}
 
-	public Mode getMode()
-	{
+	public Mode getMode() {
 		return mode;
 	}
 
-	public void setMode(Mode value)
-	{
+	public void setMode(Mode value) {
 		mode = value;
 	}
 
-	Component()
-	{
+	Component() {
 		initialize();
 	}
 
-	Component(final String n, final double c, final Mode m)
-	{
+	Component(final String n, final double c, final Mode m) {
 		// assert m == Mode.TOTAL || m == Mode.FREE;
 		setName(n);
 		setConc(c);
 		setMode(m);
 	}
 
-	void initialize()
-	{
+	void initialize() {
 		setName(null);
 		setConc(0);
 		setMode(null);
 	}
 
-	void copyFrom (Component other)
-	{
+	void copyFrom(Component other) {
 		setName(other.getName());
 		setConc(other.getConc());
 		setMode(other.getMode());
 	}
 
-	boolean isModeSolidPhaseOrCheckPrecip()
-	{
+	boolean isModeSolidPhaseOrCheckPrecip() {
 		return Mode.SOLID_PHASE == getMode() || Mode.CHECKPRECIP == getMode();
 	}
 
-	boolean isHPlusOrEMinus()
-	{
+	boolean isHPlusOrEMinus() {
 		return "H+".equals(getName()) || "e-".equals(getName());
 	}
 
-	public String toString()
-	{
+	public String toString() {
 		return getName();
 	}
 }

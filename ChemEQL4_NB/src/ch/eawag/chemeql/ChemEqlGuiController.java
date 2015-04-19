@@ -16,8 +16,6 @@ import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Menu;
@@ -35,10 +33,6 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import org.controlsfx.control.spreadsheet.GridBase;
-import org.controlsfx.control.spreadsheet.SpreadsheetCell;
-import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
-import org.controlsfx.control.spreadsheet.SpreadsheetView;
 
 
 public class ChemEqlGuiController
@@ -133,8 +127,7 @@ public class ChemEqlGuiController
 	private static final ExtensionFilter XLS_FILTER = new ExtensionFilter("Output Data, tab delimited (*.xls)", "*.xls");
 
 	@FXML
-	public void initialize()
-	{
+	public void initialize() {
 		fileChooser.getExtensionFilters().addAll(CQL_FILTER, XLS_FILTER);
 		menuBar.setUseSystemMenuBar(ChemEql.IS_MAC_OSX);
 		quitSeparator.setVisible(!ChemEql.IS_MAC_OSX);
@@ -203,8 +196,7 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void openCmd(ActionEvent event)
-	{
+	void openCmd(ActionEvent event) {
 		/* eine Matrix einlesen */
 		flushMatrixProc();
 		try {
@@ -230,8 +222,7 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void readLibCmd(ActionEvent event)
-	{
+	void readLibCmd(ActionEvent event) {
 		/* eine binäre Bibliothek aus dem Preferences-Folder einlesen */
 		flushMatrixProc();
 		if (regLibrary == null) /* falls binäre Library noch nie geöffnet...*/ {
@@ -249,8 +240,7 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void saveMatrixCmd(ActionEvent event)
-	{
+	void saveMatrixCmd(ActionEvent event) {
 		try {
 			fileChooser.setTitle("Save current matrix");
 			fileChooser.setSelectedExtensionFilter(CQL_FILTER);
@@ -280,8 +270,7 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void saveDataCmd(ActionEvent event)
-	{
+	void saveDataCmd(ActionEvent event) {
 		try {
 			fileChooser.setTitle("Save current data");
 			fileChooser.setSelectedExtensionFilter(XLS_FILTER);
@@ -310,24 +299,21 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void importLibCmd(ActionEvent event)
-	{
+	void importLibCmd(ActionEvent event) {
 		/* eine neue Bibliothek (Text-File) einlesen */
 		flushMatrixProc();
 		selectAndReadLibrary();
 	}
 
 	@FXML
-	void exportLibCmd(ActionEvent event)
-	{
+	void exportLibCmd(ActionEvent event) {
 		/* eine Bibliothek auslesen */
 		flushMatrixProc();
 		exportLibrary();
 	}
 
 	@FXML
-	void printCmd(ActionEvent event)
-	{
+	void printCmd(ActionEvent event) {
 //		JInternalFrame selected = desktopPane.getSelectedFrame();
 //		if (selected == null) {
 //			MyTools.showError("No Window selected for printing!");
@@ -338,20 +324,17 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void settingsCmd(ActionEvent event)
-	{
+	void settingsCmd(ActionEvent event) {
 		settingsDialog.setVisible(true);
 	}
 
 	@FXML
-	void iterationParamsCmd(ActionEvent event)
-	{
+	void iterationParamsCmd(ActionEvent event) {
 		iterationParametersDialog.setVisible(true);
 	}
 
 	@FXML
-	void quitCmd(ActionEvent event)
-	{
+	void quitCmd(ActionEvent event) {
 		if (ChemEql.instance().quitOk()) {
 			Platform.exit();
 			System.exit(0); // required to exit AWT
@@ -359,8 +342,7 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void editRegLibComponentsCmd(ActionEvent event)
-	{
+	void editRegLibComponentsCmd(ActionEvent event) {
 		if (regLibrary == null) {
 			regLibrary = Library.readBinLibrary(true);
 		}
@@ -371,8 +353,7 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void editRegLibSpeciesCmd(ActionEvent event)
-	{
+	void editRegLibSpeciesCmd(ActionEvent event) {
 		if (regLibrary == null) {
 			regLibrary = Library.readBinLibrary(true);
 		}
@@ -383,8 +364,7 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void editSPLibComponentsCmd(ActionEvent event)
-	{
+	void editSPLibComponentsCmd(ActionEvent event) {
 		if (spLibrary == null) {
 			spLibrary = Library.readBinLibrary(false);
 		}
@@ -395,8 +375,7 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void editSPLibSpeciesCmd(ActionEvent event)
-	{
+	void editSPLibSpeciesCmd(ActionEvent event) {
 		if (spLibrary == null) {
 			spLibrary = Library.readBinLibrary(false);
 		}
@@ -407,78 +386,66 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void fileInfoCmd(ActionEvent event)
-	{
+	void fileInfoCmd(ActionEvent event) {
 		fileInfoMI.setDisable(true);
 		updateFileInfoWindow(false);
 	}
 
 	@FXML
-	void replaceHbyOHCmd(ActionEvent event)
-	{
+	void replaceHbyOHCmd(ActionEvent event) {
 //		matrix.replaceHbyOHProc();
 		updateFileInfoWindow(true);
 	}
 
 	@FXML
-	void deleteSpeciesCmd(ActionEvent event)
-	{
+	void deleteSpeciesCmd(ActionEvent event) {
 		DeleteSpeciesDialog.getInstance(ChemEqlGuiController.this).setVisible(true);
 		updateFileInfoWindow(true);
 	}
 
 	@FXML
-	void solidPhasesCmd(ActionEvent event)
-	{
+	void solidPhasesCmd(ActionEvent event) {
 		ChangeSolidPhaseDialog.getInstance(ChemEqlGuiController.this).setVisible(true);
 		updateFileInfoWindow(true);
 	}
 
 	@FXML
-	void restoreCmd(ActionEvent event)
-	{
+	void restoreCmd(ActionEvent event) {
 		restoreProc();
 	}
 
 	@FXML
-	void pHconstCmd(ActionEvent event)
-	{
+	void pHconstCmd(ActionEvent event) {
 //		PHConstDialog.getInstance(Main.this).setVisible(true);
 	}
 
 	@FXML
-	void pHrangeCmd(ActionEvent event)
-	{
+	void pHrangeCmd(ActionEvent event) {
 //		PHRangeDialog.getInstance(Main.this).setVisible(true);
 	}
 
 	@FXML
-	void compRangeCmd(ActionEvent event)
-	{
+	void compRangeCmd(ActionEvent event) {
 //		ComponentRangeDialog.getInstance(Main.this).setVisible(true);
 	}
 
 	@FXML
-	void adsRangeCmd(ActionEvent event)
-	{
+	void adsRangeCmd(ActionEvent event) {
 //		AdsorptionRangeDialog.getInstance(Main.this).setVisible(true);
 	}
 
 	@FXML
-	void logKrangeCmd(ActionEvent event)
-	{
+	void logKrangeCmd(ActionEvent event) {
 //		LogKRangeDialog.getInstance(Main.this).setVisible(true);
 	}
 
 	@FXML
-	void kinetikCmd(ActionEvent event)
-	{
+	void kinetikCmd(ActionEvent event) {
 //		KineticsDialog.getInstance(Main.this).setVisible(true);
 	}
 
 	@FXML
-	void pXpYCmd(ActionEvent event)
-	{
+	void pXpYCmd(ActionEvent event) {
 //		PxPyDiagramDialog.getInstance(this).setVisible(true);
 	}
 
@@ -486,8 +453,7 @@ public class ChemEqlGuiController
 	private WebView htmlView;
 
 	@FXML
-	void activityInfoCmd(ActionEvent event)
-	{
+	void activityInfoCmd(ActionEvent event) {
 		URL urlActivityHelp = getClass().getResource("resources/activityHelp.html");
 		htmlView.getEngine().load(urlActivityHelp.toExternalForm());
 //		Dialogs.create().title("Activity Info").message(message)
@@ -520,14 +486,12 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void graphCmd(ActionEvent event)
-	{
+	void graphCmd(ActionEvent event) {
 		GraphicsDialog.getInstance(this).setVisible(true);
 	}
 
 	@FXML
-	void goCmd(ActionEvent event)
-	{
+	void goCmd(ActionEvent event) {
 //		matrixView.setVisible(false);
 		goMI.setDisable(true);
 		stopMI.setDisable(false);
@@ -540,8 +504,7 @@ public class ChemEqlGuiController
 		calculationThread = new Thread(new Runnable()
 		{
 			@Override
-			public void run()
-			{
+			public void run() {
 				try {
 					matrix.runProc(activitySetting());
 				} catch (CalculationStoppedException ex) {
@@ -550,8 +513,7 @@ public class ChemEqlGuiController
 					try {
 						SwingUtilities.invokeAndWait(new Runnable()
 						{
-							public void run()
-							{
+							public void run() {
 								MyTools.showException(ex);
 							}
 						});
@@ -573,15 +535,13 @@ public class ChemEqlGuiController
 	}
 
 	@FXML
-	void stopCmd(ActionEvent event)
-	{
+	void stopCmd(ActionEvent event) {
 		stopMI.setDisable(true);
 		runMenu.setDisable(true);
 	}
 
 	@FXML
-	void aboutCmd(ActionEvent event)
-	{
+	void aboutCmd(ActionEvent event) {
 		new SplashScreen(getClass().getResource("resources/about.gif"), null, 20000);
 	}
 
@@ -634,8 +594,7 @@ public class ChemEqlGuiController
 	SettingsDialog settingsDialog = SettingsDialog.getInstance(this);
 	IterationParametersDialog iterationParametersDialog = IterationParametersDialog.getInstance(this);
 
-	private void setBooleans()
-	{
+	private void setBooleans() {
 		set1();
 		set2();
 		doKinetik = false;
@@ -645,8 +604,7 @@ public class ChemEqlGuiController
 	}
 
 	// private helper methods (new in ChemEQLJava)
-	private void set1()
-	{
+	private void set1() {
 		compRange = false;
 		pHfix = false;
 		pHrange = false;
@@ -658,15 +616,13 @@ public class ChemEqlGuiController
 	}
 
 	// private helper methods (new in ChemEQLJava)
-	private void set2()
-	{
+	private void set2() {
 		iterationParametersDialog.maxIterations = IterationParametersDialog.MAX_ITERATIONS_DEFAULT;
 		activityOptions.setExpanded(false); // was calcActivCoeff.selectToggle(null);
 		setNumFormatToLinear();
 	}
 
-	private void restoreProc()
-	{
+	private void restoreProc() {
 		matrixMenu.setDisable(false);	/* sind während des Rechnens disabled worden */
 
 		runMenu.setDisable(false);
@@ -706,8 +662,7 @@ public class ChemEqlGuiController
 //		setCursor(Cursor.getDefaultCursor());
 	}
 
-	private void flushMatrixProc()
-	{
+	private void flushMatrixProc() {
 		matrix.initialize(); /*setzt den Inhalt aller globalen Handles =0 oder ''*/
 
 		// initializes also compNo and specNo with 0
@@ -733,8 +688,7 @@ public class ChemEqlGuiController
 //		matrixView.setVisible(false);
 	}
 
-	private void selectAndReadLibrary()
-	{
+	private void selectAndReadLibrary() {
 		final Library lib;
 
 		fileChooser.setTitle("Import library");
@@ -770,15 +724,13 @@ public class ChemEqlGuiController
 	}
 
 	private void importLibFromStream(final Library lib, final InputStream inStream,
-			final String msg)
-	{
+			final String msg) {
 		// library reading must take place in its own thread to allow the
 		// ProgressMonitor to be updated. Subsequent actions are included in the
 		// new thread in order so they wait for finishing import
 		Thread importThread = new Thread(new Runnable()
 		{
-			public void run()
-			{
+			public void run() {
 //				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				try {
 					lib.importLib(inStream, msg);
@@ -827,8 +779,7 @@ public class ChemEqlGuiController
 		importThread.start();
 	}
 
-	private void exportLibrary()
-	{
+	private void exportLibrary() {
 		final Library lib;
 		String fileName;
 
@@ -872,8 +823,7 @@ public class ChemEqlGuiController
 		}
 	}
 
-	void reloadLibrary(Library lib)
-	{
+	void reloadLibrary(Library lib) {
 		if (lib == regLibrary) {
 			regLibrary = Library.readBinLibrary(true);
 		}
@@ -882,8 +832,7 @@ public class ChemEqlGuiController
 		}
 	}
 
-	private void matrixLoadedUpdate()
-	{
+	private void matrixLoadedUpdate() {
 		if (matrix.isHorHplusAndFree()) {
 			pHfix = true;
 			pHrange = true;
@@ -942,8 +891,7 @@ public class ChemEqlGuiController
 		updateFileInfoWindow(false);
 	}
 
-	private void createAllWindows()
-	{
+	private void createAllWindows() {
 		matrixView = new MatrixView();
 		centerSplitPane.getItems().add(0, matrixView);
 //		matrixView.setVisible(false);
@@ -964,8 +912,8 @@ public class ChemEqlGuiController
 
 		graphicsWindow = new JInternalFrame("Graphics", true, true, true, true);
 		graphicsWindow.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
-		graphicsData
-				= new DataCollection(new Class[]{SpeciesData.class, PxPyData.class
+		graphicsData =
+				new DataCollection(new Class[]{SpeciesData.class, PxPyData.class
 
 				}
 				);
@@ -979,19 +927,16 @@ public class ChemEqlGuiController
 //		desktopPane.add(graphicsWindow);
 	}
 
-	void repaintDataWindows()
-	{
+	void repaintDataWindows() {
 //		matrixView.repaint();
 		outputWindow.repaint();
 	}
 
-	void dataOutput()
-	{
+	void dataOutput() {
 		outputWindow.update();
 	}
 
-	void updateFileInfoWindow(boolean enableSaveMatrixCmd)
-	{
+	void updateFileInfoWindow(boolean enableSaveMatrixCmd) {
 		// ?? is it sensible to adjust window size and position automatically??
 		//		wide = 70 * totComp + 30;
 		//		if (wide > qd.screenBits.Bounds.right - 100)
@@ -1028,8 +973,7 @@ public class ChemEqlGuiController
 		}
 	}
 
-	private void setFileInfoWindowTitle(File f)
-	{
+	private void setFileInfoWindowTitle(File f) {
 		StringBuilder t = new StringBuilder(ChemEql.APP_TITLE);
 		t.append(" - ").append(f.getName());
 		if (f.getParent() != null) {
@@ -1038,23 +982,19 @@ public class ChemEqlGuiController
 		ChemEql.mainStage().setTitle(t.toString());
 	}
 
-	boolean isLogNumFormat()
-	{
+	boolean isLogNumFormat() {
 		return numFormat.getSelectedToggle() == numFormatLogRMI;
 	}
 
-	void setNumFormatToLinear()
-	{
+	void setNumFormatToLinear() {
 		numFormat.selectToggle(numFormatLinRMI);
 	}
 
-	void setNumFormatToLogarithmic()
-	{
+	void setNumFormatToLogarithmic() {
 		numFormat.selectToggle(numFormatLogRMI);
 	}
 
-	private Activity activitySetting()
-	{
+	private Activity activitySetting() {
 		if (activityOptions.isExpanded()) {
 			if (debyeHückelRB.isSelected()) {
 				return Activity.DEBYEHUECKEL;
@@ -1069,14 +1009,12 @@ public class ChemEqlGuiController
 		return Activity.NO;
 	}
 
-	String getCalcActivityName()
-	{
+	String getCalcActivityName() {
 		return activitySetting().getValue();
 	}
 
 	@SuppressWarnings("fallthrough")
-	void setActivity(Activity activity)
-	{
+	void setActivity(Activity activity) {
 		switch (activity) {
 		case NO:
 			activityOptions.setExpanded(false);
@@ -1097,15 +1035,13 @@ public class ChemEqlGuiController
 		String titleWhenExpanded;
 		String titleWhenCollapsed;
 
-		public OptionTitleChanger(String titleWhenExpanded, String titleWhenCollapsed)
-		{
+		public OptionTitleChanger(String titleWhenExpanded, String titleWhenCollapsed) {
 			this.titleWhenExpanded = titleWhenExpanded;
 			this.titleWhenCollapsed = titleWhenCollapsed;
 		}
 
 		@Override
-		public void invalidated(Observable observable)
-		{
+		public void invalidated(Observable observable) {
 			BooleanProperty expanded = (BooleanProperty)observable;
 			((TitledPane)expanded.getBean()).setText(expanded.get() ? titleWhenExpanded : titleWhenCollapsed);
 		}

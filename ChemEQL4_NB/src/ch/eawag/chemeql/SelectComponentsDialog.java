@@ -17,17 +17,15 @@ class SelectComponentsDialog extends JDialog
 	private double currentConcentrationInput;
 	private ChemEqlGuiController main;
 
-
-	static SelectComponentsDialog getInstance(ChemEqlGuiController parent)
-	{
-		if (INSTANCE == null)
+	static SelectComponentsDialog getInstance(ChemEqlGuiController parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new SelectComponentsDialog(parent);
+		}
 		return INSTANCE;
 	}
 
 	/** Creates new form SelectComponentsDialog */
-	private SelectComponentsDialog(ChemEqlGuiController parent)
-	{
+	private SelectComponentsDialog(ChemEqlGuiController parent) {
 		super((Frame)null, true);
 		main = parent;
 		libraryListModel = new DefaultListModel();
@@ -35,12 +33,12 @@ class SelectComponentsDialog extends JDialog
 		initComponents();
 	}
 
-	void show(Library lib)
-	{
+	void show(Library lib) {
 		library = lib;
 		libraryListModel.removeAllElements();
-		for (int i=0; i < lib.libTotComp; i++)
+		for (int i = 0; i < lib.libTotComp; i++) {
 			libraryListModel.addElement(library.libCompNames[i]);
+		}
 		selectionListModel.removeAllElements();
 
 		concentrationTF.setText("");
@@ -55,21 +53,16 @@ class SelectComponentsDialog extends JDialog
 		super.setVisible(true);
 	}
 
-	private void concentrationChanged()
-	{
-		try
-		{
+	private void concentrationChanged() {
+		try {
 			currentConcentrationInput =
-				Double.parseDouble(concentrationTF.getText());
+					Double.parseDouble(concentrationTF.getText());
 			addButton.setEnabled(true);
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			currentConcentrationInput = Double.NaN;
 			addButton.setEnabled(false);
 		}
 	}
-
 
 	/** This method is called from within the constructor to
 	 * initialize the form.
@@ -311,9 +304,11 @@ class SelectComponentsDialog extends JDialog
 	{//GEN-HEADEREND:event_doneButtonActionPerformed
 		// construct Matrix from selected components data
 		main.matrix.buildMyChoiceMatrixAndTransfer(
-			library,selectionListModel.toArray());		// sets main.matrixIsLoaded to true
+				library, selectionListModel.toArray());		// sets main.matrixIsLoaded to true
 		main.matrix.defaultsDatInput();	/*setzt Defaultwerte, Comp.Reihenfolge etc.*/
+
 		main.matrix.adjustConcEstim();	/*neu zählen von noOfSolidPhases, noOfCheckPrecip und totLimComp und einsetzen der Konz.*/
+
 		doClose();
 	}//GEN-LAST:event_doneButtonActionPerformed
 
@@ -343,53 +338,54 @@ class SelectComponentsDialog extends JDialog
 		DefaultListModel selList = (DefaultListModel)selectionList.getModel();
 		int selI = selectionList.getSelectedIndex();
 		((DefaultListModel)libraryList.getModel()).addElement(
-			((Component)selList.remove(selI)).toString());
+				((Component)selList.remove(selI)).toString());
 		removeButton.setEnabled(false);
-		if (selList.size() == 1)
+		if (selList.size() == 1) {
 			doneButton.setEnabled(false);
+		}
 	}//GEN-LAST:event_removeButtonActionPerformed
 
 	private void addButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_addButtonActionPerformed
 	{//GEN-HEADEREND:event_addButtonActionPerformed
 		// Add your handling code here:
-		if (freeModeButton.isSelected() && currentConcentrationInput == 0)
-		{
+		if (freeModeButton.isSelected() && currentConcentrationInput == 0) {
 			MyTools.showError(
-				"Input not sensible:\nFree concentration should never be zero!");
+					"Input not sensible:\nFree concentration should never be zero!");
 			return;
 		}
 		DefaultListModel libList = (DefaultListModel)libraryList.getModel();
 		DefaultListModel selList = (DefaultListModel)selectionList.getModel();
 		int selI = libraryList.getSelectedIndex();
 		selList.addElement(new Component((String)libList.remove(selI),
-			currentConcentrationInput,
-			freeModeButton.isSelected() ? Mode.FREE : Mode.TOTAL));
+				currentConcentrationInput,
+				freeModeButton.isSelected() ? Mode.FREE : Mode.TOTAL));
 		concentrationTF.setText("");
 		concentrationTF.setEnabled(false);
 		addButton.setEnabled(false);
 		totalModeButton.setEnabled(false);
 		freeModeButton.setEnabled(false);
-		if (selList.size() == 2)
+		if (selList.size() == 2) {
 			doneButton.setEnabled(true);
+		}
 	}//GEN-LAST:event_addButtonActionPerformed
 
-	private void doCancel()
-	{
+	private void doCancel() {
 		int dialogResult = JOptionPane.showConfirmDialog(
-			this,"Do you want to dismiss dialog Select Components\nand all changes made therein?",
-			ChemEql.APP_TITLE,JOptionPane.YES_NO_OPTION);
-		if (dialogResult == JOptionPane.YES_OPTION)
-		{
-		// assert dialogResult == JOptionPane.NO_OPTION || dialogResult == JOptionPane.CLOSED_OPTION;
+				this, "Do you want to dismiss dialog Select Components\nand all changes made therein?",
+				ChemEql.APP_TITLE, JOptionPane.YES_NO_OPTION);
+		if (dialogResult == JOptionPane.YES_OPTION) {
+			// assert dialogResult == JOptionPane.NO_OPTION || dialogResult == JOptionPane.CLOSED_OPTION;
 			main.matrixIsLoaded = false;	// absence of this line causes errors in ChemEQL V203
-			try {Thread.sleep(200);}		// solves indeterministic error on Mac OS
-			catch (InterruptedException ex){}
+			try {
+				Thread.sleep(200);
+			} // solves indeterministic error on Mac OS
+			catch (InterruptedException ex) {
+			}
 			doClose();
 		}
 	}
 
-	private void doClose()
-	{
+	private void doClose() {
 		setVisible(false);
 	}
 

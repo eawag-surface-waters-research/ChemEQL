@@ -16,7 +16,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 
-
 /**
  *
  * @author kaibrassel
@@ -37,8 +36,8 @@ public class ChemEql extends Application
 	public static final boolean IS_WINDOWS = OS_NAME.contains("windows");
 
 	private static Path APP_DATA_DIR = null;
-	public static synchronized Path getApplicationDataFolder()
-	{
+
+	public static synchronized Path getApplicationDataFolder() {
 		if (APP_DATA_DIR == null) {
 			if (IS_WINDOWS) {
 				APP_DATA_DIR = Paths.get(System.getenv("APPDATA"), "ChemEQL"); //NOI18N
@@ -56,15 +55,13 @@ public class ChemEql extends Application
 
 	private static final Logger LOGGER = Logger.getLogger("ch.eawag.chemeql", "ch.eawag.chemeql.i18n");
 
-	public static Logger getLogger()
-	{
+	public static Logger getLogger() {
 		return LOGGER;
 	}
 
 	public static final ResourceBundle I18N = java.util.ResourceBundle.getBundle("ch.eawag.chemeql.i18n");
 
-	public static String i18n(String key)
-	{
+	public static String i18n(String key) {
 		return I18N.getString(key);
 	}
 
@@ -77,39 +74,33 @@ public class ChemEql extends Application
 	 * @param params parameters
 	 * @return a translated and formatted string for the given key
 	 */
-	public static String i18n(String key, Object... params)
-	{
+	public static String i18n(String key, Object... params) {
 		return MessageFormat.format(i18n(key), params);
 	}
 
 	public static ChemEql INSTANCE;
 
-	public static ChemEql instance()
-	{
+	public static ChemEql instance() {
 		return INSTANCE;
 	}
 
-	public static Stage mainStage()
-	{
+	public static Stage mainStage() {
 		return INSTANCE.getMainStage();
 	}
 
 	private Stage mainStage;
 
-	public Stage getMainStage()
-	{
+	public Stage getMainStage() {
 		return mainStage;
 	}
 
-	public ChemEql()
-	{
+	public ChemEql() {
 		super();
 		INSTANCE = this;
 	}
 
 	@Override
-	public void start(Stage stage) throws Exception
-	{
+	public void start(Stage stage) throws Exception {
 		mainStage = stage;
 		// set application icon
 		mainStage.getIcons().add(new Image("ch/eawag/chemeql/resources/icon.jpg"));
@@ -141,21 +132,18 @@ public class ChemEql extends Application
 //		new Main();
 	}
 
-	static String appHeader(String commandSymbol)
-	{
+	static String appHeader(String commandSymbol) {
 		StringBuilder sb = new StringBuilder(ChemEql.APP_TITLE);
 		sb.append(ChemEql.i18n("headerDelimiter-DIALOG"));
 		sb.append(ChemEql.i18n(commandSymbol));
 		return sb.toString();
 	}
 
-	public boolean quitOk()
-	{
+	public boolean quitOk() {
 //		return Dialogs.create().title(APP_TITLE).message(ChemEql.i18n("quit-DIALOG"))
 //				.actions(Actions.OK, Actions.CANCEL).showConfirm() == Dialog.Actions.OK;
 		return true;	 // TODO confirmation required?
 	}
-
 
 	/**
 	 * The main() method is ignored in correctly deployed JavaFX
@@ -165,8 +153,7 @@ public class ChemEql extends Application
 	 * <p>
 	 * @param args the command line arguments
 	 */
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		launch(args);
 	}
 

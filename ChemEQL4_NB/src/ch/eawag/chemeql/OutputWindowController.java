@@ -23,10 +23,7 @@
  */
 package ch.eawag.chemeql;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 
 
 /**
@@ -41,8 +38,7 @@ public class OutputWindowController
 	 * Initializes the controller class.
 	 */
 	@FXML
-	public void initialize()
-	{
+	public void initialize() {
 		// TODO
 	}
 
