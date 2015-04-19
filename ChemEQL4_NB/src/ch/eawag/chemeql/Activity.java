@@ -15,13 +15,11 @@ enum Activity
 
 	private final String value;
 
-	private Activity(String v)
-	{
+	private Activity(String v) {
 		value = v;
 	}
 
-	String getValue()
-	{
+	String getValue() {
 		return value;
 	}
 }
