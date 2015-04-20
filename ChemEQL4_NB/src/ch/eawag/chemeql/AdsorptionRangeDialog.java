@@ -7,32 +7,31 @@ import java.awt.event.ComponentEvent;
 class AdsorptionRangeDialog extends ProceedCancelDialog
 {
 	private static AdsorptionRangeDialog INSTANCE;
-	static AdsorptionRangeDialog getInstance(ChemEQL3 parent)
-	{
-		if (INSTANCE == null)
+
+	static AdsorptionRangeDialog getInstance(ChemEQL3 parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new AdsorptionRangeDialog(parent);
+		}
 		return INSTANCE;
 	}
-	
+
 	private double currentStart;
 	private double currentEnd;
 	private double currentStep;
 
 	// Constructor for creating a bean
-	public AdsorptionRangeDialog()
-	{
+	public AdsorptionRangeDialog() {
 		initComponents();
 	}
-	
-	private AdsorptionRangeDialog(ChemEQL3 parent)
-	{
+
+	private AdsorptionRangeDialog(ChemEQL3 parent) {
 		super(parent);
 		initComponents();
-		setLocation(300,250);
-		addComponentListener(new ComponentAdapter() {
+		setLocation(300, 250);
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent arg0)
-			{
+			public void componentShown(ComponentEvent arg0) {
 				startTF.setText("");
 				endTF.setText("");
 				stepTF.setText("");
@@ -40,7 +39,7 @@ class AdsorptionRangeDialog extends ProceedCancelDialog
 			}
 		});
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -155,55 +154,50 @@ class AdsorptionRangeDialog extends ProceedCancelDialog
 
       pack();
    }//GEN-END:initComponents
-	
-	private void checkInputs()
-	{
-		try
-		{
+
+	private void checkInputs() {
+		try {
 			currentStart = Double.parseDouble(startTF.getText());
 			currentEnd = Double.parseDouble(endTF.getText());
 			currentStep = Double.parseDouble(stepTF.getText());
 			proceedButton.setEnabled(true);
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			proceedButton.setEnabled(false);
 		}
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		/*cancel, restore default*/
 		main.adsRange = false;
 		main.outputFormat = OutputFormat.REGULAR;
-		main.graphCmd.setEnabled(false);	
+		main.graphCmd.setEnabled(false);
 		main.formatMenu.setEnabled(false);
 		main.pHrangeCmd.setEnabled(true);
 		main.compRangeCmd.setEnabled(true);
 		super.doCancel();
 	}
-	
-	protected void doProceed()
-	{
-		if (currentStart == 0)
-		{
+
+	protected void doProceed() {
+		if (currentStart == 0) {
 			MyTools.showError("Error in concentration range: "
-				+ "Start concentration can`t be zero! Try a very small number.");
+					+ "Start concentration can`t be zero! Try a very small number.");
 			startTF.setText("1e-20");		/*erste Komponente schreiben*/
+
 		}
-		else if (currentStart >= currentEnd || currentStep >= (currentEnd - currentStart))
+		else if (currentStart >= currentEnd || currentStep >= (currentEnd - currentStart)) {
 			MyTools.showError("Start concentration must be smaller than end concentration"
-				+ " and step must be smaller than difference between start and end!");
-		else
-		{
+					+ " and step must be smaller than difference between start and end!");
+		}
+		else {
 			main.matrix.adsRangeStart = currentStart;
 			main.matrix.adsRangeEnd = currentEnd;
 			main.matrix.adsRangeStep = currentStep;
 
 			main.adsRange = true;
 			main.outputFormat = OutputFormat.INTERVAL;
-			main.graphCmd.setEnabled(true);	
+			main.graphCmd.setEnabled(true);
 			main.formatMenu.setEnabled(true);	/*activate formats*/
+
 			main.pHrangeCmd.setEnabled(false);
 			main.compRangeCmd.setEnabled(false);
 			super.doProceed();

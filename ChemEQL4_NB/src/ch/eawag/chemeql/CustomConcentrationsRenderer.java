@@ -7,26 +7,27 @@ class CustomConcentrationsRenderer extends CustomRenderer
 {
 	private ChemEQL3 main;
 
-	CustomConcentrationsRenderer(Font font, int alignment, ChemEQL3 m)
-	{
-		super(font,alignment);
+	CustomConcentrationsRenderer(Font font, int alignment, ChemEQL3 m) {
+		super(font, alignment);
 		main = m;
 	}
 
-	protected void setValue(Object value)
-	{
+	protected void setValue(Object value) {
 		String s;
-		if (value instanceof String)
+		if (value instanceof String) {
 			s = (String)value;	// for rendering components info in output window
-		else
-		{
+		}
+		else {
 			setFont(myFont);
-			if (((Double)value).doubleValue() == 0.0)
+			if (((Double)value).doubleValue() == 0.0) {
 				s = "0.0";
-			else if (((Double)value).doubleValue() == 1.0)
+			}
+			else if (((Double)value).doubleValue() == 1.0) {
 				s = "1.0";
-			else
+			}
+			else {
 				s = main.settingsDialog.concentrationFormat.format(value);
+			}
 		}
 		this.setText(s);
 	}

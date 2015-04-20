@@ -9,10 +9,11 @@ import java.awt.event.ItemListener;
 public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static PxPyDiagramDialog INSTANCE;
-	static PxPyDiagramDialog getInstance(ChemEQL3 parent)
-	{
-		if (INSTANCE == null)
+
+	static PxPyDiagramDialog getInstance(ChemEQL3 parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new PxPyDiagramDialog(parent);
+		}
 		return INSTANCE;
 	}
 
@@ -24,20 +25,18 @@ public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListen
 	private int currentpXpYspecs;
 
 	// Constructor for creating a bean
-	public PxPyDiagramDialog()
-	{
+	public PxPyDiagramDialog() {
 		initComponents();
 	}
-	
-	private PxPyDiagramDialog(ChemEQL3 parent)
-	{
+
+	private PxPyDiagramDialog(ChemEQL3 parent) {
 		super(parent);
 		initComponents();
-		setLocation(300,250);
-		addComponentListener(new ComponentAdapter() {
+		setLocation(300, 250);
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent ev)
-			{
+			public void componentShown(ComponentEvent ev) {
 				currentpXpYstep = 0.2;
 				pXpYstepTF.setText("0.20");
 				pXpYspecsTF.setText("");
@@ -48,15 +47,18 @@ public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListen
 
 				proceedButton.setEnabled(false);
 				xCompCB.setModel(main.matrix.createComponentsCBModel());
-				xCompCB.setSelectedIndex(main.matrix.totComp-1);	/*Horizontal: Letzte Komponente (meist H+)*/
+				xCompCB.setSelectedIndex(main.matrix.totComp - 1);	/*Horizontal: Letzte Komponente (meist H+)*/
+
 				yCompCB.setModel(main.matrix.createComponentsCBModel());
-				yCompCB.setSelectedIndex(main.matrix.totComp-2);	/*Vertikal: Zweitletzte Komponente (meist e-)*/
+				yCompCB.setSelectedIndex(main.matrix.totComp - 2);	/*Vertikal: Zweitletzte Komponente (meist e-)*/
+
 				mainpXpYcompCB.setModel(main.matrix.createComponentsCBModel());
 				mainpXpYcompCB.setSelectedIndex(0);						/*Vorschlag: Erste Komponente*/
+
 			}
 		});
 	}
-		
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -287,16 +289,13 @@ public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListen
 
       pack();
    }//GEN-END:initComponents
-	
-	public void itemStateChanged(ItemEvent e)
-	{
+
+	public void itemStateChanged(ItemEvent e) {
 		proceedButton.setEnabled(true);
 	}
-	
-	private void checkInputs()
-	{
-		try
-		{
+
+	private void checkInputs() {
+		try {
 			currentpXStart = Double.parseDouble(pXStartTF.getText());
 			currentpXEnd = Double.parseDouble(pXEndTF.getText());
 			currentpYStart = Double.parseDouble(pYStartTF.getText());
@@ -304,38 +303,38 @@ public class PxPyDiagramDialog extends ProceedCancelDialog implements ItemListen
 			currentpXpYstep = Double.parseDouble(pXpYstepTF.getText());
 			currentpXpYspecs = Integer.parseInt(pXpYspecsTF.getText());
 			proceedButton.setEnabled(true);
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			proceedButton.setEnabled(false);
 		}
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		/*cancel*/
 		main.dopXpYdiagram = false;
 		main.doDrawGraph = false;
-		main.graphCmd.setEnabled(false); 
+		main.graphCmd.setEnabled(false);
 		main.outputFormat = OutputFormat.REGULAR;
 		super.doCancel();
 	}
-	
-	protected void doProceed()
-	{
-		if (currentpXStart >= currentpXEnd || currentpYStart >= currentpYEnd)
+
+	protected void doProceed() {
+		if (currentpXStart >= currentpXEnd || currentpYStart >= currentpYEnd) {
 			MyTools.showError("Start values must be smaller than end values!");
-		else if (xCompCB.getSelectedIndex() == yCompCB.getSelectedIndex())
+		}
+		else if (xCompCB.getSelectedIndex() == yCompCB.getSelectedIndex()) {
 			MyTools.showError("X component and Y component are identical!");
-		else if (currentpXpYspecs < 2 || currentpXpYspecs > main.matrix.totSpec-2)
+		}
+		else if (currentpXpYspecs < 2 || currentpXpYspecs > main.matrix.totSpec - 2) {
 			MyTools.showError("Number of species is not sensible!");
-		else
-		{
+		}
+		else {
 			main.dopXpYdiagram = true;
-			main.doDrawGraph = true;				/*** GRAPHIC ACTIVE ***/
+			main.doDrawGraph = true;
+			/** * GRAPHIC ACTIVE ** */
 			main.graphCmd.setEnabled(false);		/*deactivate graphics*/
+
 			main.outputFormat = OutputFormat.PXPY_DIAGRAM;
-			
+
 			main.matrix.xComp = xCompCB.getSelectedIndex();
 			main.matrix.yComp = yCompCB.getSelectedIndex();
 			main.matrix.mainpXpYcomp = mainpXpYcompCB.getSelectedIndex();

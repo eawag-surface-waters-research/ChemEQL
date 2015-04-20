@@ -2,52 +2,57 @@ package ch.eawag.chemeql;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import javax.swing.*;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
 
 
 class ChangeSolidPhaseDialog extends ProceedCancelDialog
 {
 	private static ChangeSolidPhaseDialog INSTANCE;
-	static ChangeSolidPhaseDialog getInstance(ChemEQL3 parent)
-	{
-		if (INSTANCE == null)
+
+	static ChangeSolidPhaseDialog getInstance(ChemEQL3 parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new ChangeSolidPhaseDialog(parent);
+		}
 		return INSTANCE;
 	}
 
 	private double currentLogInput;
 
-	private ChangeSolidPhaseDialog(ChemEQL3 parent)
-	{
+	private ChangeSolidPhaseDialog(ChemEQL3 parent) {
 		super(parent);
 		initComponents();
 		replacementCB.setMaximumRowCount(20);
 		componentCB.setPrototypeDisplayValue("CaH2Si=4[s]");
 		replacementCB.setPrototypeDisplayValue("CaH2Si=4[s]");
-		setLocation(600,150);
-		addComponentListener(new ComponentAdapter() {
+		setLocation(600, 150);
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent arg0)
-			{
+			public void componentShown(ComponentEvent arg0) {
 				if (main.spLibrary == null) // falls Library noch nicht offen
-					main.spLibrary = Library.readBinLibrary(main,false);
-				if (main.spLibrary == null) return;	// Error while reading library: Exit!
-
+				{
+					main.spLibrary = Library.readBinLibrary(main, false);
+				}
+				if (main.spLibrary == null) {
+					return;	// Error while reading library: Exit!
+				}
 				proceedButton.setEnabled(false);
 				componentCB.setModel(main.matrix.createSpecialComponentsCBModel());
-				int i=0;
-				while(((Component)componentCB.getItemAt(i)).isModeSolidPhaseOrCheckPrecip())
+				int i = 0;
+				while (((Component)componentCB.getItemAt(i)).isModeSolidPhaseOrCheckPrecip()) {
 					i++;
+				}
 				componentCB.setSelectedIndex(i);
 				componentCB.setRenderer(new DefaultListCellRenderer()
 				{
 					public java.awt.Component getListCellRendererComponent(JList list, Object value,
-						int index, boolean isSelected, boolean cellHasFocus)
-					{
+							int index, boolean isSelected, boolean cellHasFocus) {
 						java.awt.Component comp = super.getListCellRendererComponent(
-							list,value,index,isSelected,cellHasFocus);
-						if (((Component)value).isModeSolidPhaseOrCheckPrecip())
+								list, value, index, isSelected, cellHasFocus);
+						if (((Component)value).isModeSolidPhaseOrCheckPrecip()) {
 							comp.setEnabled(false);
+						}
 						return comp;
 					}
 				});
@@ -57,21 +62,16 @@ class ChangeSolidPhaseDialog extends ProceedCancelDialog
 		});
 	}
 
-	private void logChanged()
-	{
-		try
-		{
+	private void logChanged() {
+		try {
 			currentLogInput = Double.parseDouble(logTF.getText());
 			proceedButton.setEnabled(true);
 			litTF.setText("");
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			currentLogInput = Double.NaN;
 			proceedButton.setEnabled(false);
 		}
 	}
-
 
    private void initComponents()//GEN-BEGIN:initComponents
    {
@@ -194,17 +194,15 @@ class ChangeSolidPhaseDialog extends ProceedCancelDialog
 		// Add your handling code here:
 		Species selSpec = (Species)replacementCB.getSelectedItem();
 		logTF.setText(Double.toString(selSpec.constant));
-		litTF.setText(selSpec.source.replace(Tokenizer.TAB,' '));
+		litTF.setText(selSpec.source.replace(Tokenizer.TAB, ' '));
 		equationTF.setText(
-			main.spLibrary.equationFor(replacementCB.getSelectedIndex()));
+				main.spLibrary.equationFor(replacementCB.getSelectedIndex()));
 	}//GEN-LAST:event_replacementCBActionPerformed
 
-	protected void doProceed()
-	{
+	protected void doProceed() {
 		((Species)replacementCB.getSelectedItem()).constant = currentLogInput;
 		if (main.matrix.recalculate(
-			componentCB.getSelectedIndex(),replacementCB.getSelectedIndex()))
-		{
+				componentCB.getSelectedIndex(), replacementCB.getSelectedIndex())) {
 			/*Komponenten neu ordnen, da ein 'total' zu einem 'solidPhase' geworden ist!*/
 			main.matrix.reorderComponents();
 			super.doProceed();

@@ -7,34 +7,33 @@ import java.awt.event.ComponentEvent;
 class GraphicsDialog extends ProceedCancelDialog
 {
 	private static GraphicsDialog INSTANCE;
-	static GraphicsDialog getInstance(ChemEQL3 parent)
-	{
-		if (INSTANCE == null)
+
+	static GraphicsDialog getInstance(ChemEQL3 parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new GraphicsDialog(parent);
+		}
 		return INSTANCE;
 	}
-	
+
 	// Constructor for creating a bean
-	public GraphicsDialog()
-	{
+	public GraphicsDialog() {
 		initComponents();
 	}
-	
-	private GraphicsDialog(ChemEQL3 parent)
-	{
+
+	private GraphicsDialog(ChemEQL3 parent) {
 		super(parent);
 		initComponents();
-		setLocation(400,200);
-		addComponentListener(new ComponentAdapter() {
+		setLocation(400, 200);
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent arg0)
-			{
+			public void componentShown(ComponentEvent arg0) {
 				speciesList.setModel(main.matrix.createSpeciesNamesModel());
 				proceedButton.setEnabled(true);
 			}
 		});
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -65,20 +64,18 @@ class GraphicsDialog extends ProceedCancelDialog
 
       pack();
    }//GEN-END:initComponents
-	
-	protected void doCancel()
-	{
+
+	protected void doCancel() {
 		main.doDrawGraph = false;
 		main.drawSpecs = new int[0];
 		super.doCancel();
 	}
-	
-	protected void doProceed()
-	{
-		if (speciesList.getSelectedIndices().length > 10)
+
+	protected void doProceed() {
+		if (speciesList.getSelectedIndices().length > 10) {
 			MyTools.showError("Maximum of 10 species can be drawn!");
-		else
-		{
+		}
+		else {
 			main.drawSpecs = speciesList.getSelectedIndices();
 			main.doDrawGraph = true;
 			super.doProceed();

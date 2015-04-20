@@ -10,13 +10,11 @@ class NumFormatEnum extends JToggleButton.ToggleButtonModel
 
 	private String value;
 
-	private NumFormatEnum(String v)
-	{
+	private NumFormatEnum(String v) {
 		value = v;
 	}
 
-	String getValue()
-	{
+	String getValue() {
 		return value;
 	}
 }

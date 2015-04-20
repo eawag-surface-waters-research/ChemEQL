@@ -1,4 +1,4 @@
-          package ch.eawag.chemeql;
+package ch.eawag.chemeql;
 
 import javax.swing.JToggleButton.ToggleButtonModel;
 
@@ -17,13 +17,11 @@ class ActivityEnum extends ToggleButtonModel
 
 	private String value;
 
-	private ActivityEnum(String v)
-	{
+	private ActivityEnum(String v) {
 		value = v;
 	}
 
-	String getValue()
-	{
+	String getValue() {
 		return value;
 	}
 }

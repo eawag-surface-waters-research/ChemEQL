@@ -8,10 +8,10 @@ class PHRangeDialog extends ProceedCancelDialog
 {
 	private static PHRangeDialog INSTANCE;
 
-	static PHRangeDialog getInstance(ChemEQL3 parent)
-	{
-		if (INSTANCE == null)
+	static PHRangeDialog getInstance(ChemEQL3 parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new PHRangeDialog(parent);
+		}
 		return INSTANCE;
 	}
 
@@ -20,20 +20,18 @@ class PHRangeDialog extends ProceedCancelDialog
 	private double currentStep;
 
 	// Constructor for creating a bean
-	public PHRangeDialog()
-	{
+	public PHRangeDialog() {
 		initComponents();
 	}
-	
-	private PHRangeDialog(ChemEQL3 main)
-	{
+
+	private PHRangeDialog(ChemEQL3 main) {
 		super(main);
 		initComponents();
-		setLocation(300,250);
-		addComponentListener(new ComponentAdapter() {
+		setLocation(300, 250);
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent ev)
-			{
+			public void componentShown(ComponentEvent ev) {
 				startTF.setText("");
 				endTF.setText("");
 				stepTF.setText("");
@@ -42,7 +40,7 @@ class PHRangeDialog extends ProceedCancelDialog
 			}
 		});
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -127,18 +125,14 @@ class PHRangeDialog extends ProceedCancelDialog
 
       pack();
    }//GEN-END:initComponents
-	
-	private void checkInputs()
-	{
-		try
-		{
+
+	private void checkInputs() {
+		try {
 			currentStart = Double.parseDouble(startTF.getText());
 			currentEnd = Double.parseDouble(endTF.getText());
 			currentStep = Double.parseDouble(stepTF.getText());
 			proceedButton.setEnabled(true);
-		}
-		catch (NumberFormatException ex)
-		{
+		} catch (NumberFormatException ex) {
 			currentStart = Double.NaN;
 			currentEnd = Double.NaN;
 			currentStep = Double.NaN;
@@ -146,8 +140,7 @@ class PHRangeDialog extends ProceedCancelDialog
 		}
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		/*cancel button, restore default*/
 		main.pHrange = false;
 		main.outputFormat = OutputFormat.REGULAR;
@@ -155,19 +148,20 @@ class PHRangeDialog extends ProceedCancelDialog
 		main.formatMenu.setEnabled(false);
 		main.pHconstCmd.setEnabled(true);
 		main.compRangeCmd.setEnabled(true);
-		if (main.matrix.adsorption())
+		if (main.matrix.adsorption()) {
 			main.adsRangeCmd.setEnabled(true);
+		}
 		super.doCancel();
 	}
-	
-	protected void doProceed()
-	{
-		if (currentStart >= currentEnd)
+
+	protected void doProceed() {
+		if (currentStart >= currentEnd) {
 			MyTools.showError("Start value must be smaller than end value!");
-		else if (currentEnd - currentStart < currentStep)
+		}
+		else if (currentEnd - currentStart < currentStep) {
 			MyTools.showError("Range too small or step to large!");
-		else
-		{
+		}
+		else {
 			main.pHrangeStart = currentStart;
 			main.pHrangeEnd = currentEnd;
 			main.pHrangeStep = currentStep;
@@ -186,5 +180,5 @@ class PHRangeDialog extends ProceedCancelDialog
    private javax.swing.JTextField startTF;
    private javax.swing.JTextField stepTF;
    // End of variables declaration//GEN-END:variables
-	
+
 }

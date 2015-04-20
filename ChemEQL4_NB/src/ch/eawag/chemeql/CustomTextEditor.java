@@ -12,34 +12,31 @@ import javax.swing.table.TableCellEditor;
 
 
 class CustomTextEditor extends AbstractCellEditor
-	implements TableCellEditor
+		implements TableCellEditor
 {
 	JTextField editorComponent;
-	
-	CustomTextEditor(int alignment)
-	{
+
+	CustomTextEditor(int alignment) {
 		editorComponent = new JTextField();
 		editorComponent.setHorizontalAlignment(alignment);
 		editorComponent.setBorder(
-			BorderFactory.createLineBorder(Color.blue.brighter()));		
+				BorderFactory.createLineBorder(Color.blue.brighter()));
 	}
 
-	public boolean isCellEditable(EventObject evt)
-	{
-		if (evt instanceof MouseEvent)
+	public boolean isCellEditable(EventObject evt) {
+		if (evt instanceof MouseEvent) {
 			return ((MouseEvent)evt).getClickCount() >= 1;
+		}
 		return true;
 	}
 
 	public Component getTableCellEditorComponent(JTable table, Object value,
-		boolean isSelected, int rowIndex, int vColIndex)
-	{
+			boolean isSelected, int rowIndex, int vColIndex) {
 		editorComponent.setText((String)value);
 		return editorComponent;
 	}
-	
-	public Object getCellEditorValue()
-	{
+
+	public Object getCellEditorValue() {
 		return editorComponent.getText();
 	}
 }

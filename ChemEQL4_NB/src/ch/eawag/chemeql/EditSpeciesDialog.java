@@ -1,32 +1,31 @@
 package ch.eawag.chemeql;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 
 class EditSpeciesDialog extends ProceedCancelDialog
 {
 	private static EditSpeciesDialog INSTANCE;
-	static EditSpeciesDialog getInstance(ChemEQL3 parent)
-	{
-		if (INSTANCE == null)
+
+	static EditSpeciesDialog getInstance(ChemEQL3 parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new EditSpeciesDialog(parent);
+		}
 		return INSTANCE;
 	}
-	
+
 	private Library library;
 
 	// Constructor for creating a bean
-	public EditSpeciesDialog()
-	{
+	public EditSpeciesDialog() {
 		initComponents();
 	}
 
-	private EditSpeciesDialog(ChemEQL3 parent)
-	{
+	private EditSpeciesDialog(ChemEQL3 parent) {
 		super(parent);
 		getRootPane().setDefaultButton(null);
 		initComponents();
@@ -35,25 +34,24 @@ class EditSpeciesDialog extends ProceedCancelDialog
 		speciesScroller.setMaximumSize(speciesScroller.getPreferredSize());
 		speciesList.addListSelectionListener(new ListSelectionListener()
 		{
-			public void valueChanged(ListSelectionEvent evt)
-			{
+			public void valueChanged(ListSelectionEvent evt) {
 				updateData();
 			}
 		});
 
 		acceptButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent ev)
-			{
+			public void actionPerformed(ActionEvent ev) {
 				String newName = nameTF.getText();
 				int l = newName.length();
-				if (l == 0)
+				if (l == 0) {
 					MyTools.showError("Please provide a name!");
-				else if (l > 50)
+				}
+				else if (l > 50) {
 					MyTools.showError("Name too long!");
-				else
-					try
-					{
+				}
+				else {
+					try {
 						int i = speciesList.getSelectedIndex();
 						Species spec = library.libSpecies[i];
 						spec.constant = Double.parseDouble(logKTF.getText());
@@ -63,34 +61,30 @@ class EditSpeciesDialog extends ProceedCancelDialog
 						resetButton.setEnabled(false);
 						acceptButton.setEnabled(false);
 						proceedButton.setEnabled(true);
-					}
-					catch (NumberFormatException ex)
-					{
+					} catch (NumberFormatException ex) {
 						MyTools.showError("Your log K input is not a number!");
 					}
+				}
 			}
 		});
 
 		resetButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent ev)
-			{
+			public void actionPerformed(ActionEvent ev) {
 				updateData();
 			}
 		});
 
 		newButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent ev)
-			{
+			public void actionPerformed(ActionEvent ev) {
 				NewSpeciesDialog dlg = NewSpeciesDialog.getInstance();
 				dlg.show(library);
 				Species species = dlg.newSpecies();
 				if (species == null)
 					;	// dialog was cancelled
-				else
-				{
-					int index = library.insertSpecies(species,dlg.stoichCoeffs());
+				else {
+					int index = library.insertSpecies(species, dlg.stoichCoeffs());
 					speciesList.ensureIndexIsVisible(index);
 					speciesList.setSelectedIndex(index);
 					proceedButton.setEnabled(true);
@@ -100,21 +94,18 @@ class EditSpeciesDialog extends ProceedCancelDialog
 
 		deleteButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent ev)
-			{
+			public void actionPerformed(ActionEvent ev) {
 				int i = speciesList.getSelectedIndex();
 				speciesList.clearSelection();
 				library.deleteSpeciesAtIndex(i);
 				proceedButton.setEnabled(true);
 			}
 		});
-		setLocation(100,100);
+		setLocation(100, 100);
 	}
 
-	void show(Library lib)
-	{
-		if (library != lib)
-		{
+	void show(Library lib) {
+		if (library != lib) {
 			library = lib;
 			setTitle("Edit Species (" + library.libraryType() + " Library)");
 			speciesList.setModel(library.getSpeciesListModel());
@@ -129,35 +120,31 @@ class EditSpeciesDialog extends ProceedCancelDialog
 		super.setVisible(true);
 	}
 
-	private void updateData()
-	{
+	private void updateData() {
 		int i = speciesList.getSelectedIndex();
 		speciesList.ensureIndexIsVisible(i);
 		boolean specSelected = i >= 0;
 		setEditPanelEnabled(specSelected);
-		if (specSelected)
-		{
+		if (specSelected) {
 			Species spec = library.libSpecies[i];
 			equationTF.setText(library.equationFor(i));
 			nameTF.setText(spec.name);
 			logKTF.setText(MyTools.EXACT_2_DIGITS.format(spec.constant));
-			litTF.setText(spec.source.replace(Tokenizer.TAB,' '));
+			litTF.setText(spec.source.replace(Tokenizer.TAB, ' '));
 		}
-		else
-		{
+		else {
 			equationTF.setText("");
 			nameTF.setText("");
 			logKTF.setText("");
 			litTF.setText("");
 		}
-		
+
 		resetButton.setEnabled(false);
 		acceptButton.setEnabled(false);
 		deleteButton.setEnabled(specSelected);
 	}
 
-	private void setEditPanelEnabled(boolean enabled)
-	{
+	private void setEditPanelEnabled(boolean enabled) {
 		nameTF.setEnabled(enabled);
 		logKTF.setEnabled(enabled);
 		litTF.setEnabled(enabled);
@@ -339,31 +326,27 @@ class EditSpeciesDialog extends ProceedCancelDialog
 
       pack();
    }//GEN-END:initComponents
-	
-	private void didEdit()
-	{
+
+	private void didEdit() {
 		resetButton.setEnabled(true);
 		acceptButton.setEnabled(true);
 	}
 
-	protected void doCancel()
-	{
-		if (proceedButton.isEnabled())
-		{
+	protected void doCancel() {
+		if (proceedButton.isEnabled()) {
 			if (JOptionPane.showConfirmDialog(this,
-				"Do you really want to dismiss all changes made in this dialog?",
-				ChemEQL3.AN,JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION)
-			{
+					"Do you really want to dismiss all changes made in this dialog?",
+					ChemEQL3.AN, JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
 				main.reloadLibrary(library);
 				super.doCancel();
 			}
 		}
-		else
+		else {
 			super.doCancel();
+		}
 	}
-	
-	protected void doProceed()
-	{
+
+	protected void doProceed() {
 		library.writeBinary();
 		super.doProceed();
 	}

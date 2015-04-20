@@ -9,28 +9,27 @@ import java.awt.event.ItemListener;
 class ProceedCancelTemplate extends ProceedCancelDialog implements ItemListener
 {
 	private static ProceedCancelTemplate INSTANCE;
-	static ProceedCancelTemplate getInstance(ChemEQL3 parent)
-	{
-		if (INSTANCE == null)
+
+	static ProceedCancelTemplate getInstance(ChemEQL3 parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new ProceedCancelTemplate(parent);
+		}
 		return INSTANCE;
 	}
 
 	// Constructor for creating a bean
-	public ProceedCancelTemplate()
-	{
+	public ProceedCancelTemplate() {
 		initComponents();
 	}
 
-	private ProceedCancelTemplate(ChemEQL3 parent)
-	{
+	private ProceedCancelTemplate(ChemEQL3 parent) {
 		super(parent);
 		initComponents();
-		setLocation(300,250);
-		addComponentListener(new ComponentAdapter() {
+		setLocation(300, 250);
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent ev)
-			{
+			public void componentShown(ComponentEvent ev) {
 				proceedButton.setEnabled(false);
 			}
 		});
@@ -49,18 +48,15 @@ class ProceedCancelTemplate extends ProceedCancelDialog implements ItemListener
       pack();
    }//GEN-END:initComponents
 
-	public void itemStateChanged(ItemEvent e)
-	{
+	public void itemStateChanged(ItemEvent e) {
 		proceedButton.setEnabled(true);
 	}
 
-	protected void doCancel()
-	{
+	protected void doCancel() {
 		super.doCancel();
 	}
 
-	protected void doProceed()
-	{
+	protected void doProceed() {
 		super.doProceed();
 	}
    // Variables declaration - do not modify//GEN-BEGIN:variables

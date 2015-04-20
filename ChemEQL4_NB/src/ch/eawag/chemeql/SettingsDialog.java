@@ -12,21 +12,21 @@ import javax.swing.JComboBox;
 class SettingsDialog extends ProceedCancelDialog implements ItemListener
 {
 	private static SettingsDialog INSTANCE;
-	
-	static SettingsDialog getInstance(ChemEQL3 parent)
-	{
-		if (INSTANCE == null)
+
+	static SettingsDialog getInstance(ChemEQL3 parent) {
+		if (INSTANCE == null) {
 			INSTANCE = new SettingsDialog(parent);
+		}
 		return INSTANCE;
 	}
 
 	private static final String[] CONCENTRATION_FORMATS =
-		new String []{"0.0E0","0.00E0","0.000E0","0.0000E0","0.00000E0"};
+			new String[]{"0.0E0", "0.00E0", "0.000E0", "0.0000E0", "0.00000E0"};
 	private static final String[] NONEXPO_CONCENTRATION_FORMATS =
-		new String []{"0.0","0.00","0.000","0.0000","0.00000"};
+			new String[]{"0.0", "0.00", "0.000", "0.0000", "0.00000"};
 	private static final String[] CONSTANT_FORMATS =
-		new String[]{"0.0","0.00","0.000","0.0000"};
-	
+			new String[]{"0.0", "0.00", "0.000", "0.0000"};
+
 	private int concentrationFormatIndex;
 	DecimalFormat concentrationFormat;
 	DecimalFormat nonExpoConcentrationFormat;
@@ -34,34 +34,32 @@ class SettingsDialog extends ProceedCancelDialog implements ItemListener
 	DecimalFormat constantFormat;
 
 	// Constructor for creating a bean
-	public SettingsDialog()
-	{
+	public SettingsDialog() {
 		initComponents();
 	}
 
-	private SettingsDialog(ChemEQL3 main)
-	{
+	private SettingsDialog(ChemEQL3 main) {
 		super(main);
 		initComponents();
-		setLocation(300,250);		
+		setLocation(300, 250);
 
 		Preferences pref = Preferences.userRoot();
-		concentrationFormatIndex = pref.getInt("concentrationDigits",2);
-		constantFormatIndex = pref.getInt("constantDigits",0);
+		concentrationFormatIndex = pref.getInt("concentrationDigits", 2);
+		constantFormatIndex = pref.getInt("constantDigits", 0);
 
 		concentrationFormat = new DecimalFormat(
-			CONCENTRATION_FORMATS[concentrationFormatIndex]);
+				CONCENTRATION_FORMATS[concentrationFormatIndex]);
 		nonExpoConcentrationFormat = new DecimalFormat(
-			NONEXPO_CONCENTRATION_FORMATS[concentrationFormatIndex]);
+				NONEXPO_CONCENTRATION_FORMATS[concentrationFormatIndex]);
 		concentrationsChoice.addItemListener(this);
 		constantFormat = new DecimalFormat(
-			CONSTANT_FORMATS[constantFormatIndex]);
+				CONSTANT_FORMATS[constantFormatIndex]);
 		constantsChoice.addItemListener(this);
 
-		addComponentListener(new ComponentAdapter() {
+		addComponentListener(new ComponentAdapter()
+		{
 			@Override
-			public void componentShown(ComponentEvent e)
-			{
+			public void componentShown(ComponentEvent e) {
 				concentrationsChoice.setSelectedIndex(concentrationFormatIndex);
 				constantsChoice.setSelectedIndex(constantFormatIndex);
 				proceedButton.setEnabled(false);
@@ -135,24 +133,22 @@ class SettingsDialog extends ProceedCancelDialog implements ItemListener
       pack();
    }//GEN-END:initComponents
 
-	public void itemStateChanged(ItemEvent e)
-	{
+	public void itemStateChanged(ItemEvent e) {
 		proceedButton.setEnabled(true);
 	}
 
-	protected void doProceed()
-	{
+	protected void doProceed() {
 		concentrationFormatIndex = concentrationsChoice.getSelectedIndex();
 		concentrationFormat.applyPattern(
-			CONCENTRATION_FORMATS[concentrationFormatIndex]);
+				CONCENTRATION_FORMATS[concentrationFormatIndex]);
 		nonExpoConcentrationFormat.applyPattern(
-			NONEXPO_CONCENTRATION_FORMATS[concentrationFormatIndex]);
+				NONEXPO_CONCENTRATION_FORMATS[concentrationFormatIndex]);
 		constantFormatIndex = constantsChoice.getSelectedIndex();
 		constantFormat.applyPattern(
-			CONSTANT_FORMATS[constantFormatIndex]);
+				CONSTANT_FORMATS[constantFormatIndex]);
 		Preferences pref = Preferences.userRoot();
-		pref.putInt("concentrationDigits",concentrationFormatIndex);
-		pref.putInt("constantDigits",constantFormatIndex);
+		pref.putInt("concentrationDigits", concentrationFormatIndex);
+		pref.putInt("constantDigits", constantFormatIndex);
 		main.repaintDataWindows();
 		super.doProceed();
 	}

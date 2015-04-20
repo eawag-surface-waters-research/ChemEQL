@@ -8,33 +8,28 @@ class CustomRenderer extends DefaultTableCellRenderer
 {
 	Font myFont;
 
-	CustomRenderer(Font font, int alignment)
-	{
+	CustomRenderer(Font font, int alignment) {
 		super();
 		myFont = font;
 		super.setHorizontalAlignment(alignment);
 	}
 
-	CustomRenderer(Font font)
-	{
+	CustomRenderer(Font font) {
 		super();
 		myFont = font;
 //		this(font,SwingConstants.LEFT); is default
 	}
 
-	CustomRenderer()
-	{
+	CustomRenderer() {
 		super();
 	}
 
-	public boolean isOpaque()
-	{
+	public boolean isOpaque() {
 		return false;
 	}
 
-	protected void setValue(Object value)
-	{
+	protected void setValue(Object value) {
 		setFont(myFont);
 		super.setValue(value);
-	}         
+	}
 }
