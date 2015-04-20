@@ -754,6 +754,7 @@ public class ChemEQL3 extends JFrame
 					FILE_CHOOSER.setDialogTitle("Open matrix");
 					FILE_CHOOSER.addChoosableFileFilter(CQL_FILTER);
 					FILE_CHOOSER.setFileFilter(CQL_FILTER);
+					FILE_CHOOSER.setAcceptAllFileFilterUsed(true);
 					int returnVal = FILE_CHOOSER.showOpenDialog(ChemEQL3.this);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						// user has not canceled file dialog: go read my matrix!
