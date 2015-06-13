@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.util.Locale;
 import javax.swing.ButtonGroup;
 import javax.swing.JDesktopPane;
@@ -207,14 +208,17 @@ public class ChemEQL3 extends JFrame
 //		new SplashScreen(ChemEQL3.class.getResource("resources/startup.gif"), this, 1300);
 		// import standard libraries from jar file if binary libs don't exist yet
 		try {
-			String t = " library sucessfully imported and stored as binary file at ";
+			Files.createDirectories(MyTools.getAppDataPath()); // ensure that the app data directory exists);
 			if (!Library.binLibFile(true).exists()) {
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				regLibrary = new Library(ChemEQL3.this, true);
 				regLibrary.importLib(ChemEQL3.class.getResourceAsStream("resources/CQL.Library"),
 						"Importing standard regular library");
 				String path = regLibrary.writeBinary();
-				System.out.println("Regular" + t + path);
+				MyTools.showInfo(String.format(
+						"Regular %s %s.", "library sucessfully imported and stored as binary file at", path));
+				System.out.println(String.format(
+						"Regular %s %s.", "library sucessfully imported and stored as binary file at", path));
 			}
 			if (!Library.binLibFile(false).exists()) {
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -222,7 +226,10 @@ public class ChemEQL3 extends JFrame
 				spLibrary.importLib(ChemEQL3.class.getResourceAsStream("resources/CQL.spLibrary"),
 						"Importing standard solid phases library");
 				String path = spLibrary.writeBinary();
-				System.out.println("Solid phases" + t + path);
+				MyTools.showInfo(String.format(
+						"Solid phases %s %s.", "library sucessfully imported and stored as binary file at", path));
+				System.out.println(String.format(
+						"Solid phases %s %s.", "library sucessfully imported and stored as binary file at", path));
 			}
 		} catch (Exception ex) {
 			regLibrary = spLibrary = null;
@@ -458,9 +465,6 @@ public class ChemEQL3 extends JFrame
 
 		setGlassPane(blockingGlass);
 		blockingGlass.setVisible(true);
-		importThread.setPriority(
-				Math.max(Thread.MIN_PRIORITY, Thread.currentThread().getPriority() - 1));
-		importThread.start();
 	}
 
 	private void exportLibrary() {

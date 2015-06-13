@@ -52,8 +52,8 @@ class Library implements Serializable
 	}
 
 	static File binLibFile(final boolean isRegularLib) {
-		return new File(
-				System.getProperty("user.home"), defaultBinFileName(isRegularLib));
+		File result = MyTools.getAppDataPath().resolve(defaultBinFileName(isRegularLib)).toFile();
+		return result;
 	}
 
 	// read binary library file from the users home directory
