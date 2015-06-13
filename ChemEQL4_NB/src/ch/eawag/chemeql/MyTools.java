@@ -1,7 +1,9 @@
 package ch.eawag.chemeql;
 
-import java.text.DecimalFormat;
 import java.awt.Font;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -9,6 +11,21 @@ import javax.swing.JTextArea;
 
 public class MyTools extends Object
 {
+	public static final boolean IS_MAC_OSX;
+	public static final boolean IS_LINUX;
+	public static final boolean IS_WINDOWS;
+
+	static {
+		String osName = System.getProperty("os.name").toLowerCase();
+		IS_MAC_OSX = osName.contains("mac os x");
+		IS_LINUX = osName.contains("linux");
+		IS_WINDOWS = osName.contains("windows");
+		if (!(IS_MAC_OSX || IS_LINUX || IS_WINDOWS)) {
+			showError(String.format("Cannot start ChemEQL: Operating System \"%s\" unknown!", osName));
+			System.exit(0);
+		}
+	}
+
 	private static final double LOG10 = Math.log(10);
 
 	static final DecimalFormat EXACT_2_DIGITS = new DecimalFormat("0.00");
@@ -45,19 +62,23 @@ public class MyTools extends Object
 
 	static void showException(Exception ex) {
 		ex.printStackTrace();
-		callAlert(ex.toString(), false);
+		showError(ex.toString());
 	}
 
 	static void showError(String msg) {
-		callAlert(msg, false);
+		callAlert(msg, JOptionPane.ERROR_MESSAGE);
 	}
 
 	static void showWarning(String msg) {
-		callAlert(msg, true);
+		callAlert(msg, JOptionPane.WARNING_MESSAGE);
 	}
 
-	private static void callAlert(String msg, boolean isWarning) {
-		JTextArea ta = new JTextArea(msg, 4, 30);
+	static void showInfo(String msg) {
+		callAlert(msg, JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private static void callAlert(String msg, int msgType) {
+		JTextArea ta = new JTextArea(msg, 6, 40);
 //		ta.setBackground(null);
 		ta.setOpaque(false);
 		ta.setBorder(null);
@@ -71,13 +92,27 @@ public class MyTools extends Object
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		c.setBorder(null);
 		c.setOpaque(false);
-		if (isWarning) {
-			JOptionPane.showMessageDialog(null, c, ChemEql.APP_TITLE + " Warning",
-					JOptionPane.WARNING_MESSAGE);
-		}
-		else {
-			JOptionPane.showMessageDialog(null, c, ChemEql.APP_TITLE + " Error",
-					JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, c, ChemEQL3.AN, msgType);
+	}
+
+	public static Path getAppDataPath() {
+		try {
+			if (IS_WINDOWS) {
+				return Paths.get(System.getenv("APPDATA"), "ChemEQL");
+			}
+			else if (IS_MAC_OSX) {
+				return Paths.get(System.getProperty("user.home"), "Library", "Application Support", "ChemEQL");
+			}
+			else if (IS_LINUX) {
+				return Paths.get(System.getProperty("user.home"), ".chemeql");
+			}
+			else {
+				// last resort
+				return Paths.get("/ChemEQL");
+			}
+		} catch (Exception ex) {
+			// last resort
+			return Paths.get("/ChemEQL");
 		}
 	}
 }
