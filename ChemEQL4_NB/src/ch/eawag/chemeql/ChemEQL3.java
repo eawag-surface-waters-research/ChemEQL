@@ -68,10 +68,22 @@ public class ChemEQL3 extends JFrame
 
 	static final String AN = "ChemEQL";
 	private static JFileChooser FILE_CHOOSER;
-	private static FileFilter CQL_FILTER = new FileFilter()
+	private static FileFilter MATRIX_OPEN_FILTER = new FileFilter()
 	{
 		public boolean accept(File pathname) {
-			return pathname.isDirectory() || pathname.getName().endsWith(".cql");
+			return pathname.isDirectory()
+					|| pathname.getName().toLowerCase().endsWith(".txt")
+					|| pathname.getName().toLowerCase().endsWith(".cql");
+		}
+
+		public String getDescription() {
+			return ChemEQL3.AN + " Matrices";
+		}
+	};
+	private static FileFilter MATRIX_SAVE_FILTER = new FileFilter()
+	{
+		public boolean accept(File pathname) {
+			return pathname.isDirectory() || pathname.getName().toLowerCase().endsWith(".txt");
 		}
 
 		public String getDescription() {
@@ -756,8 +768,8 @@ public class ChemEQL3 extends JFrame
 				flushMatrixProc();
 				try {
 					FILE_CHOOSER.setDialogTitle("Open matrix");
-					FILE_CHOOSER.addChoosableFileFilter(CQL_FILTER);
-					FILE_CHOOSER.setFileFilter(CQL_FILTER);
+					FILE_CHOOSER.addChoosableFileFilter(MATRIX_OPEN_FILTER);
+					FILE_CHOOSER.setFileFilter(MATRIX_OPEN_FILTER);
 					FILE_CHOOSER.setAcceptAllFileFilterUsed(true);
 					int returnVal = FILE_CHOOSER.showOpenDialog(ChemEQL3.this);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -778,7 +790,7 @@ public class ChemEQL3 extends JFrame
 				} finally {
 					setCursor(Cursor.getDefaultCursor());
 					FILE_CHOOSER.setFileFilter(FILE_CHOOSER.getAcceptAllFileFilter());
-					FILE_CHOOSER.removeChoosableFileFilter(CQL_FILTER);
+					FILE_CHOOSER.removeChoosableFileFilter(MATRIX_OPEN_FILTER);
 				}
 			}
 		});
@@ -817,9 +829,9 @@ public class ChemEQL3 extends JFrame
 			public void actionPerformed(ActionEvent ev) {
 				try {
 					FILE_CHOOSER.setDialogTitle("Save current matrix");
-					FILE_CHOOSER.addChoosableFileFilter(CQL_FILTER);
-					FILE_CHOOSER.setFileFilter(CQL_FILTER);
-					File file = new File(FILE_CHOOSER.getCurrentDirectory(), "z.cql");
+					FILE_CHOOSER.addChoosableFileFilter(MATRIX_SAVE_FILTER);
+					FILE_CHOOSER.setFileFilter(MATRIX_SAVE_FILTER);
+					File file = new File(FILE_CHOOSER.getCurrentDirectory(), "z.txt");
 					FILE_CHOOSER.setSelectedFile(file);
 					int returnVal = FILE_CHOOSER.showSaveDialog(ChemEQL3.this);
 					if (returnVal == JFileChooser.CANCEL_OPTION) {
@@ -828,8 +840,8 @@ public class ChemEQL3 extends JFrame
 					// user has not canceled file dialog: save if file is new or
 					// shall be replaced
 					file = FILE_CHOOSER.getSelectedFile();
-					if (!file.getName().endsWith(".cql")) {
-						file = new File(file.getParentFile(), file.getName() + ".cql");
+					if (!file.getName().endsWith(".txt")) {
+						file = new File(file.getParentFile(), file.getName() + ".txt");
 					}
 					if (!file.exists() || JOptionPane.showConfirmDialog(ChemEQL3.this,
 							"Replace existing matrix '" + file.getName() + "'?",
@@ -844,7 +856,7 @@ public class ChemEQL3 extends JFrame
 				} finally {
 					setCursor(Cursor.getDefaultCursor());
 					FILE_CHOOSER.setFileFilter(FILE_CHOOSER.getAcceptAllFileFilter());
-					FILE_CHOOSER.removeChoosableFileFilter(CQL_FILTER);
+					FILE_CHOOSER.removeChoosableFileFilter(MATRIX_SAVE_FILTER);
 				}
 			}
 		});
