@@ -19,4 +19,4 @@ being a Java port of a native Mac OS 9 application that in turn was an extended 
 original program MICROQL by John Westall. ChemEQL 4 is open source.
 
 ChemEQL 3.1 and its manual with many representative examples are available at:
-http://www.eawag.ch/research_e/surf/Researchgroups/sensors_and_analytic/chemeql.html
+http://www.eawag.ch/en/department/surf/projects/chemeql/.
