@@ -175,7 +175,7 @@ public class ChemEQL3 extends JFrame
 	}
 
 	private ChemEQL3() {
-		System.out.println("Starting " + AN + ", version 3.2.0 (20th of April 2015)");
+		System.out.println("Starting " + AN + ", version 3.2.1 (1st of November 2016)");
 
 		// make application respond to the Mac OS X application menu
 		macOSXRegistration();
@@ -322,7 +322,7 @@ public class ChemEQL3 extends JFrame
 	}
 
 	private void restoreProc() {
-		matrixMenu.setEnabled(true);	/* sind während des Rechnens disabled worden */
+		matrixMenu.setEnabled(true); // sind während des Rechnens disabled worden
 
 		runMenu.setEnabled(true);
 		goCmd.setEnabled(true);
@@ -350,11 +350,11 @@ public class ChemEQL3 extends JFrame
 				pHconstCmd.setEnabled(true);
 				pHrangeCmd.setEnabled(true);
 			}
-			if (matrix.isTotal()) /*if (one of the modes is 'total') activate CompRange*/ {
+			if (matrix.isTotal()) { // if (one of the modes is 'total') activate CompRange
 				compRangeCmd.setEnabled(true);
 			}
 			adsRangeCmd.setEnabled(matrix.adsorption());
-		} /* if multiConc == 1 */
+		} // if multiConc == 1
 
 		goCmd.setEnabled(true);
 		activitiesMenu.setEnabled(true);
@@ -362,16 +362,15 @@ public class ChemEQL3 extends JFrame
 	}
 
 	private void flushMatrixProc() {
-		matrix.initialize(); /*setzt den Inhalt aller globalen Handles =0 oder ''*/
+		matrix.initialize(); // setzt den Inhalt aller globalen Handles =0 oder ''
 
 		// initializes also compNo and specNo with 0
-
 		set1();
 		set2();
 
 		logKrange = false;
 		pXpYplot = false;
-		activityOutput = false;	/*output in activities instead of concentrations*/
+		activityOutput = false; // output in activities instead of concentrations
 
 		iterationParametersDialog.autoConvCrit = false;
 		iterationParametersDialog.markIter = false;
@@ -417,8 +416,7 @@ public class ChemEQL3 extends JFrame
 		}
 
 		try {
-			importLibFromStream(lib, new FileInputStream(inputFile),
-					"Importing library " + inputFile);
+			importLibFromStream(lib, new FileInputStream(inputFile), "Importing library " + inputFile);
 		} catch (FileNotFoundException ex) {
 			// should never happen
 			regLibrary = spLibrary = null;
@@ -477,11 +475,13 @@ public class ChemEQL3 extends JFrame
 
 		setGlassPane(blockingGlass);
 		blockingGlass.setVisible(true);
+
+		importThread.setPriority(Math.max(Thread.MIN_PRIORITY, Thread.currentThread().getPriority() - 1));
+		importThread.start();
 	}
 
 	private void exportLibrary() {
-		final Library lib;
-		String fileName;
+		Library lib;
 
 		// Choose what kind of library to be exported
 		Object[] options = {"Regular Library", "Solid Phases Library"};
@@ -509,12 +509,11 @@ public class ChemEQL3 extends JFrame
 		}
 		try {
 			FILE_CHOOSER.setDialogTitle("Export " + options[answer]);
-			File file = new File(
-					FILE_CHOOSER.getCurrentDirectory(), lib.defaultTextFileName());
+			File file = new File(FILE_CHOOSER.getCurrentDirectory(), lib.defaultTextFileName());
 			FILE_CHOOSER.setSelectedFile(file);
 			int returnVal = FILE_CHOOSER.showSaveDialog(this);
 			if (returnVal == JFileChooser.CANCEL_OPTION) {
-				return;				// Exit!
+				return;																		// Exit!
 			}
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			lib.exportTo(FILE_CHOOSER.getSelectedFile());
@@ -575,20 +574,19 @@ public class ChemEQL3 extends JFrame
 		}
 		adsRangeCmd.setEnabled(matrix.adsorption() && matrix.multiConc == 1);
 
-		if (matrix.isHorHplusAndFree()) /*pH is constant*/ {
+		if (matrix.isHorHplusAndFree()) { // pH is constant
 			pHconstCmd.setEnabled(true);
 			if (matrix.multiConc == 1) {
 				pHrangeCmd.setEnabled(true);
 			}
 		}
-		else /*pH is not constant*/ {
+		else { // pH is not constant
 			pHconstCmd.setEnabled(false);
 			if (matrix.multiConc == 1) {
 				pHrangeCmd.setEnabled(false);
 			}
 		}
-		setCursor(Cursor.getDefaultCursor());
-		/*makes cursor an arrow*/
+		setCursor(Cursor.getDefaultCursor()); // makes cursor an arrow
 
 		drawFileInfoWindow(false);
 	}
@@ -764,7 +762,7 @@ public class ChemEQL3 extends JFrame
 		openCmd.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt) {
-				/* eine Matrix einlesen */
+				// eine Matrix einlesen
 				flushMatrixProc();
 				try {
 					FILE_CHOOSER.setDialogTitle("Open matrix");
@@ -802,9 +800,9 @@ public class ChemEQL3 extends JFrame
 		readLibCmd.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt) {
-				/* eine binäre Bibliothek aus dem Preferences-Folder einlesen */
+				// eine binäre Bibliothek aus dem Preferences-Folder einlesen
 				flushMatrixProc();
-				if (regLibrary == null) /* falls binäre Library noch nie geöffnet...*/ {
+				if (regLibrary == null) { // falls binäre Library noch nie geöffnet...
 					regLibrary = Library.readBinLibrary(ChemEQL3.this, true);
 				}
 				if (regLibrary == null) {
@@ -1160,7 +1158,8 @@ public class ChemEQL3 extends JFrame
 		});
 		modeMenu.add(compRangeCmd);
 
-		adsRangeCmd = new JMenuItem("Adsorption range ..."); /* titration with particles */
+		adsRangeCmd = new JMenuItem("Adsorption range ...");
+		/* titration with particles */
 
 		adsRangeCmd.setEnabled(false);
 		adsRangeCmd.addActionListener(new ActionListener()
